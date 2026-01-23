@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataGym Analyze | Plyometrics</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+
+    <!-- Background Animation -->
+    <div class="bg-gradient-animation"></div>
+
+    <!-- Sidebar injected by common.js -->
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div id="module-plyo" class="module-content">
+            <header class="page-header">
+                <h1 class="page-title" data-i18n="plyo_title">Plyometrics</h1>
+                <p class="text-secondary" data-i18n="plyo_subtitle">Explosive power and jump training</p>
+            </header>
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="plyoTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="plyo-power-tab" data-bs-toggle="tab"
+                        data-bs-target="#plyo-power-pane" type="button" role="tab">
+                        <ion-icon name="flash-outline" class="me-2"></ion-icon><span data-i18n="tab_plyo_power">Power &
+                            Contact</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="plyo-load-tab" data-bs-toggle="tab" data-bs-target="#plyo-load-pane"
+                        type="button" role="tab">
+                        <ion-icon name="barbell-outline" class="me-2"></ion-icon><span data-i18n="tab_plyo_load">Load
+                            Calc</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="plyo-ai-tab" data-bs-toggle="tab" data-bs-target="#plyo-ai-pane"
+                        type="button" role="tab">
+                        <ion-icon name="videocam-outline" class="me-2"></ion-icon><span data-i18n="tab_ai">AI
+                            Analyzer</span>
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="plyoTabsContent">
+
+                <!-- Calc Tab -->
+                <div class="tab-pane fade show active" id="plyo-calc-pane" role="tabpanel">
+                    <div class="row">
+                        <!-- Jump Height / Flight Time -->
+                        <div class="col-md-6">
+                            <div class="glass-card h-100">
+                                <h5 class="mb-4" data-i18n="res_jump_height">Jump Height</h5>
+                                <div class="mb-3">
+                                    <label class="form-label" data-i18n="label_flight_time">Flight Time (ms)</label>
+                                    <input type="number" class="form-control" id="inputFlightTime" placeholder="500">
+                                </div>
+                                <button class="btn btn-primary w-100 mb-3" id="btnCalcJump"
+                                    data-i18n="btn_calc_jump">Calculate Height</button>
+                                <div class="text-center">
+                                    <h2 class="text-info" id="resJumpHeight">-- cm</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RSI -->
+                        <div class="col-md-6">
+                            <div class="glass-card h-100">
+                                <h5 class="mb-4" data-i18n="res_rsi">RSI (Reactive Strength Index)</h5>
+                                <div class="mb-3">
+                                    <label class="form-label" data-i18n="label_drop_height">Drop Height (cm)</label>
+                                    <input type="number" class="form-control" id="inputDropHeight" placeholder="45">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" data-i18n="label_gct">Ground Contact Time (ms)</label>
+                                    <input type="number" class="form-control" id="inputGct" placeholder="200">
+                                </div>
+                                <button class="btn btn-warning w-100 mb-3" id="btnCalcRsi"
+                                    data-i18n="btn_calc_jump">Calculate RSI</button>
+                                <div class="text-center">
+                                    <h2 class="text-warning" id="resRsi">--</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load Tab -->
+                <div class="tab-pane fade" id="plyo-load-pane" role="tabpanel">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="glass-card">
+                                <h5 class="mb-4" data-i18n="tab_load">Plyometric Load</h5>
+                                <div class="mb-3">
+                                    <label class="form-label" data-i18n="label_contacts">Total Contacts</label>
+                                    <input type="number" class="form-control" id="inputContacts" placeholder="100">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" data-i18n="label_intensity">Intensity Level (1-10)</label>
+                                    <input type="number" class="form-control" id="inputIntensity" placeholder="5"
+                                        min="1" max="10">
+                                </div>
+                                <button class="btn btn-success w-100 mb-4" id="btnCalcPlyoLoad"
+                                    data-i18n="btn_calc_plyo_load">Calculate Load</button>
+
+                                <div class="text-center p-3 border rounded border-secondary">
+                                    <h6 class="text-secondary" data-i18n="res_plyo_load">Session Load</h6>
+                                    <h1 class="display-4 fw-bold" id="resPlyoLoad">--</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Analyzer Tab -->
+                <div class="tab-pane fade" id="plyo-ai-pane" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="glass-card">
+                                <h5 class="mb-3" data-i18n="video_upload_title">Video Upload</h5>
+                                <div class="upload-area mb-4" id="plyoUploadArea">
+                                    <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+                                    <h4 data-i18n="drop_video_text">Drop your video here</h4>
+                                    <p class="text-secondary" data-i18n="video_formats">Supports MP4, MOV, WEBM (Max
+                                        50MB)</p>
+                                    <input type="file" id="plyoVideoInput" accept="video/*" class="d-none">
+                                    <button class="btn btn-primary mt-2" id="btnPlyoSelectFile"
+                                        data-i18n="btn_select_file">Select File</button>
+                                </div>
+
+                                <!-- Video Player & MediaPipe Overlay -->
+                                <div class="position-relative mb-4">
+                                    <video id="plyoVideoPlayer" class="w-100 rounded d-none" controls muted
+                                        playsinline></video>
+                                    <canvas id="plyoCanvas" class="position-absolute top-0 start-0 w-100 h-100 d-none"
+                                        style="pointer-events: none;"></canvas>
+                                </div>
+
+                                <h5 class="mb-3 mt-4" data-i18n="ai_result_title">AI Analysis Result</h5>
+                                <div class="ai-result-box" id="plyoResultBox">
+                                    <p class="text-secondary fst-italic" data-i18n="ai_waiting_text">Upload a video to
+                                        see the analysis...</p>
+
+                                    <!-- Mock Result for Plyometrics -->
+                                    <div class="d-none" id="plyoAiOutputMock">
+                                        <h6 class="text-success"><ion-icon name="checkmark-circle"
+                                                class="me-1"></ion-icon>Take-off Mechanics</h6>
+                                        <p class="small text-secondary mb-3">Good triple extension observed.</p>
+                                        <h6 class="text-danger"><ion-icon name="alert-circle"
+                                                class="me-1"></ion-icon>Landing Stability</h6>
+                                        <p class="small text-secondary">Knee valgus detected on landing phase.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="glass-card">
+                                <h5 class="mb-4" data-i18n="context_title">Context</h5>
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label" data-i18n="exercise_label">Exercise Type</label>
+                                        <select class="form-select">
+                                            <option value="cmj">Countermovement Jump</option>
+                                            <option value="dj">Depth Jump</option>
+                                            <option value="pogo">Pogo Hops</option>
+                                            <option value="broad">Broad Jump</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-primary w-100 mt-2" id="btnAnalyzePlyo"
+                                        disabled>
+                                        <ion-icon name="sparkles" class="me-2"></ion-icon><span
+                                            data-i18n="btn_analyze">Analyze with AI</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Common JS (Sidebar, i18n) -->
+    <script src="js/common.js"></script>
+    <!-- Video Processor -->
+    <script src="js/video_processor.js"></script>
+    <!-- Plyometrics Module -->
+    <script src="js/plyometrics.js"></script>
+</body>
+
+</html>
