@@ -191,8 +191,9 @@ const translations = {
 
         // --- PROPER KEYS FOR NEW MODULES (ES) ---
         // Plyometrics
-        tab_power: "Potencia y Contacto",
-        tab_load: "Carga Pliométrica",
+        // Plyometrics
+        tab_plyo_basic: "Métricas Básicas",
+        tab_plyo_indices: "Índices Avanzados",
         label_flight_time: "Tiempo de Vuelo (ms)",
         label_drop_height: "Altura Caída (cm)",
         label_gct: "Tiempo Contacto (ms)",
@@ -203,6 +204,16 @@ const translations = {
         res_jump_height: "Altura Salto",
         res_rsi: "RSI (Índice)",
         res_plyo_load: "Carga Sesión",
+        res_eui: "Índice Utilización Elástica (EUI)",
+        res_ucci: "Índice Coordinación (UCCI)",
+        label_cmj: "CMJ (cm)",
+        label_sj: "SJ (cm)",
+        label_abk: "Abalakov (cm)",
+        btn_calc_eui: "Calcular EUI",
+        btn_calc_ucci: "Calcular UCCI",
+        feedback_optimal: "¡Rango Óptimo!",
+        feedback_improve_elastic: "Mejorar Capacidad Elástica (Pliometría)",
+        feedback_improve_coord: "Mejorar Coordinación (Brazos)",
 
         // Gym
         tab_rm: "Calc. RM",
@@ -349,8 +360,9 @@ const translations = {
 
         // --- NEW KEYS (CA) ---
         // Plyometrics
-        tab_power: "Potència i Contacte",
-        tab_load: "Càrrega Pliomètrica",
+        // Plyometrics
+        tab_plyo_basic: "Mètriques Bàsiques",
+        tab_plyo_indices: "Índexs Avançats",
         label_flight_time: "Temps de Vol (ms)",
         label_drop_height: "Alçada Caiguda (cm)",
         label_gct: "Temps Contacte (ms)",
@@ -508,8 +520,9 @@ const translations = {
 
         // --- NEW KEYS (EN) ---
         // Plyometrics
-        tab_power: "Power & Contact",
-        tab_load: "Plyo Load",
+        // Plyometrics
+        tab_plyo_basic: "Basic Metrics",
+        tab_plyo_indices: "Advanced Indices",
         label_flight_time: "Flight Time (ms)",
         label_drop_height: "Drop Height (cm)",
         label_gct: "Contact Time (ms)",

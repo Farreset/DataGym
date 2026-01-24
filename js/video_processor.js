@@ -532,6 +532,34 @@ class GymAnalyzer {
                     assist: "Extensión Tríceps",
                     checkBack: true // Check lean
                 };
+            case 'bicep_curl':
+                return {
+                    joint: 'elbow',
+                    startAngle: 160, // Bottom (Extended)
+                    targetAngle: 40, // Top (Flexed)
+                    correction: "Rango Completo (Abajo estira, Arriba contrae)",
+                    assist: "Menos peso, controla la bajada",
+                    checkBack: false
+                };
+            case 'tricep_ext':
+                return {
+                    joint: 'elbow',
+                    startAngle: 160, // Top (Extended) if Tricep Pushdown
+                    // Actually, pushdown: Start High (flexed ~90 or less?) -> Push Down (Extend to 180).
+                    // Let's assume Cable Pushdown: Start ~60-90 -> Angle INCREASES to 180.
+                    // Wait, logic above assumes "BendMovement" (Squat, Bench) = Angle Decreases.
+                    // "ExtensionMovement" (OHP) = Angle Increases? NO.
+                    // Squat: Start 180 -> Go to 90. (Decrease).
+                    // Bench: Start 180 -> Go to 90. (Decrease).
+                    // OHP: Start 70 -> Go to 170. (Increase). 
+                    // Bicep Curl: Start 170 -> Go to 40. (Decrease).
+                    // Tricep Pushdown: Start 70 -> Go to 170. (Increase).
+                    startAngle: 70,
+                    targetAngle: 170, // Lockout
+                    correction: "Extensión completa de codo",
+                    assist: "Codos pegados al cuerpo",
+                    checkBack: false
+                };
             default:
                 return { joint: 'knee', startAngle: 160, targetAngle: 100 };
         }
@@ -556,7 +584,7 @@ class GymAnalyzer {
             mainAngle = this.calculateAngle(leftHip, leftKnee, leftAnkle);
             // Back Angle (Shoulder-Hip-Knee) - roughly
             backAngle = this.calculateAngle(leftShoulder, leftHip, leftKnee);
-        } else if (this.exerciseType === 'bench' || this.exerciseType === 'ohp') {
+        } else if (this.exerciseType === 'bench' || this.exerciseType === 'ohp' || this.exerciseType === 'bicep_curl' || this.exerciseType === 'tricep_ext') {
             // Arm Angle (Shoulder-Elbow-Wrist)
             mainAngle = this.calculateAngle(leftShoulder, leftElbow, leftWrist);
         }
@@ -608,7 +636,11 @@ class GymAnalyzer {
     updateRepLogic(angle) {
         // Simple Hysteresis for Rep Counting
         const { startAngle, targetAngle } = this.config;
-        const isBendMovement = startAngle > targetAngle; // Squat, Bench (Angle decreases on eccentric)
+        const isBendMovement = startAngle > targetAngle; // Squat, Bench, Curl (Angle decreases or starts high goes low)
+
+        // Bicep Curl: Start Extended (180) -> Flex (40). (Decrease) OK.
+        // Tricep Pushdown: Start Flexed (70) -> Extend (180). (Increase).
+        // OHP: Start Flexed (70) -> Extend (180). (Increase).
 
         if (isBendMovement) {
             // Eccentric: Angle Decreases
@@ -625,18 +657,13 @@ class GymAnalyzer {
                 this.state = 'start';
             }
         } else {
-            // Extension Movement (OHP goes Up -> Angle Increases? Actually elbow angle extends...)
-            // For OHP: Start (Low Angle) -> Up (High Angle) -> Down
-            const isExtensionStart = startAngle < targetAngle;
-
-            if (isExtensionStart) {
-                if (this.state === 'start' && angle > targetAngle - 10) { // Top
-                    this.state = 'top';
-                }
-                if (this.state === 'top' && angle < startAngle + 10) { // Return
-                    this.reps++;
-                    this.state = 'start';
-                }
+            // Extension Movement (OHP, Tricep)
+            if (this.state === 'start' && angle > targetAngle - 10) { // Top/Locked out
+                this.state = 'top';
+            }
+            if (this.state === 'top' && angle < startAngle + 10) { // Return
+                this.reps++;
+                this.state = 'start';
             }
         }
     }
@@ -663,6 +690,56 @@ class GymAnalyzer {
         // ULTRA-ADVANCED: Strict Squat Checks
         if (this.exerciseType === 'squat') {
             this.checkSquatStrict(landmarks, timestamp);
+        } else if (this.exerciseType === 'bench') {
+            this.checkBenchStrict(landmarks, timestamp);
+        } else if (this.exerciseType === 'bicep_curl') {
+            this.checkBicepCurlStrict(landmarks, timestamp);
+        } else if (this.exerciseType === 'tricep_ext') {
+            this.checkTricepStrict(landmarks, timestamp);
+        } else if (this.exerciseType === 'ohp') {
+            this.checkOhpStrict(landmarks, timestamp);
+        }
+    }
+
+    checkBicepCurlStrict(landmarks, timestamp) {
+        const leftShoulder = landmarks[11];
+        const leftElbow = landmarks[13];
+        const leftHip = landmarks[23];
+
+        // 1. Elbow Swing (Drift)
+        // Check if elbow moves horizontally too much relative to shoulder
+        // Ideally elbow stays UNDER shoulder.
+        if (leftShoulder.visibility > 0.8 && leftElbow.visibility > 0.8) {
+            const elbowOffsetX = Math.abs(leftElbow.x - leftShoulder.x);
+            // If elbow swings fwd/back > 0.1 (normalized)
+            if (elbowOffsetX > 0.12) { // generous threshold
+                this.logIssue("Codo Balanceándose", timestamp);
+                this.corrections.add("Pega el codo al cuerpo");
+            }
+        }
+
+        // 2. Momentum (Back Swing)
+        // Check back angle (Shoulder-Hip verticality)
+        // Reuse general back check or specific
+    }
+
+    checkTricepStrict(landmarks, timestamp) {
+        const leftShoulder = landmarks[11];
+        const leftElbow = landmarks[13];
+        // 1. Elbow Flare (Hard in 2D side view, but can check height stability)
+        // For pushdown, elbow should be stable vertically mostly.
+    }
+
+    checkOhpStrict(landmarks, timestamp) {
+        // 1. Excessive Lean Back (Lumbar hyperextension)
+        const leftShoulder = landmarks[11];
+        const leftHip = landmarks[23];
+        const leftKnee = landmarks[25];
+
+        const backAngle = this.calculateAngle(leftShoulder, leftHip, leftKnee);
+        if (backAngle < 160) { // If < 160, significant arch/lean back
+            this.logIssue("Arqueo Lumbar Excesivo", timestamp);
+            this.corrections.add("Aprieta abdomen (Core) y glúteos");
         }
     }
 
@@ -700,6 +777,52 @@ class GymAnalyzer {
             if (kneeWidth < ankleWidth * 0.85) {
                 this.logIssue("Valgo de Rodilla (Rodillas dentro)", timestamp);
                 this.corrections.add("Empuja rodillas hacia fuera (Activa glúteo)");
+            }
+        }
+    }
+
+    checkBenchStrict(landmarks, timestamp) {
+        // Get landmarks for both sides
+        const leftWrist = landmarks[15];
+        const rightWrist = landmarks[16];
+        const leftElbow = landmarks[13];
+        const rightElbow = landmarks[14];
+        const leftShoulder = landmarks[11];
+        const rightShoulder = landmarks[12];
+        // Indices for hands (approximate for wrist extension check)
+        const leftIndex = landmarks[19];
+        const rightIndex = landmarks[20];
+
+        // 1. Arm Balance (Symmetry check)
+        // Check if one wrist is significantly higher/lower than the other relative to shoulders
+        // Use Y-coordinates. Note: Y increases downwards in screen coordinates.
+        if (leftWrist.visibility > 0.8 && rightWrist.visibility > 0.8) {
+            const wristDiffY = Math.abs(leftWrist.y - rightWrist.y);
+            // Threshold: 0.05 is roughly 5% of screen height
+            if (wristDiffY > 0.05) {
+                this.logIssue("Barra Desequilibrada", timestamp);
+                this.corrections.add("Empuja con ambos brazos por igual");
+            }
+        }
+
+        // 2. Wrist Stack/Extension Check
+        // We want wrist directly over elbow (vertical forearm) mostly, but also wrist not bent back too much.
+        // Calculate angle: Forearm (Elbow->Wrist) vs Hand (Wrist->Index)
+        // Straight line = 180 degrees.
+        if (leftWrist.visibility > 0.8 && leftIndex.visibility > 0.8 && leftElbow.visibility > 0.8) {
+            const leftWristAngle = this.calculateAngle(leftElbow, leftWrist, leftIndex);
+            // If angle < 150 (arbitrary threshold for excessive extension)
+            if (leftWristAngle < 150) {
+                this.logIssue("Muñeca Doblada (Izq)", timestamp);
+                this.corrections.add("Mantén muñecas rectas (Nudillos al techo)");
+            }
+        }
+
+        if (rightWrist.visibility > 0.8 && rightIndex.visibility > 0.8 && rightElbow.visibility > 0.8) {
+            const rightWristAngle = this.calculateAngle(rightElbow, rightWrist, rightIndex);
+            if (rightWristAngle < 150) {
+                this.logIssue("Muñeca Doblada (Der)", timestamp);
+                this.corrections.add("Mantén muñecas rectas");
             }
         }
     }
