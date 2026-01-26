@@ -26,7 +26,7 @@ function injectSidebar() {
                 <ion-icon name="home-outline"></ion-icon>
                 <span data-i18n="nav_dashboard">Dashboard</span>
             </a>
-            <a href="html/swimming.html" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
+            <a href="/DataGym/html/swimming.html" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
                 <ion-icon name="water-outline"></ion-icon>
                 <span data-i18n="nav_swimming">Swimming</span>
             </a>
