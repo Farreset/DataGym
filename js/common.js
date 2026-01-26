@@ -22,23 +22,23 @@ function injectSidebar() {
         </div>
 
         <div class="nav flex-column">
-             <a href="/" class="nav-link ${(path === '/' || path.includes('index.html')) ? 'active' : ''}">
+             <a href="/DataGym/" class="nav-link ${(path === '/DataGym/' || path.includes('index.html')) ? 'active' : ''}">
                 <ion-icon name="home-outline"></ion-icon>
                 <span data-i18n="nav_dashboard">Dashboard</span>
             </a>
-            <a href="/swimming" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
+            <a href="/DataGym/html/swimming.html" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
                 <ion-icon name="water-outline"></ion-icon>
                 <span data-i18n="nav_swimming">Swimming</span>
             </a>
-            <a href="/running" class="nav-link ${path.includes('running') ? 'active' : ''}">
+            <a href="/DataGym/html/running.html" class="nav-link ${path.includes('running') ? 'active' : ''}">
                 <ion-icon name="walk-outline"></ion-icon>
                 <span data-i18n="nav_running">Running</span>
             </a>
-            <a href="/plyometrics" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
+            <a href="/DataGym/html/plyometrics.html" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
                 <ion-icon name="fitness-outline"></ion-icon>
                 <span data-i18n="nav_plyometrics">Plyometrics</span>
             </a>
-             <a href="/gym" class="nav-link ${path.includes('gym') ? 'active' : ''}">
+             <a href="/DataGym/html/gym.html" class="nav-link ${path.includes('gym') ? 'active' : ''}">
                 <ion-icon name="barbell-outline"></ion-icon>
                 <span data-i18n="nav_gym">Gym</span>
             </a>
