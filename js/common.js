@@ -22,23 +22,23 @@ function injectSidebar() {
         </div>
 
         <div class="nav flex-column">
-             <a href="/DataGym/" class="nav-link ${(path === '/DataGym/' || path.includes('index.html')) ? 'active' : ''}">
+             <a href="/" class="nav-link ${(path === '/' || path.includes('index.html')) ? 'active' : ''}">
                 <ion-icon name="home-outline"></ion-icon>
                 <span data-i18n="nav_dashboard">Dashboard</span>
             </a>
-            <a href="/DataGym/html/swimming.html" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
+            <a href="/swimming" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
                 <ion-icon name="water-outline"></ion-icon>
                 <span data-i18n="nav_swimming">Swimming</span>
             </a>
-            <a href="/DataGym/html/running.html" class="nav-link ${path.includes('running') ? 'active' : ''}">
+            <a href="/running" class="nav-link ${path.includes('running') ? 'active' : ''}">
                 <ion-icon name="walk-outline"></ion-icon>
                 <span data-i18n="nav_running">Running</span>
             </a>
-            <a href="/DataGym/html/plyometrics.html" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
+            <a href="/plyometrics" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
                 <ion-icon name="fitness-outline"></ion-icon>
                 <span data-i18n="nav_plyometrics">Plyometrics</span>
             </a>
-             <a href="/DataGym/html/gym.html" class="nav-link ${path.includes('gym') ? 'active' : ''}">
+             <a href="/gym" class="nav-link ${path.includes('gym') ? 'active' : ''}">
                 <ion-icon name="barbell-outline"></ion-icon>
                 <span data-i18n="nav_gym">Gym</span>
             </a>
@@ -229,6 +229,17 @@ const translations = {
         res_1rm: "1RM Estimado",
         res_bmi: "Tu IMC",
         res_w5: "Carga Total",
+        label_power: "Potencia",
+        label_adjusted: "Ajustada",
+        btn_calc_power: "Calcular Potencia",
+        label_time: "Tiempo",
+        btn_calc_time: "Calcular Tiempo",
+        label_weight2: "Peso Objetivo (kg)",
+        label_reps2: "Repeticiones Objetivo",
+        info_tab: "Test realizado en 5 segundos",
+        info2_tab: "Calcular tiempo estimado para el objetivo",
+        tab_power: "Potencia",
+        tab_time: "Tiempo",
 
         // Running
         tab_pace: "Ritmo y PPM",
@@ -388,6 +399,17 @@ const translations = {
         res_1rm: "1RM Estimat",
         res_bmi: "El teu IMC",
         res_w5: "Càrrega Total",
+        label_power: "Potència",
+        label_adjusted: "Ajustada",
+        btn_calc_power: "Calcular Potència",
+        label_time: "Temps",
+        btn_calc_time: "Calcular Temps",
+        label_weight2: "Pes Objetiu (kg)",
+        label_reps2: "Repeticions Objetivo",
+        info_tab: "Test realitzat en 5 segons",
+        info2_tab: "Calcular temps estimat per l'objectiu",
+        tab_power: "Potència",
+        tab_time: "Temps",
 
         // Running
         tab_pace: "Ritme i PPM",
@@ -548,6 +570,17 @@ const translations = {
         res_1rm: "Estimated 1RM",
         res_bmi: "Your BMI",
         res_w5: "Total Load",
+        label_power: "Power",
+        label_adjusted: "Adjusted",
+        btn_calc_power: "Calculate Power",
+        label_time: "Time",
+        btn_calc_time: "Calculate Time",
+        label_weight2: "Weight Objective (kg)",
+        label_reps2: "Reps Objective",
+        info_tab: "Test performed in 5 seconds",
+        info2_tab: "Calculate estimated time for target",
+        tab_power: "Power",
+        tab_time: "Time",
 
         // Running
         tab_pace: "Pace & PPM",
