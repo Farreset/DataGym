@@ -26,19 +26,19 @@ function injectSidebar() {
                 <ion-icon name="home-outline"></ion-icon>
                 <span data-i18n="nav_dashboard">Dashboard</span>
             </a>
-            <a href="/swimming" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
+            <a href="html/swimming" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
                 <ion-icon name="water-outline"></ion-icon>
                 <span data-i18n="nav_swimming">Swimming</span>
             </a>
-            <a href="/running" class="nav-link ${path.includes('running') ? 'active' : ''}">
+            <a href="html/running" class="nav-link ${path.includes('running') ? 'active' : ''}">
                 <ion-icon name="walk-outline"></ion-icon>
                 <span data-i18n="nav_running">Running</span>
             </a>
-            <a href="/plyometrics" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
+            <a href="html/plyometrics" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
                 <ion-icon name="fitness-outline"></ion-icon>
                 <span data-i18n="nav_plyometrics">Plyometrics</span>
             </a>
-             <a href="/gym" class="nav-link ${path.includes('gym') ? 'active' : ''}">
+             <a href="html/gym" class="nav-link ${path.includes('gym') ? 'active' : ''}">
                 <ion-icon name="barbell-outline"></ion-icon>
                 <span data-i18n="nav_gym">Gym</span>
             </a>
