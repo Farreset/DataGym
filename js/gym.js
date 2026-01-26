@@ -4,6 +4,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // Configuramos la subida de vídeos para el análisis de ejercicios (Sentadilla, Banca, etc.)
+    // ... (previous code) ...
+
     setupFileUpload({
         zoneId: 'gymUploadArea',      // Dónde arrastras el vídeo
         inputId: 'gymVideoInput',     // El selector de archivos invisible
@@ -15,69 +17,98 @@ document.addEventListener('DOMContentLoaded', () => {
         analyzeBtnId: 'btnAnalyzeGym',// El botón de "Analizar con IA"
         module: 'Gym',                // Le decimos a la IA que busque repeticiones de gym
         onAnalysisComplete: () => {
-            // Cuando la IA termina de procesar el vídeo, mostramos los datos:
             const results = videoProcessor.getAnalysisResults();
-            if (results && results.detected) {
-                const resultBox = document.getElementById('gymResultBox');
-                const waitingText = resultBox.querySelector('.text-secondary.fst-italic');
-                if (waitingText) waitingText.classList.add('d-none'); // Escondemos el mensaje de espera
-
-                // 1. Preparamos la lista de fallos técnicos (en rojo)
-                let correctionsHtml = '';
-                if (results.corrections.length > 0) {
-                    correctionsHtml = '<ul class="list-unstyled mb-0 text-start">';
-                    results.corrections.forEach(c => {
-                        correctionsHtml += `<li class="text-danger small"><ion-icon name="alert-circle" class="me-1"></ion-icon>${c}</li>`;
-                    });
-                    correctionsHtml += '</ul>';
-                } else {
-                    // Si no hay fallos, ¡felicitamos al usuario!
-                    correctionsHtml = '<p class="text-success small mb-0"><ion-icon name="checkmark-circle" class="me-1"></ion-icon>¡Buena Técnica!</p>';
-                }
-
-                // 2. Preparamos las recomendaciones positivas (etiquetas azules)
-                let recHtml = '';
-                results.recommendations.forEach(r => {
-                    recHtml += `<span class="badge bg-info text-dark me-1">${r}</span>`;
-                });
-
-                // 3. Montamos el diseño final de los resultados
-                const html = `
-                     <div class="row text-center mb-3">
-                        <div class="col-12">
-                            <h1 class="display-3 fw-bold text-primary">${results.reps}</h1>
-                            <span class="text-white bg-primary px-3 py-1 rounded-pill text-uppercase small">Reps Detectadas</span>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <div class="p-2 border rounded bg-white bg-opacity-10 h-100">
-                                <h6 class="small text-uppercase text-secondary mb-2">Fallo Técnico</h6>
-                                ${correctionsHtml}
-                            </div>
-                        </div>
-                         <div class="col-6">
-                            <div class="p-2 border rounded bg-white bg-opacity-10 h-100">
-                                <h6 class="small text-uppercase text-secondary mb-2">Sugerencias</h6>
-                                <div>${recHtml}</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                // Inyectamos todo el HTML nuevo en el cuadro de resultados
-                const mockOutput = document.getElementById('gymAiOutputMock');
-                if (mockOutput) {
-                    mockOutput.innerHTML = html;
-                    mockOutput.classList.remove('d-none');
-                }
-            }
+            displayGymResults(results);
         }
     });
 
     // Encendemos las calculadoras de peso (1RM, Potencia, IMC)
     initGymCalculators();
 });
+
+// Helper to display results
+function displayGymResults(results) {
+    if (results && results.detected) {
+        const resultBox = document.getElementById('gymResultBox');
+        const waitingText = resultBox.querySelector('.text-secondary.fst-italic');
+        if (waitingText) waitingText.classList.add('d-none');
+
+        // 1. Reps Display (Unilateral vs Bilateral)
+        let repsHtml = '';
+        if (results.isUnilateral) {
+            repsHtml = `<div class="d-flex justify-content-center gap-4">
+                            <div><h1 class="display-3 fw-bold text-primary">${results.repsL}</h1><small class="text-uppercase">Izq</small></div>
+                            <div><h1 class="display-3 fw-bold text-primary">${results.repsR}</h1><small class="text-uppercase">Der</small></div>
+                         </div>`;
+        } else {
+            repsHtml = `<h1 class="display-3 fw-bold text-primary">${results.reps}</h1>`;
+        }
+
+        // 2. Errors & Suggestions Table
+        let errorListHtml = '';
+        let suggestionHtml = '';
+        const errors = results.errors || {};
+        const errorKeys = Object.keys(errors);
+
+        if (errorKeys.length > 0) {
+            // Sort by frequency
+            errorKeys.sort((a, b) => errors[b] - errors[a]);
+
+            let listItems = '';
+            errorKeys.forEach(err => {
+                listItems += `<li class="d-flex justify-content-between text-danger small">
+                                <span><ion-icon name="alert-circle" class="me-1"></ion-icon>${err}</span>
+                                <span class="badge bg-danger rounded-pill">${errors[err]}</span>
+                              </li>`;
+            });
+            errorListHtml = `<ul class="list-group list-group-flush bg-transparent">${listItems}</ul>`;
+
+            // Generate smart suggestion based on top error
+            const topError = errorKeys[0];
+            let advice = "Mejora tu técnica general.";
+            // Simple mapping logic (could be more advanced)
+            if (topError.includes("talones")) advice = "Trabaja en la movilidad de tobillo y mantén los talones pegados.";
+            else if (topError.includes("rodillas")) advice = "Activa los glúteos y empuja rodillas afuera.";
+            else if (topError.includes("arquear")) advice = "Fortalece el core y mantén la columna neutra.";
+            else if (topError.includes("balancearte")) advice = "Baja el peso y controla la fase excéntrica.";
+            else if (topError.includes("codos")) advice = "Ajusta la posición de tus codos para mayor estabilidad.";
+            else if (topError.includes("asimétrico")) advice = "Realiza ejercicios unilaterales para corregir el desbalance.";
+
+            suggestionHtml = `<div class="alert alert-info small mt-2"><ion-icon name="bulb" class="me-1"></ion-icon><strong>Consejo:</strong> ${advice}</div>`;
+
+        } else {
+            errorListHtml = '<p class="text-success small mb-0"><ion-icon name="checkmark-circle" class="me-1"></ion-icon>¡Técnica Excelente!</p>';
+            suggestionHtml = '<div class="alert alert-success small mt-2">¡Sigue así! Sube de peso progresivamente.</div>';
+        }
+
+        const html = `
+             <div class="row text-center mb-3">
+                <div class="col-12">
+                    ${repsHtml}
+                    <span class="text-white bg-primary px-3 py-1 rounded-pill text-uppercase small">Reps Totales</span>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-12">
+                    <div class="p-3 border rounded bg-white bg-opacity-10">
+                        <h6 class="small text-uppercase text-secondary mb-2">Resumen de Técnica</h6>
+                        ${errorListHtml}
+                        ${suggestionHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const mockOutput = document.getElementById('gymAiOutputMock');
+        if (mockOutput) {
+            mockOutput.innerHTML = html;
+            mockOutput.classList.remove('d-none');
+        }
+    }
+}
+
+// ... (Rest of existing initGymCalculators) ...
+
 
 function initGymCalculators() {
     // --- 1. Calculadora de RM (Fuerza Máxima) ---
@@ -206,43 +237,76 @@ function setupWebcam() {
                 // Determine module (assuming we are in Gym module here as this file is gym.js)
                 const module = 'Gym';
 
-                // 1. Request Camera Access
+                // 1. Initialize AI Processor FIRST to attach its event listeners (which might overwrite)
+                // We do this matching the element, but we'll manually handle the play/dimensions for webcam to be safe.
+                videoProcessor.setupAnalysis(videoElement, canvasElement, module);
+
+                // 2. Request Camera Access
                 stream = await navigator.mediaDevices.getUserMedia({
                     video: { width: 1280, height: 720 }
                 });
 
-                // 2. Set Video Source
+                // 3. Set Video Source & Handle Playback
                 videoElement.srcObject = stream;
                 videoElement.classList.remove('d-none');
+
+                // Manually handle metadata since setupAnalysis might have its own ideas.
+                // We want to ensure we Play and Resize canvas.
                 videoElement.onloadedmetadata = () => {
                     videoElement.play();
                     canvasElement.classList.remove('d-none');
                     canvasElement.width = videoElement.videoWidth;
                     canvasElement.height = videoElement.videoHeight;
+
+                    // Update processor dimensions just in case
+                    if (videoProcessor.getLayout) {
+                        // videoProcessor internally uses canvas dimensions, so we are good if we set them above.
+                    }
                 };
 
-                // 3. Update UI
+                // 4. Update UI
                 btnCamera.classList.add('d-none');
                 btnStop.classList.remove('d-none');
-                // Disable file upload while camera is active
                 document.getElementById('btnGymSelectFile').disabled = true;
 
-                // 4. Initialize AI Processor with live stream
-                // We need to initialize the analyzer immediately for real-time
-                videoProcessor.setupAnalysis(videoElement, canvasElement, module);
-
-                // Start processing loop
+                // 5. Start Processing Loop
                 cameraActive = true;
-
-                // We can hook into videoProcessor's play/pause but for webcam we just want it to run
                 videoProcessor.isVideoPlaying = true;
                 videoProcessor.processFrame();
 
-                analyzeBtn.disabled = false; // Enable "Analyze" button just in case, though it's real-time now
+                analyzeBtn.disabled = false;
+
+                if (videoProcessor.gymAnalyzer && exerciseSelect) {
+                    videoProcessor.gymAnalyzer.exerciseType = exerciseSelect.value;
+                    videoProcessor.gymAnalyzer.config = videoProcessor.gymAnalyzer.getExerciseConfig(exerciseSelect.value);
+                    videoProcessor.gymAnalyzer.state = 'start'; // Reset state
+                    videoProcessor.gymAnalyzer.reps = 0;
+                    videoProcessor.gymAnalyzer.corrections = new Set(); // Clear old corrections
+                    videoProcessor.gymAnalyzer.formIssues = [];
+                }
 
             } catch (err) {
                 console.error("Error accessing webcam:", err);
-                alert("No se pudo acceder a la cámara. Por favor, revisa los permisos.");
+                alert("No se pudo acceder a la cámara. Revisa los permisos.");
+            }
+        });
+    }
+
+    // --- 6. Dynamic Exercise Switching ---
+    const exerciseSelect = document.getElementById('gymExerciseSelect');
+    if (exerciseSelect) {
+        exerciseSelect.addEventListener('change', () => {
+            // Update analyzer if it's running (camera on)
+            if (videoProcessor.gymAnalyzer) {
+                const newType = exerciseSelect.value;
+                videoProcessor.gymAnalyzer.exerciseType = newType;
+                videoProcessor.gymAnalyzer.config = videoProcessor.gymAnalyzer.getExerciseConfig(newType);
+
+                // Reset counters/state for new exercise
+                videoProcessor.gymAnalyzer.state = 'start';
+                videoProcessor.gymAnalyzer.reps = 0;
+                videoProcessor.gymAnalyzer.corrections = new Set();
+                videoProcessor.gymAnalyzer.formIssues = [{ time: Date.now() / 1000, issue: "Ejercicio Cambiado: " + newType }];
             }
         });
     }
