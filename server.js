@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/swimming', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'swimming.html'));
+    res.sendFile(path.join(__dirname, 'html', 'swimming.html','html/swimming.html'));
 });
 
 app.get('/running', (req, res) => {
