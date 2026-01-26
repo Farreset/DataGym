@@ -22,7 +22,7 @@ function injectSidebar() {
         </div>
 
         <div class="nav flex-column">
-             <a href="/" class="nav-link ${(path === '/' || path.includes('index.html')) ? 'active' : ''}">
+             <a href="/DataGym/" class="nav-link ${(path === '/' || path.includes('index.html')) ? 'active' : ''}">
                 <ion-icon name="home-outline"></ion-icon>
                 <span data-i18n="nav_dashboard">Dashboard</span>
             </a>
