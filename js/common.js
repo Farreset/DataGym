@@ -22,27 +22,35 @@ function injectSidebar() {
         </div>
 
         <div class="nav flex-column">
-             <a href="/DataGym/" class="nav-link ${(path === '/DataGym/' || path.includes('index.html')) ? 'active' : ''}">
+             <a href="/" class="nav-link ${(path === '/' || path.includes('index.html')) ? 'active' : ''}">
                 <ion-icon name="home-outline"></ion-icon>
                 <span data-i18n="nav_dashboard">Dashboard</span>
             </a>
-            <a href="/DataGym/html/swimming.html" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
-                <ion-icon name="water-outline"></ion-icon>
-                <span data-i18n="nav_swimming">Swimming</span>
-            </a>
-            <a href="/DataGym/html/running.html" class="nav-link ${path.includes('running') ? 'active' : ''}">
+            
+            <a href="/running" class="nav-link ${path.includes('running') ? 'active' : ''}">
                 <ion-icon name="walk-outline"></ion-icon>
                 <span data-i18n="nav_running">Running</span>
             </a>
-            <a href="/DataGym/html/plyometrics.html" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
+            <a href="/swimming" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
+                <ion-icon name="water-outline"></ion-icon>
+                <span data-i18n="nav_swimming">Swimming</span>
+            </a>
+            <a href="/plyometrics" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
                 <ion-icon name="fitness-outline"></ion-icon>
                 <span data-i18n="nav_plyometrics">Plyometrics</span>
             </a>
-             <a href="/DataGym/html/gym.html" class="nav-link ${path.includes('gym') ? 'active' : ''}">
+             <a href="/gym" class="nav-link ${path.includes('gym') ? 'active' : ''}">
                 <ion-icon name="barbell-outline"></ion-icon>
                 <span data-i18n="nav_gym">Gym</span>
             </a>
-            
+            <a href="/routines" class="nav-link ${path.includes('routines') ? 'active' : ''}">
+                <ion-icon name="list-outline"></ion-icon>
+                <span data-i18n="nav_routines">Routines</span>
+            </a>
+             <a href="/nutrition" class="nav-link ${path.includes('nutrition') ? 'active' : ''}">
+                <ion-icon name="nutrition-outline"></ion-icon>
+                <span data-i18n="nav_nutrition">Nutrition</span>
+            </a>
             <div class="mt-4 px-3" id="toolsSection">
                 <h6 class="text-secondary small text-uppercase" data-i18n="nav_tools">Tools</h6>
                 <!-- Dynamic tools injected here based on page -->
@@ -262,8 +270,252 @@ const translations = {
         total_load: "Carga Total",
         w5_load: "Calculo Potencia",
 
+        // Routines
+        routines_title: "Constructor de Rutinas",
+        routines_subtitle: "Crea tu plan de entrenamiento personalizado",
+        search_placeholder: "Buscar ejercicios...",
+        filter_muscle_all: "Todos los Músculos",
+        filter_equip_all: "Todo el Equipo",
+        my_routine: "Mi Rutina",
+        btn_save: "Guardar PDF",
+        empty_routine_title: "Tu rutina está vacía",
+        empty_routine_text: "Haz clic en '+' para añadir ejercicios.",
+        est_time: "Tiempo Est.",
+        sets_label: "Series",
+        reps_label: "Reps",
+        weight_label: "Peso",
+        add_set: "+ Añadir Serie",
+        loading_exercises: "Cargando ejercicios...",
+        no_exercises_found: "No se encontraron ejercicios.",
+        clear_confirm: "¿Borrar toda la rutina?",
+        pdf_title: "Mi Rutina de Gimnasio",
+        pdf_generated: "Generado el",
+        pdf_duration: "Duración Estimada",
+        nav_nutrition: "Nutrición",
+        nav_routines: "Rutinas",
+        // Nutrition
+        nutrition_title: "Nutrición",
+        nutrition_subtitle: "Nutrición para la mejor preparación y resultados.",
+        nutrition_feature_text: "Este módulo es caracterizado por una biblioteca de ejercicios y un constructor de rutinas.",
+        nutrition_upload_prompt: "Sube una foto de tu comida",
+        nutrition_upload_prompt_description: "El motor Antigravity analizará la composición molecular, macros, micros y coste de mercado.",
+        nutrition_loading: "Analizando composición molecular...",
+        nutrition_loading_text: "Calibrando sensores...",
+        nutrition_category: "GASTRONOMIC_PLATE",
+        nutrition_item_name: "Nombre del Plato",
+        nutrition_verdict: "Verdict",
+        nutrition_health_score: "Health Score",
+        nutrition_macros: "Matriz Energética",
+        nutrition_deep_details: "Desglose Detallado",
+        video_upload_text: "Sube tu video corriendo y recibe un análisis biomecánico avanzado impulsado por inteligencia artificial. El sistema evaluará automáticamente tu cadencia, longitud de zancada, oscilación vertical, tiempo de contacto con el suelo y otras métricas clave de rendimiento para ayudarte a entender y mejorar tu técnica de carrera.",
+        video_upload_text_description: "Sube un vídeo para obtener análisis detallados...",
+        cadence: "Cadencia",
+        tilt: "Inclinación",
+        forward_lean: "Inclinación hacia adelante",
+        gct_angles: "Angulos",
+        left: "I",
+        right: "D",
+        contact: "Contacto",
+        knee_flex: "Flexión de rodillas",
+        shin: "Espinilla",
+        btn_analyzing: "Analizando...",
+        btn_calc_freq: "Calcular Frecuencia",
+        btn_calc_amp: "Calcular Amplitud",
+        freq_calc_title: "Calculadora de Frecuencia",
+        freq_calc_desc: "Calcular la frecuencia de brazada (Hz) y SPM.",
+        amp_calc_title: "Calculadora de Amplitud (DPS)",
+        amp_calc_desc: "Distancia por brazada (DPS).",
+        dist_m_label: "Distancia (m)",
+        strokes_label: "Número de brazadas",
+        cycles_label: "Número de ciclos (brazadas)",
+        cycles_per_second: "Ciclos/segundo",
+        strokes_per_minute: "Brazadas/minuto",
+
+
+
+
+
+        // Swimming - New Logic
+        swim_tab_css: "Perfil CSS",
+        swim_tab_zones: "Zonas y Estilos",
+        swim_tab_builder: "Diseñador Series",
+        swim_tab_tech: "Eficiencia",
+        swim_tab_health: "Salud (ACWR)",
+        swim_tab_ai: "Analizador IA",
+
+        // CSS Profile
+        css_title: "Perfil de Velocidad Crítica (CSS)",
+        css_desc: "Introduce tus tiempos máximos. Este parámetro fisiológico establece tus zonas de entrenamiento.",
+        css_label_400: "Tiempo 400m",
+        css_label_200: "Tiempo 200m",
+        css_placeholder: "MM:SS (ej. 06:00)",
+        css_btn_calc: "Calcular Perfil CSS",
+        css_res_placeholder: "Introduce tiempos para ver perfil",
+        css_res_title: "Perfil Fisiológico",
+        css_res_speed: "Velocidad Umbral",
+        css_res_pace: "Ritmo Base (100m)",
+        css_res_info_pre: "Este ritmo representa tu",
+        css_res_info_bold: "techo aeróbico",
+        css_res_info_post: ". Nadar más rápido que",
+        css_res_info_post2: "acumulará lactato rápidamente. Ritmos más lentos pueden sostenerse por mucho tiempo.",
+
+        // Zones & Styles
+        zones_title: "Zonas de Entrenamiento",
+        zones_warn_calc: "Calcula tu perfil CSS primero.",
+        zones_note: "* Nota: Los tiempos se ajustan automáticamente al estilo seleccionado usando coeficientes de arrastre biomecánico. No necesitas nuevos tests.",
+
+        // Workout Builder
+        wb_title: "Diseñador de Series",
+        wb_style: "Estilo",
+        wb_dist: "Distancia",
+        wb_zone: "Zona Intensidad",
+        wb_target: "Tiempo Objetivo",
+        wb_rest: "Protocolo Descanso:",
+        wb_start_time: "Cada:",
+        wb_rest_placeholder: "Selecciona parámetros para ver consejos.",
+        wb_alert: "⚠️ Alerta Metodológica: Si reduces el descanso en series de Sprint, dejas de entrenar velocidad pura y pasas a resistencia anaeróbica. ¡Respeta la pausa larga!",
+
+        // ACWR
+        acwr_title: "Control de Carga (ACWR)",
+        acwr_desc: "Compara Carga Aguda (7 días) vs Crónica (28 días) para prevenir lesiones.",
+        acwr_label_acute: "Carga Aguda (Últimos 7 días)",
+        acwr_doc_acute: "Distancia total o unidades de carga esta semana.",
+        acwr_label_chronic: "Carga Crónica (Media 4 semanas)",
+        acwr_doc_chronic: "Media semanal del último mes.",
+        acwr_btn_calc: "Calcular Riesgo",
+        acwr_res_placeholder: "Introduce datos de carga",
+
+        // SWOLF
+        swolf_title: "Eficiencia (SWOLF)",
+        swolf_desc: "SWOLF = Tiempo + Brazadas. Menor puntuación es mejor eficiencia.",
+        swolf_label_time: "Tiempo",
+        swolf_label_strokes: "Brazadas (Ciclos)",
+        swolf_placeholder_time: "Segundos o MM:SS (ej. 30)",
+        swolf_placeholder_strokes: "Conteo (ej. 15)",
+        swolf_label_pool: "Largo Piscina",
+        swolf_btn_analyze: "Analizar Eficiencia",
+        swolf_res_placeholder: "Introduce métricas para analizar",
+        swolf_res_score: "Puntuación SWOLF",
+
+        // AI Extras
+        meta_label_dist: "Distancia Total (m)",
+        meta_label_time: "Tiempo Total (s) o Ritmo",
+        meta_doc_time: "Usa segundos (ej. 45.5) para mejor resultado.",
+        meta_optional: "Metadatos Video (Opcional)",
+        meta_desc: "Introduce datos manualmente para mejor precisión IA.",
+        // JS Dynamic Strings
+        alert_invalid_css: "Tiempos inválidos. Usa formato MM:SS (ej. 05:30) y asegura 400m > 200m.",
+        alert_invalid_swolf: "Por favor introduce tiempo y brazadas válidos.",
+
+        // Tech Check
+        freq_label: "Frecuencia",
+        freq_unit: "Ciclos/Min",
+        amp_label: "Amplitud",
+        amp_desc: "Metros/Brazada",
+        tech_why_title: "¿Por qué es importante?",
+        freq_info: "Ritmo de nado. Muy bajo indica puntos muertos; muy alto puede indicar 'resbale'.",
+        amp_info: "Distancia por brazada. Mayor amplitud indica mejor eficiencia (DPS).",
+
+        mode_manual: "Entrada Manual",
+        mode_ai: "Estimador IA",
+        btn_ai_sim: "Simular Análisis Pro",
+        ai_est_desc: "La IA estima métricas de rendimiento detalladas usando solo Tiempo y Longitud de Piscina.",
+        ai_avg_speed: "Velocidad Media",
+
+        // Workout Advice
+        advice_rec: "Continuo o descanso muy corto (10s). Objetivo: Limpiar lactato.",
+        advice_en1: "Descanso 10s-15s. Mantén frecuencia cardíaca estable.",
+        advice_en2: "Trabajo:Descanso 1:0.25 a 1:0.5 (20s-40s). Ritmo repetible.",
+        advice_en3: "Trabajo:Descanso 1:1 a 1:3. Recuperación necesaria acidosis.",
+        advice_sp: "Trabajo:Descanso 1:12 a 1:20 (Descanso total > 2m). Fosfágenos puros.",
+
+        // SWOLF Feedback
+        swolf_fb_good: "Buena eficiencia.",
+        swolf_fb_slip: "Diagnóstico: 'Resbale'. Frecuencia alta (>50) pero bajo DPS. Enfócate en deslizar.",
+        swolf_fb_elite: "Diagnóstico: Eficiencia Élited. Excelente balance deslizamiento/frecuencia.",
+        swolf_fb_goal: "Objetivo: Intenta bajar 1-2 puntos manteniendo el mismo tiempo con una brazada menos.",
+
+        // ACWR Status
+        acwr_risk_under: "Riesgo Desentrenamiento",
+        acwr_risk_optimal: "Sweet Spot (Óptimo)",
+        acwr_risk_high: "CRÍTICO: Alto Riesgo Lesión",
+        acwr_risk_over: "Precaución (Sobrecarga)",
+        acwr_msg_high: "Rec Entrenador: Tu carga aguda es 50% mayor que la histórica. Reduce volumen un 20% el próximo microciclo.",
+
+        // AI Results
+        ai_complete: "Análisis Completo",
+        ai_strokes: "Total Brazadas",
     },
     ca: {
+        // Swimming - New Logic
+        swim_tab_css: "Perfil CSS",
+        swim_tab_zones: "Zones i Estils",
+        swim_tab_builder: "Dissenyador Sèries",
+        swim_tab_tech: "Eficiència",
+        swim_tab_health: "Salut (ACWR)",
+        swim_tab_ai: "Analitzador IA",
+
+        // CSS Profile
+        css_title: "Perfil de Velocitat Crítica (CSS)",
+        css_desc: "Introdueix els teus temps màxims. Aquest paràmetre fisiològic estableix les teves zones d'entrenament.",
+        css_label_400: "Temps 400m",
+        css_label_200: "Temps 200m",
+        css_placeholder: "MM:SS (ex. 06:00)",
+        css_btn_calc: "Calcular Perfil CSS",
+        css_res_placeholder: "Introdueix temps per veure perfil",
+        css_res_title: "Perfil Fisiològic",
+        css_res_speed: "Velocitat Llindar",
+        css_res_pace: "Ritme Base (100m)",
+        css_res_info_pre: "Aquest ritme representa el teu",
+        css_res_info_bold: "sostre aeròbic",
+        css_res_info_post: ". Nedar més ràpid que",
+        css_res_info_post2: "acumularà lactat ràpidament. Ritmes més lents poden sostenir-se per molt temps.",
+
+        // Zones & Styles
+        zones_title: "Zones d'Entrenament",
+        zones_warn_calc: "Calcula el teu perfil CSS primer.",
+        zones_note: "* Nota: Els temps s'ajusten automàticament a l'estil seleccionat utilitzant coeficients d'arrossegament biomecànic. No necessites nous tests.",
+
+        // Workout Builder
+        wb_title: "Dissenyador de Sèries",
+        wb_style: "Estil",
+        wb_dist: "Distància",
+        wb_zone: "Zona Intensitat",
+        wb_target: "Temps Objectiu",
+        wb_rest: "Protocol Descans:",
+        wb_start_time: "Cada:",
+        wb_rest_placeholder: "Selecciona paràmetres per veure consells.",
+        wb_alert: "⚠️ Alerta Metodològica: Si redueixes el descans en sèries de Sprint, deixes d'entrenar velocitat pura i passes a resistència anaeròbica. Respecta la pausa llarga!",
+
+        // ACWR
+        acwr_title: "Control de Càrrega (ACWR)",
+        acwr_desc: "Compara Càrrega Aguda (7 dies) vs Crònica (28 dies) per prevenir lesions.",
+        acwr_label_acute: "Càrrega Aguda (Últims 7 dies)",
+        acwr_doc_acute: "Distància total o unitats de càrrega aquesta setmana.",
+        acwr_label_chronic: "Càrrega Crònica (Mitjana 4 setmanes)",
+        acwr_doc_chronic: "Mitjana setmanal de l'últim mes.",
+        acwr_btn_calc: "Calcular Risc",
+        acwr_res_placeholder: "Introdueix dades de càrrega",
+
+        // SWOLF
+        swolf_title: "Eficiència (SWOLF)",
+        swolf_desc: "SWOLF = Temps + Braçades. Menor puntuació és millor eficiència.",
+        swolf_label_time: "Temps",
+        swolf_label_strokes: "Braçades (Cicles)",
+        swolf_placeholder_time: "Segons o MM:SS (ex. 30)",
+        swolf_placeholder_strokes: "Compte (ex. 15)",
+        swolf_label_pool: "Llarg Piscina",
+        swolf_btn_analyze: "Analitzar Eficiència",
+        swolf_res_placeholder: "Introdueix mètriques per analitzar",
+        swolf_res_score: "Puntuació SWOLF",
+
+        // AI Extras
+        meta_label_dist: "Distància Total (m)",
+        meta_label_time: "Temps Total (s) o Ritme",
+        meta_doc_time: "Usa segons (ex. 45.5) per millor resultat.",
+        meta_optional: "Metadades Vídeo (Opcional)",
+        meta_desc: "Introdueix dades manualment per millor precisió IA.",
+
         nav_dashboard: "Inici",
         nav_swimming: "Natació",
         nav_running: "Running",
@@ -369,8 +621,6 @@ const translations = {
         gym_subtitle: "Calculadora i eines per exercicis de gimnàs",
         gym_feature_text: "Aquest mòdul comptarà amb una biblioteca d'exercicis i constructor de rutines.",
 
-        // --- NEW KEYS (CA) ---
-        // Plyometrics
         // Plyometrics
         tab_plyo_basic: "Mètriques Bàsiques",
         tab_plyo_indices: "Índexs Avançats",
@@ -431,9 +681,97 @@ const translations = {
         ohp: "Press de hombros",
         total_load: "Càrrega Total",
         w5_load: "Calcul de potencia",
+        nav_routines: "Rutines",
+        nav_nutrition: "Nutrició",
+        nutrition_title: "Nutrició",
+        nutrition_subtitle: "Nutrició per a la millor preparació i resultats.",
+        nutrition_feature_text: "Aquest mòdul es caracteritza per una llibreria d'exercicis i un constructor de rutines.",
+        nutrition_category: "GASTRONOMIC_PLATE",
+        nutrition_item_name: "Nombre del Plato",
+        nutrition_verdict: "Verdict",
+        nutrition_health_score: "Health Score",
+        nutrition_macros: "Matriz Energética",
+        nutrition_deep_details: "Desglose Detallado",
+        nutrition_upload_prompt: "Sube una foto de tu comida",
+        nutrition_upload_prompt_description: "El motor Antigravity analizará la composición molecular, macros, micros y coste de mercado.",
+        nutrition_loading: "Analizando composición molecular...",
+        nutrition_loading_text: "Calibrando sensores...",
+        btn_analyzing: "Analitzant...",
+        btn_calc_freq: "Calcula Freqüencia",
+        btn_calc_amp: "Calcula Amplitud",
+        freq_calc_title: "Calculadora de Freqüencia",
+        freq_calc_desc: "Calcula la freqüencia de palada (Hz) y SPM.",
+        amp_calc_title: "Calculadora de Amplitud (DPS)",
+        amp_calc_desc: "Distancia por palada (DPS).",
+        dist_m_label: "Distancia (m)",
+        strokes_label: "Número de paladas",
+        cycles_label: "Número de ciclos (paladas)",
+        cycles_per_second: "Cicles / Segon",
+        strokes_per_minute: "Brazadas / Minut",
 
 
+        // JS Dynamic Strings
+        alert_invalid_css: "Temps invàlids. Ua format MM:SS (ex. 05:30) i assegura 400m > 200m.",
+        alert_invalid_swolf: "Si us plau introdueix temps i braçades vàlids.",
+
+        // Tech Check
+        freq_label: "Freqüència",
+        freq_unit: "Cicles/Min",
+        amp_label: "Amplitud",
+        amp_desc: "Metres/Braçada",
+        tech_why_title: "Per què és important?",
+        freq_info: "Ritme de nedar. Massa baix indica punts morts; massa alt pot indicar 'relliscada'.",
+        amp_info: "Distància per braçada. Major amplitud indica millor eficiència (DPS).",
+
+        mode_manual: "Entrada Manual",
+        mode_ai: "Estimador IA",
+        btn_ai_sim: "Simular Anàlisi Pro",
+        ai_est_desc: "La IA estima mètriques de rendiment detallades usant només Temps i Longitud de Piscina.",
+        ai_avg_speed: "Velocitat Mitjana",
+
+        // Zones
+        zone_name_rec: "Recuperació (Rec)",
+        zone_desc_rec: "Eliminació de lactat, recuperació activa.",
+        zone_name_en1: "Resistència Base (En-1)",
+        zone_desc_en1: "Capacitat aeròbica, crema de greixos.",
+        zone_name_en2: "Llindar (En-2)",
+        zone_desc_en2: "Estat estacionari de lactat. Ritme de creuer.",
+        zone_name_en3: "VO2 Màx (En-3)",
+        zone_desc_en3: "Màxim consum d'oxigen. Intervals curts.",
+        zone_name_sp: "Sprint (Sp)",
+        zone_desc_sp: "Velocitat pura, alta tolerància al lactat.",
+
+        // Workout Advice
+        advice_rec: "Continu o descans molt curt (10s). Objectiu: Netejar lactat.",
+        advice_en1: "Descans 10s-15s. Manté freqüència cardíaca estable.",
+        advice_en2: "Treball:Descans 1:0.25 a 1:0.5 (20s-40s). Ritme repetible.",
+        advice_en3: "Treball:Descans 1:1 a 1:3. Recuperació necessària acidosi.",
+        advice_sp: "Treball:Descans 1:12 a 1:20 (Descans total > 2m). Fosfàgens purs.",
+
+        // SWOLF Feedback
+        swolf_fb_good: "Bona eficiència.",
+        swolf_fb_slip: "Diagnòstic: 'Rellisca'. Freqüència alta (>50) però baix DPS. Enfoca't en lliscar.",
+        swolf_fb_elite: "Diagnòstic: Eficiència Èlit. Excel·lent balanç lliscament/freqüència.",
+        swolf_fb_goal: "Objectiu: Intenta baixar 1-2 punts mantenint el mateix temps amb una braçada menys.",
+
+        // ACWR Status
+        acwr_risk_under: "Risc Desentrenament",
+        acwr_risk_optimal: "Sweet Spot (Òptim)",
+        acwr_risk_high: "CRÍTIC: Alt Risc Lesió",
+        acwr_risk_over: "Precaució (Sobrecàrrega)",
+        acwr_msg_high: "Rec Entrenador: La teva càrrega aguda és 50% major que la històrica. Redueix volum un 20% el pròxim microcicle.",
+
+        // AI Results
+        ai_complete: "Anàlisi Complet",
+        ai_strokes: "Total Braçades",
+        ai_spm: "SPM Mitjà",
+        ai_tech: "Insights Tècnica",
+        ai_rhythm: "• Ritme constant detectat.",
+        ai_focus_glide: "focus en lliscament/tècnica",
+        ai_focus_sprint: "sprint/alta freqüència",
+        ai_focus_endurance: "ritme resistència estable",
     },
+
     en: {
         nav_dashboard: "Dashboard",
         nav_swimming: "Swimming",
@@ -540,8 +878,6 @@ const translations = {
         gym_subtitle: "Calculator and tools for gym exercises",
         gym_feature_text: "This module will feature an exercise library and routine builder.",
 
-        // --- NEW KEYS (EN) ---
-        // Plyometrics
         // Plyometrics
         tab_plyo_basic: "Basic Metrics",
         tab_plyo_indices: "Advanced Indices",
@@ -602,12 +938,90 @@ const translations = {
         ohp: "Overhead Press",
         total_load: "Total Load",
         w5_load: "Power Calc",
+        w5_power: "Power",
+        w5_time: "Time",
+        w5_intensity: "Intensity",
+        nav_nutrition: "Nutrition",
+        nutrition_title: "Nutrition",
+        nutrition_subtitle: "Nutrition for better preparation and results.",
+        nutrition_upload_prompt: "Upload a photo of your meal",
+        nutrition_upload_prompt_description: "The Antigravity engine will analyze the molecular composition, macros, micros and market cost.",
+        nutrition_loading: "Analyzing molecular composition...",
+        nutrition_loading_text: "Calibrating sensors...",
+        nutrition_category: "GASTRONOMIC_PLATE",
+        nutrition_item_name: "Dish Name",
+        nutrition_verdict: "Verdict",
+        nutrition_health_score: "Health Score",
+        nutrition_macros: "Energy Matrix",
+        nutrition_deep_details: "Detailed Breakdown",
+        btn_analyzing: "Analyzing...",
+
+
+        // JS Dynamic Strings
+        alert_invalid_css: "Invalid times. Use MM:SS format (e.g. 05:30) and ensure 400m > 200m.",
+        alert_invalid_swolf: "Please enter valid time and strokes.",
+
+        // Tech Check
+        freq_label: "Frequency",
+        freq_unit: "Cycles/Min",
+        amp_label: "Amplitude",
+        amp_desc: "Meters/Stroke",
+        tech_why_title: "Why is this important?",
+        freq_info: "Stroke rhythm. Too low means dead spots; too high might indicate slipping.",
+        amp_info: "Distance per stroke. Higher amplitude generally indicates better efficiency.",
+
+        mode_manual: "Manual Input",
+        mode_ai: "AI Estimator",
+        btn_ai_sim: "Simulate Pro Analysis",
+        ai_est_desc: "AI estimates detailed performance metrics using only Time & Pool Length.",
+        ai_avg_speed: "Avg Speed",
+
+        // Zones
+        zone_name_rec: "Recovery (Rec)",
+        zone_desc_rec: "Lactate clearance, active recovery.",
+        zone_name_en1: "Base Endurance (En-1)",
+        zone_desc_en1: "Aerobic capacity, fat burning.",
+        zone_name_en2: "Threshold (En-2)",
+        zone_desc_en2: "Lactate steady state. Cruise pace.",
+        zone_name_en3: "VO2 Max (En-3)",
+        zone_desc_en3: "Max oxygen uptake. Short intervals.",
+        zone_name_sp: "Sprint (Sp)",
+        zone_desc_sp: "Pure speed, high lactate tolerance.",
+
+        // Workout Advice
+        advice_rec: "Continuous or very short rest (10s). Goal: Flush lactate.",
+        advice_en1: "Rest 10s-15s. Keep heart rate stable.",
+        advice_en2: "Work:Rest 1:0.25 to 1:0.5 (20s-40s). Repeatable pace.",
+        advice_en3: "Work:Rest 1:1 to 1:3. High acidosis recovery needed.",
+        advice_sp: "Work:Rest 1:12 to 1:20 (Total rest > 2m). Pure phosphagens.",
+
+        // SWOLF Feedback
+        swolf_fb_good: "Good efficiency.",
+        swolf_fb_slip: "Diagnosis: 'Slipping'. High stroke rate (>50) but low DPS. Focus on glide.",
+        swolf_fb_elite: "Diagnosis: Elite Efficiency. Excellent glide/rate balance.",
+        swolf_fb_goal: "Goal: Try to drop 1-2 points next session by holding the same time with one less stroke.",
+
+        // ACWR Status
+        acwr_risk_under: "Undertraining Risk",
+        acwr_risk_optimal: "Sweet Spot (Optimal)",
+        acwr_risk_high: "CRITICAL: High Injury Risk",
+        acwr_risk_over: "Caution (Overreaching)",
+        acwr_msg_high: "Coach Rec: Your acute load is 50% higher than historical. Reduce volume by 20% next microcycle.",
+
+        // AI Results
+        ai_complete: "Analysis Complete",
+        ai_strokes: "Total Strokes",
+        ai_spm: "Avg SPM",
+        ai_tech: "Technique Insights",
+        ai_rhythm: "• Consistent rhythm detected.",
+        ai_focus_glide: "gliding/drill focus",
+        ai_focus_sprint: "sprinting/high turnover",
+        ai_focus_endurance: "steady endurance pace",
 
     }
 };
 
 function initializeLanguage() {
-    // Initialize Language (Default: Spanish)
     const savedLang = localStorage.getItem('adminLang') || 'es';
     setLanguage(savedLang);
 }
@@ -616,10 +1030,19 @@ function setLanguage(lang) {
     // Fallback to Spanish if key doesn't exist
     const t = translations[lang] || translations.es;
 
+    // specific handling for innerText
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (t[key]) {
             el.innerText = t[key];
+        }
+    });
+
+    // specific handling for placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) {
+            el.placeholder = t[key];
         }
     });
 
@@ -631,19 +1054,33 @@ function setLanguage(lang) {
     localStorage.setItem('adminLang', lang);
 }
 
+// Helper for JS dynamic strings
+function getTranslation(key) {
+    const lang = localStorage.getItem('adminLang') || 'es';
+    const t = translations[lang] || translations.es;
+    return t[key] || key;
+}
+
 // --- Shared Utilities ---
 
 // Helper: Parse MM:SS.ms or SS.ms to total seconds
+// Helper: Parse HH:MM:SS, MM:SS.ms or SS.ms to total seconds
 function parseTime(timeStr) {
-    let parts = timeStr.split(':');
+    if (!timeStr) return 0;
+    // Normalized: replace comma with dot, trim
+    const str = timeStr.toString().replace(',', '.').trim();
+    const parts = str.split(':');
     let seconds = 0;
 
-    if (parts.length === 2) {
+    if (parts.length === 3) {
+        // HH:MM:SS
+        seconds = (parseInt(parts[0]) * 3600) + (parseInt(parts[1]) * 60) + parseFloat(parts[2]);
+    } else if (parts.length === 2) {
         // MM:SS
-        seconds = parseInt(parts[0]) * 60 + parseFloat(parts[1].replace(',', '.'));
+        seconds = (parseInt(parts[0]) * 60) + parseFloat(parts[1]);
     } else {
         // SS only
-        seconds = parseFloat(parts[0].replace(',', '.'));
+        seconds = parseFloat(parts[0]);
     }
     return seconds;
 }
@@ -750,14 +1187,27 @@ function startAnalysis(file, resultBox, mockOutputId, config) {
         videoEl.classList.add('d-none');
         canvasEl.classList.add('d-none');
 
+        // Remove Overlay if exists
+        const oldOverlay = videoEl.parentNode.querySelector('.ai-status-overlay');
+        if (oldOverlay) oldOverlay.remove();
+
         if (resultBox) {
-            resultBox.classList.remove('d-none'); // Show box again
+            // resultBox.classList.remove('d-none'); // Don't show box on reset, wait for upload
+            // Actually, on reset we go back to "Upload" state usually, or "Ready to Analyze"
+            // Let's hide the result box to be clean
+            resultBox.classList.add('d-none');
+
             const mockPrompt = resultBox.querySelector('.text-secondary.fst-italic');
             if (mockPrompt) mockPrompt.classList.remove('d-none');
 
             const mockResult = document.getElementById(mockOutputId);
             if (mockResult) mockResult.classList.add('d-none');
         }
+
+        // Show Upload Area again? Or just clear inputs?
+        const uploadArea = document.getElementById(config.zoneId);
+        // If we want to allow re-upload, we might need to show it.
+        // Current flow seems to keep upload area visible but maybe we should reset it?
 
         // Hide Headers
         const gymTitle = document.getElementById('gymResultTitle');
@@ -771,13 +1221,13 @@ function startAnalysis(file, resultBox, mockOutputId, config) {
         analyzeBtn.classList.add('btn-primary');
         analyzeBtn.dataset.state = 'analyze';
 
-        // Clear file input
+        // Re-enable input if needed or just let user pick file again
         return;
     }
 
     // 2. ANALYZE Logic (Start)
 
-    // Hide the ENTIRE result box initially (User Request)
+    // Hide the ENTIRE result box initially
     if (resultBox) {
         resultBox.classList.add('d-none');
     }
@@ -792,13 +1242,36 @@ function startAnalysis(file, resultBox, mockOutputId, config) {
     videoEl.classList.remove('d-none');
     canvasEl.classList.remove('d-none');
 
-    // Switch Button to "Reset" state
-    analyzeBtn.innerHTML = '<ion-icon name="refresh" class="me-2"></ion-icon><span data-i18n="btn_reset">Reiniciar Parámetros</span>';
-    analyzeBtn.classList.remove('btn-primary');
-    analyzeBtn.classList.add('btn-outline-danger');
-    analyzeBtn.dataset.state = 'reset';
+    // --- INSERT AI OVERLAY ---
+    const parent = videoEl.parentNode;
+    // Ensure parent is relative
+    parent.classList.add('position-relative');
 
-    // Hide Header Initially (Generic check for gym/run headers)
+    // Remove existing
+    const existingOverlay = parent.querySelector('.ai-status-overlay');
+    if (existingOverlay) existingOverlay.remove();
+
+    // Create new Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'ai-status-overlay';
+    overlay.innerHTML = `
+        <div class="ai-scanner-line"></div>
+        <div class="text-center z-3">
+             <div class="spinner-border text-info mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+             <h4 class="text-white tracking-wide ai-pulse-text fw-bold" data-i18n="btn_analyzing">Analizando...</h4>
+             <small class="text-info font-monospace">BIOMECHANICS ENGINE v11.0</small>
+        </div>
+    `;
+    parent.appendChild(overlay);
+    // -------------------------
+
+    // Switch Button to "Loading" state
+    analyzeBtn.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div><span data-i18n="btn_analyzing">Analizando...</span>';
+    analyzeBtn.classList.remove('btn-primary');
+    analyzeBtn.classList.add('btn-outline-light');
+    analyzeBtn.disabled = true; // Prevent clicking while analyzing
+
+    // Hide Header Initially
     const gymTitle = document.getElementById('gymResultTitle');
     if (gymTitle) gymTitle.classList.add('d-none');
     const runTitle = document.getElementById('runResultTitle');
@@ -807,35 +1280,63 @@ function startAnalysis(file, resultBox, mockOutputId, config) {
     // Setup MediaPipe
     videoProcessor.setupAnalysis(videoEl, canvasEl, config.module);
 
-    // RESTRICT CONTROLS: Remove native controls to prevent seeking
+    // RESTRICT CONTROLS
     videoEl.removeAttribute('controls');
 
-    // Custom Play/Pause on click
+    // Muted strict
+    videoEl.muted = true;
+
+    // Custom Play/Pause (Toggle)
     videoEl.onclick = () => {
-        if (videoEl.paused) {
-            videoEl.play();
-        } else {
-            videoEl.pause();
-        }
+        if (videoEl.paused) videoEl.play();
+        else videoEl.pause();
     };
 
     // Listen for video end
     videoEl.onended = () => {
-        // Disable click to prevent replay - User must use Reset button
-        videoEl.onclick = null;
+        videoEl.onclick = null; // Disable interactions
+
+        // UPDATE OVERLAY TEXT
+        const title = overlay.querySelector('h4');
+        const spinner = overlay.querySelector('.spinner-border');
+        const small = overlay.querySelector('small');
+
+        if (title) title.innerText = "GENERATING REPORT...";
+        if (small) small.innerText = "COMPILING DATA POINTS";
+        if (spinner) {
+            spinner.classList.remove('text-info');
+            spinner.classList.add('text-success');
+        }
 
         if (config.onAnalysisComplete && typeof config.onAnalysisComplete === 'function') {
             setTimeout(() => {
-                // Show Header
-                if (gymTitle) gymTitle.classList.remove('d-none');
-                if (runTitle) runTitle.classList.remove('d-none');
+                // Fade out overlay
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.remove(); // Remove from DOM
 
-                // Show Result Box Container
-                if (resultBox) resultBox.classList.remove('d-none');
+                    // Show Header
+                    if (gymTitle) gymTitle.classList.remove('d-none');
+                    if (runTitle) runTitle.classList.remove('d-none');
 
-                // Show Results ONLY now
-                config.onAnalysisComplete();
-            }, 500);
+                    // Show Result Box Container
+                    if (resultBox) resultBox.classList.remove('d-none');
+
+                    // Show Results
+                    config.onAnalysisComplete();
+
+                    // RESET BUTTON & CONTROLS FOR REPLAY
+                    analyzeBtn.innerHTML = '<ion-icon name="sparkles" class="me-2"></ion-icon><span data-i18n="btn_analyze">Re-Analyze</span>';
+                    analyzeBtn.classList.remove('btn-outline-light');
+                    analyzeBtn.classList.add('btn-primary');
+                    analyzeBtn.disabled = false;
+
+                    videoEl.controls = true;
+                    videoEl.onclick = null;
+
+                }, 500); // Wait for fade out
+
+            }, 1000); // 1s processing delay
         }
     };
 

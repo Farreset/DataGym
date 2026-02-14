@@ -1,0 +1,426 @@
+/**
+ * ANTIGRAVITY BIOMECHANICS ENGINE v9.0 (Magnetic Floor & Auto-Recalib)
+ * Lógica: El suelo se adapta lateralmente (X) pero es estricto verticalmente (Y).
+ * Incluye recalibración automática si te cambias de sitio.
+ */
+
+class GymAnalyzer {
+    constructor(videoElement, canvasElement) {
+        this.videoElement = videoElement;
+        this.canvasCtx = canvasElement ? canvasElement.getContext('2d') : null;
+
+        // Configuración
+        this.exerciseType = 'squat';
+        this.mode = 'technique';
+        this.state = 'start';
+
+        // Estado
+        this.reps = 0;
+        this.prevTime = 0;
+        this.isPausedForAlert = false;
+
+        // --- SISTEMA DE SUELO MAGNÉTICO ---
+        this.calibration = {
+            isCalibrated: false,
+            floorY: 0,          // La altura sagrada del suelo
+            floorSlope: 0,      // Inclinación de la cámara (para corregir perspectiva)
+            shoulderWidth: 0,
+            lastStableY: 0      // Para detectar cambios de posición
+        };
+
+        // Variables para Auto-Recalibración
+        this.stabilityCounter = 0;
+        this.calibCounter = 0;
+        this.floorSamples = [];
+        this.lastAlertTime = 0;
+    }
+
+    reset() {
+        this.reps = 0;
+        this.state = 'start';
+        this.calibration.isCalibrated = false;
+        this.calibCounter = 0;
+        this.floorSamples = [];
+        this.cleanCanvas();
+        this.dispatchUpdate({ type: 'RESET' });
+    }
+
+    cleanCanvas() {
+        if (this.canvasCtx) {
+            this.canvasCtx.clearRect(0, 0, this.canvasCtx.canvas.width, this.canvasCtx.canvas.height);
+        }
+    }
+
+    processFrame(rawLandmarks, timestamp) {
+        if (!rawLandmarks || this.isPausedForAlert) return;
+
+        this.cleanCanvas();
+        const body = this.mapLandmarks(rawLandmarks);
+
+        // --- FASE 1: CALIBRACIÓN INICIAL ---
+        if (!this.calibration.isCalibrated) {
+            this.performCalibration(body);
+            if (this.canvasCtx) {
+                this.drawSkeleton(rawLandmarks, '#888888');
+                this.drawTempFloor(Math.max(body.l_heel.y, body.r_heel.y));
+            }
+            return;
+        }
+
+        // --- FASE 2: AUTO-RECALIBRACIÓN (Si te cambias de sitio) ---
+        this.checkPositionalChange(body);
+
+        // --- FASE 3: ANÁLISIS ---
+        const mainAngle = this.calculateExerciseAngle(body);
+        this.updateRepState(mainAngle);
+
+        if (this.state !== 'start') {
+            this.analyzePrecisionSquat(body);
+        }
+
+        // --- FASE 4: RENDERIZADO VISUAL ---
+        if (this.canvasCtx) {
+            // Dibujar suelo magnético que sigue a los pies
+            this.drawMagneticAnchors(body);
+            this.drawSkeleton(rawLandmarks);
+        }
+
+        this.dispatchUpdate({
+            type: 'FRAME',
+            reps: this.reps,
+            angle: Math.round(mainAngle),
+            velocity: this.calculateVelocity(mainAngle, timestamp)
+        });
+    }
+
+    // --- LÓGICA DE CALIBRACIÓN ROBUSTA ---
+    performCalibration(body) {
+        // 1. Validar Visibilidad
+        const hasFeet = ((body.l_heel?.visibility ?? 0) > 0.6 && (body.r_heel?.visibility ?? 0) > 0.6);
+        if (!hasFeet || !body.nose) {
+            this.resetCalibration("BUSCANDO PIES...", "Aléjate para que se vean bien");
+            return;
+        }
+
+        // 2. Validar Estabilidad (¿Estás quieto?)
+        const currentY = (body.l_heel.y + body.r_heel.y) / 2;
+        if (Math.abs(currentY - this.calibration.lastStableY) > 0.01) {
+            // Si te mueves mucho, reiniciamos contador
+            this.calibCounter = Math.max(0, this.calibCounter - 2);
+        }
+        this.calibration.lastStableY = currentY;
+
+        // 3. Validar Postura
+        if (!this.checkPosture(body)) {
+            this.resetCalibration("PONTE RECTO", "Estira las piernas");
+            return;
+        }
+
+        // 4. Acumular
+        this.calibCounter++;
+        this.floorSamples.push({ ly: body.l_heel.y, ry: body.r_heel.y, lx: body.l_heel.x, rx: body.r_heel.x });
+
+        if (this.calibCounter < 40) {
+            this.dispatchUpdate({ type: 'CALIBRATION_START' });
+        } else {
+            this.finalizeCalibration();
+        }
+    }
+
+    finalizeCalibration() {
+        // Calcular promedio del suelo
+        const n = this.floorSamples.length;
+        let sumLY = 0, sumRY = 0, sumLX = 0, sumRX = 0;
+
+        this.floorSamples.forEach(s => {
+            sumLY += s.ly; sumRY += s.ry;
+            sumLX += s.lx; sumRX += s.rx;
+        });
+
+        const avgLy = sumLY / n;
+        const avgRy = sumRY / n;
+        const avgLx = sumLX / n;
+        const avgRx = sumRX / n;
+
+        // Calcular la pendiente del suelo (por si la cámara está torcida)
+        // Slope (m) = (y2 - y1) / (x2 - x1)
+        const slope = (avgRy - avgLy) / (avgRx - avgLx);
+
+        // Guardamos el nivel base en el centro del cuerpo
+        const centerX = (avgLx + avgRx) / 2;
+        const centerY = (avgLy + avgRy) / 2;
+
+        this.calibration.floorY = centerY;
+        this.calibration.floorSlope = slope;
+        this.calibration.isCalibrated = true;
+
+        this.dispatchUpdate({ type: 'CALIBRATION_COMPLETE' });
+    }
+
+    resetCalibration(msg, subtext) {
+        this.calibCounter = 0;
+        this.floorSamples = [];
+        this.dispatchUpdate({ type: 'CALIBRATION_FEEDBACK', msg: msg, subtext: subtext });
+    }
+
+    // --- AUTO-RECALIBRACIÓN (DETECTAR CAMBIO DE SITIO) ---
+    checkPositionalChange(body) {
+        // Solo verificamos si estamos en estado 'start' (de pie esperando)
+        if (this.state !== 'start') return;
+
+        // Calculamos dónde deberían estar los pies según la calibración actual
+        const expectedLY = this.getExpectedFloorY(body.l_heel.x);
+        const expectedRY = this.getExpectedFloorY(body.r_heel.x);
+
+        const diffL = Math.abs(body.l_heel.y - expectedLY);
+        const diffR = Math.abs(body.r_heel.y - expectedRY);
+
+        // Si los pies están consistentemente lejos del suelo calibrado (ej. te fuiste para atrás o adelante)
+        // Umbral 0.05 es aprox 5-10cm en pantalla
+        if (diffL > 0.05 && diffR > 0.05) {
+            this.stabilityCounter++;
+        } else {
+            this.stabilityCounter = 0;
+        }
+
+        // Si llevas 40 frames (1.5s) en una nueva posición estable, recalibramos
+        if (this.stabilityCounter > 40) {
+            console.log("Recalibrando por cambio de posición...");
+            this.calibration.isCalibrated = false;
+            this.calibCounter = 0;
+            this.floorSamples = [];
+            this.stabilityCounter = 0;
+        }
+    }
+
+    // --- MATEMÁTICA DEL SUELO INCLINADO ---
+    getExpectedFloorY(currentX) {
+        // Ecuación de la recta: y - y1 = m(x - x1)
+        // Usamos el centro calibrado como punto de referencia (x1, y1)
+        // Si no hay slope (cámara recta), devuelve floorY constante.
+
+        // NOTA SIMPLIFICADA: Para webcams normales, asumimos suelo plano (slope=0) para evitar jitter,
+        // a menos que la detección inicial indique una inclinación brutal.
+        if (Math.abs(this.calibration.floorSlope) < 0.1) {
+            return this.calibration.floorY;
+        }
+
+        // Si hay inclinación, calculamos la Y proyectada
+        // Esto es complejo sin saber el centro X exacto, usaremos el Y promedio simple para robustez
+        return this.calibration.floorY;
+    }
+
+    // --- ANÁLISIS DE TÉCNICA ---
+    analyzePrecisionSquat(body) {
+        if (this.mode !== 'technique') return;
+
+        // Usamos el suelo magnético: La referencia Y se mueve si la cámara está inclinada, 
+        // pero aquí usamos el valor base para robustez.
+        const floorY = this.calibration.floorY;
+        const threshold = 0.04; // Tolerancia
+
+        const l_lift = floorY - body.l_heel.y;
+        const r_lift = floorY - body.r_heel.y;
+
+        if (l_lift > threshold || r_lift > threshold) {
+            this.triggerAlert("TALONES AL SUELO", "No los despegues");
+            if (this.canvasCtx) {
+                if (l_lift > threshold) this.drawErrorCircle(body.l_heel);
+                if (r_lift > threshold) this.drawErrorCircle(body.r_heel);
+            }
+        }
+
+        // Valgo Dinámico (Adaptado a la anchura actual)
+        const currentAnkleWidth = Math.abs(body.l_ankle.x - body.r_ankle.x);
+        const kneeWidth = Math.abs(body.l_knee.x - body.r_knee.x);
+
+        // Si las rodillas están más juntas que el 70% de los tobillos actuales -> VALGO
+        if (kneeWidth < currentAnkleWidth * 0.75) {
+            this.triggerAlert("RODILLAS FUERA", "Abre las rodillas");
+        }
+    }
+
+    // --- RENDERIZADO MAGNÉTICO ---
+    drawMagneticAnchors(body) {
+        const ctx = this.canvasCtx;
+        const w = ctx.canvas.width;
+        const h = ctx.canvas.height;
+        const floorY = this.calibration.floorY * h;
+
+        // Función para dibujar una plataforma que sigue al pie en X
+        const drawPad = (footX, footY) => {
+            const px = footX * w; // Posición X actual del pie
+            const py = floorY;    // Posición Y fija del suelo
+
+            ctx.beginPath();
+            // Dibujamos una plataforma centrada en el pie actual
+            ctx.moveTo(px - 40, py);
+            ctx.lineTo(px + 40, py);
+
+            ctx.lineWidth = 4;
+            // Color: Verde si el pie está tocando, Rojo si está volando
+            const isFlying = (py - (footY * h)) > (h * 0.04);
+            ctx.strokeStyle = isFlying ? '#ff0000' : '#00ff00';
+
+            ctx.shadowColor = ctx.strokeStyle;
+            ctx.shadowBlur = 15;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Si está volando, dibujar línea conectora
+            if (isFlying) {
+                ctx.beginPath();
+                ctx.moveTo(px, footY * h);
+                ctx.lineTo(px, py);
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+        };
+
+        drawPad(body.l_heel.x, body.l_heel.y);
+        drawPad(body.r_heel.x, body.r_heel.y);
+    }
+
+    drawTempFloor(yLevel) {
+        const y = yLevel * this.canvasCtx.canvas.height;
+        this.canvasCtx.beginPath();
+        this.canvasCtx.moveTo(0, y);
+        this.canvasCtx.lineTo(this.canvasCtx.canvas.width, y);
+        this.canvasCtx.strokeStyle = 'yellow';
+        this.canvasCtx.setLineDash([5, 5]);
+        this.canvasCtx.stroke();
+        this.canvasCtx.setLineDash([]);
+    }
+
+    // --- UTILS STANDARD ---
+    mapLandmarks(lm) {
+        return {
+            nose: lm[0],
+            l_shoulder: lm[11], r_shoulder: lm[12],
+            l_hip: lm[23], r_hip: lm[24],
+            l_knee: lm[25], r_knee: lm[26],
+            l_ankle: lm[27], r_ankle: lm[28],
+            l_heel: lm[29], r_heel: lm[30],
+            l_foot_index: lm[31], r_foot_index: lm[32]
+        };
+    }
+
+    calculateAngle(a, b, c) {
+        if (!a || !b || !c) return 180;
+        const radians = Math.atan2(c.y - b.y, c.x - b.x) - Math.atan2(a.y - b.y, a.x - b.x);
+        let angle = Math.abs(radians * 180.0 / Math.PI);
+        if (angle > 180.0) angle = 360.0 - angle;
+        return angle;
+    }
+
+    calculateExerciseAngle(body) {
+        if (this.exerciseType === 'squat') {
+            const l = this.calculateAngle(body.l_hip, body.l_knee, body.l_ankle);
+            const r = this.calculateAngle(body.r_hip, body.r_knee, body.r_ankle);
+            return (l + r) / 2;
+        }
+        return 180;
+    }
+
+    updateRepState(angle) {
+        const startZone = 160;
+        const deepZone = 90;
+
+        if (this.state === 'start' && angle < startZone - 10) this.state = 'eccentric';
+        if (this.state === 'eccentric' && angle <= deepZone) {
+            this.state = 'bottom';
+            this.dispatchUpdate({ type: 'FEEDBACK', msg: "¡PROFUNDIDAD!", color: 'success' });
+        }
+        if (this.state === 'bottom' && angle > deepZone + 15) this.state = 'concentric';
+        if (this.state === 'concentric' && angle >= startZone - 5) {
+            this.reps++;
+            this.state = 'start';
+            this.dispatchUpdate({ type: 'REP_COMPLETE' });
+        }
+    }
+
+    checkPosture(body) {
+        const l = this.calculateAngle(body.l_hip, body.l_knee, body.l_ankle);
+        const r = this.calculateAngle(body.r_hip, body.r_knee, body.r_ankle);
+        return (l > 160 && r > 160);
+    }
+
+    calculateVelocity(angle, timestamp) {
+        if (!this.prevTime) { this.prevTime = timestamp; return 0; }
+        const dt = (timestamp - this.prevTime) / 1000;
+        if (dt <= 0) return 0;
+        const v = Math.abs(angle - (this.prevAngle || angle)) / dt;
+        this.prevAngle = angle;
+        this.prevTime = timestamp;
+        return (v / 100).toFixed(2);
+    }
+
+    triggerAlert(msg, subtext) {
+        if (Date.now() - this.lastAlertTime < 2000) return;
+        this.lastAlertTime = Date.now();
+        this.dispatchUpdate({ type: 'FEEDBACK', msg: msg, subtext: subtext, color: 'danger' });
+    }
+
+    dispatchUpdate(data) {
+        window.dispatchEvent(new CustomEvent('gym-data', { detail: data }));
+    }
+
+    drawSkeleton(landmarks, colorOverride) {
+        const color = colorOverride || '#00f2ff';
+        drawConnectors(this.canvasCtx, landmarks, POSE_CONNECTIONS, { color: color, lineWidth: 2 });
+        drawLandmarks(this.canvasCtx, landmarks, { color: '#ffffff', lineWidth: 1, radius: 2 });
+    }
+
+    drawErrorCircle(point) {
+        const x = point.x * this.canvasCtx.canvas.width;
+        const y = point.y * this.canvasCtx.canvas.height;
+        this.canvasCtx.beginPath();
+        this.canvasCtx.arc(x, y, 25, 0, 2 * Math.PI);
+        this.canvasCtx.strokeStyle = '#ff0000';
+        this.canvasCtx.lineWidth = 4;
+        this.canvasCtx.stroke();
+    }
+}
+
+// INICIALIZACIÓN
+const videoProcessor = {
+    gymAnalyzer: null,
+    pose: null,
+    camera: null,
+
+    start: async function (videoEl, canvasEl) {
+        if (!this.pose) {
+            this.pose = new Pose({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}` });
+            this.pose.setOptions({
+                modelComplexity: 1,
+                smoothLandmarks: true,
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5
+            });
+            this.pose.onResults((results) => {
+                if (this.gymAnalyzer) this.gymAnalyzer.processFrame(results.poseLandmarks, Date.now());
+            });
+        }
+
+        this.gymAnalyzer = new GymAnalyzer(videoEl, canvasEl);
+
+        if (!videoEl.src || videoEl.src === '') {
+            this.camera = new Camera(videoEl, {
+                onFrame: async () => { await this.pose.send({ image: videoEl }); },
+                width: 1280, height: 720
+            });
+            this.camera.start();
+        } else {
+            const loop = async () => {
+                if (videoEl.paused) return;
+                await this.pose.send({ image: videoEl });
+                requestAnimationFrame(loop);
+            };
+            videoEl.play();
+            videoEl.addEventListener('play', loop);
+        }
+    },
+    reset: function () { if (this.gymAnalyzer) this.gymAnalyzer.reset(); }
+};

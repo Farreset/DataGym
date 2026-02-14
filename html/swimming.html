@@ -10,7 +10,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -39,129 +39,515 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs" id="swimTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="swim-time-tab" data-bs-toggle="tab"
-                        data-bs-target="#swim-time-pane" type="button" role="tab">
-                        <ion-icon name="stopwatch-outline" class="me-2"></ion-icon><span data-i18n="tab_calculator">Time
-                            Calculator</span>
+                    <button class="nav-link active" id="swim-css-tab" data-bs-toggle="tab"
+                        data-bs-target="#swim-css-pane" type="button" role="tab" data-i18n="swim_tab_css">
+                        <ion-icon name="stopwatch-outline" class="me-2"></ion-icon>CSS Profile
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="swim-zones-tab" data-bs-toggle="tab" data-bs-target="#swim-zones-pane"
-                        type="button" role="tab">
-                        <ion-icon name="speedometer-outline" class="me-2"></ion-icon>Zones / PPM
+                        type="button" role="tab" data-i18n="swim_tab_zones">
+                        <ion-icon name="speedometer-outline" class="me-2"></ion-icon>Zones & Styles
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="swim-builder-tab" data-bs-toggle="tab"
+                        data-bs-target="#swim-builder-pane" type="button" role="tab" data-i18n="swim_tab_builder">
+                        <ion-icon name="construct-outline" class="me-2"></ion-icon>Set Designer
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="swim-tech-tab" data-bs-toggle="tab" data-bs-target="#swim-tech-pane"
+                        type="button" role="tab" data-i18n="swim_tab_tech">
+                        <ion-icon name="flash-outline" class="me-2"></ion-icon>Eficiencia
+                    </button>
+                </li>
+                <!-- <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="swim-health-tab" data-bs-toggle="tab"
+                        data-bs-target="#swim-health-pane" type="button" role="tab" data-i18n="swim_tab_health">
+                        <ion-icon name="medkit-outline" class="me-2"></ion-icon>Health (ACWR)
+                    </button>
+                </li> -->
+                <li class="nav-item" role="presentation">
                     <button class="nav-link" id="swim-ai-tab" data-bs-toggle="tab" data-bs-target="#swim-ai-pane"
-                        type="button" role="tab">
-                        <ion-icon name="videocam-outline" class="me-2"></ion-icon><span data-i18n="tab_ai">AI
-                            Analyzer</span>
+                        type="button" role="tab" data-i18n="swim_tab_ai">
+                        <ion-icon name="videocam-outline" class="me-2"></ion-icon>AI Analyzer
                     </button>
                 </li>
             </ul>
 
+            <!-- Tab Content -->
             <div class="tab-content" id="swimTabsContent">
-                <!-- Time Calc (Existing) -->
-                <div class="tab-pane fade show active" id="swim-time-pane" role="tabpanel">
-                    <!-- Existing content skipped for brevity, keeping wrapping div -->
+
+                <!-- 1. CSS Profile Tab -->
+                <div class="tab-pane fade show active" id="swim-css-pane" role="tabpanel">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="calc_pace_title">Calculate Pace</h5>
+                                <h5 class="mb-4 d-flex align-items-center">
+                                    <ion-icon name="stopwatch" class="me-2 text-primary"></ion-icon>
+                                    <span data-i18n="css_title">Critical Swim Speed (CSS) Profile</span>
+                                </h5>
+                                <p class="text-secondary small mb-4" data-i18n="css_desc">
+                                    Enter your max effort times. This physiological parameter sets your training zones.
+                                </p>
+
                                 <div class="mb-3">
-                                    <label class="form-label" data-i18n="distance_label">Distance (m)</label>
-                                    <input type="number" class="form-control" id="calcDist" placeholder="e.g. 400">
+                                    <label class="form-label" data-i18n="css_label_400">400m Time</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark-subtle border-secondary"><ion-icon
+                                                name="timer-outline"></ion-icon></span>
+                                        <input type="text" class="form-control" id="cssT400"
+                                            placeholder="MM:SS (e.g. 06:00)" data-i18n-placeholder="css_placeholder">
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="time_label">Time (MM:SS.ms)</label>
-                                    <input type="text" class="form-control" id="calcTime" placeholder="05:30.00">
+                                <div class="mb-4">
+                                    <label class="form-label" data-i18n="css_label_200">200m Time</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark-subtle border-secondary"><ion-icon
+                                                name="timer-outline"></ion-icon></span>
+                                        <input type="text" class="form-control" id="cssT200"
+                                            placeholder="MM:SS (e.g. 02:40)" data-i18n-placeholder="css_placeholder">
+                                    </div>
                                 </div>
-                                <button class="btn btn-primary w-100" id="btnCalculatePace"
-                                    data-i18n="btn_calculate">Calculate</button>
-                                <div class="text-center mt-3">
-                                    <h2 class="display-4 fw-bold text-primary" id="resultPace">--:--</h2>
-                                    <p class="text-secondary">/ 100m</p>
-                                </div>
+
+                                <button class="btn btn-primary w-100" id="btnCalcCSS">
+                                    <ion-icon name="calculator-outline" class="me-2"></ion-icon>
+                                    <span data-i18n="css_btn_calc">Calculate My CSS Profile</span>
+                                </button>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="calc_time_title">Project Time</h5>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="target_dist_label">Target Distance (m)</label>
-                                    <input type="number" class="form-control" id="targetDist" placeholder="1500">
+
+                        <div class="col-md-7">
+                            <div class="glass-card h-100 d-flex flex-column justify-content-center align-items-center text-center"
+                                id="cssResultContainer">
+                                <!-- Default State -->
+                                <div id="cssPlaceholder" class="opacity-50">
+                                    <ion-icon name="analytics-outline" class="display-1 mb-3"></ion-icon>
+                                    <h5 class="text-secondary">Enter times to see your profile</h5>
                                 </div>
-                                <button class="btn btn-secondary w-100 mt-4" id="btnPredict"
-                                    data-i18n="btn_calculate">Calculate Time</button>
-                                <div class="text-center mt-3">
-                                    <h2 class="display-4 fw-bold text-success" id="resultTime">--:--</h2>
-                                    <p class="text-secondary" data-i18n="est_time">Est. Time</p>
+
+                                <!-- Result State (Hidden by default) -->
+                                <div id="cssResults" class="d-none w-100 animate-fade-in">
+                                    <h5 class="text-primary mb-4">Physiological Profile</h5>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-6">
+                                            <div class="p-3 bg-white rounded shadow-sm border">
+                                                <small class="text-secondary text-uppercase d-block mb-1">Threshold
+                                                    Speed</small>
+                                                <h2 class="fw-bold text-dark mb-0"><span id="resCssSpeed">0.00</span>
+                                                    <span class="fs-6 fw-normal text-secondary">m/s</span>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-3 bg-primary-subtle rounded shadow-sm border border-primary">
+                                                <small class="text-primary-emphasis text-uppercase d-block mb-1">Base
+                                                    Pace (100m)</small>
+                                                <h2 class="fw-bold text-primary mb-0" id="resCssPace">--:--</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="alert alert-info border-0 bg-info-subtle text-info-emphasis text-start d-flex align-items-start small">
+                                        <ion-icon name="information-circle"
+                                            class="me-2 fs-5 mt-1 flex-shrink-0"></ion-icon>
+                                        <div>
+                                            This pace represents your <strong>aerobic ceiling</strong>. Swimming faster
+                                            than <span id="resCssPaceInfo" class="fw-bold"
+                                                data-i18n="swimming.resCssPaceInfo">--:--</span> will accumulate
+                                            lactate rapidly. Slower paces can be sustained for long durations.
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Zones / PPM Tab -->
+                <!-- 2. Zones & Styles Tab -->
                 <div class="tab-pane fade" id="swim-zones-pane" role="tabpanel">
                     <div class="row">
-                        <div class="col-md-5">
-                            <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="tab_zones">Zone Calculator</h5>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="label_css">Critical Swim Speed Pace
-                                        (MM:SS)</label>
-                                    <input type="text" class="form-control" id="inputCssPace" placeholder="01:40"
-                                        maxlength="5">
-                                    <div class="form-text text-secondary" data-i18n="vam_help">Enter your Critical Swim
-                                        Speed / 100m.</div>
+                        <div class="col-12">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h5 class="mb-0 d-flex align-items-center">
+                                        <ion-icon name="speedometer" class="me-2 text-warning"></ion-icon>
+                                        <span data-i18n="zones_title">Training Zones</span>
+                                    </h5>
+                                    <select class="form-select w-auto" id="selZoneStyle">
+                                        <option value="freestyle" data-i18n="stroke_free">Front Crawl (Free)</option>
+                                        <option value="backstroke" data-i18n="stroke_back">Backstroke</option>
+                                        <option value="breaststroke" data-i18n="stroke_breast">Breaststroke</option>
+                                        <option value="butterfly" data-i18n="stroke_fly">Butterfly</option>
+                                    </select>
                                 </div>
-                                <button class="btn btn-primary w-100" id="btnCalcSwimZones"
-                                    data-i18n="btn_calc_zones_swim">Calculate CSS Zones</button>
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="glass-card h-100">
-                                <h5 class="mb-3" data-i18n="zones_result_title">Training Zones</h5>
-                                <div id="swimZonesResult" class="d-flex flex-column gap-2">
-                                    <p class="text-secondary fst-italic text-center mt-5" data-i18n="zones_waiting">
-                                        Enter CSS to see zones.</p>
+
+                                <div id="zonesTableContainer" class="d-flex flex-column gap-3">
+                                    <p class="text-center text-secondary py-5" data-i18n="zones_warn_calc">
+                                        Calculate your CSS profile first.</p>
+                                </div>
+
+                                <div class="mt-3 p-3 bg-light rounded text-secondary small" data-i18n="zones_note">
+                                    * Note: Times are automatically adjusted for the selected stroke using biomechanical
+                                    drag coefficients. No new tests needed.
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div><!-- AI Analyzer Tab -->
+                </div>
+
+                <!-- 3. Workout Builder Tab -->
+                <div class="tab-pane fade" id="swim-builder-pane" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="glass-card">
+                                <h5 class="mb-4 d-flex align-items-center">
+                                    <ion-icon name="construct" class="me-2 text-success"></ion-icon>
+                                    <span data-i18n="wb_title">Set Designer</span>
+                                </h5>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-4">
+                                        <label class="form-label" data-i18n="wb_style">Style</label>
+                                        <select class="form-select" id="wbStyle">
+                                            <option value="freestyle" data-i18n="stroke_free">Front Crawl</option>
+                                            <option value="backstroke" data-i18n="stroke_back">Backstroke</option>
+                                            <option value="breaststroke" data-i18n="stroke_breast">Breaststroke</option>
+                                            <option value="butterfly" data-i18n="stroke_fly">Butterfly</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" data-i18n="wb_dist">Distance</label>
+                                        <select class="form-select" id="wbDist">
+                                            <option value="25">25m</option>
+                                            <option value="50">50m</option>
+                                            <option value="100">100m</option>
+                                            <option value="200">200m</option>
+                                            <option value="400">400m</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" data-i18n="wb_zone">Intensity Zone</label>
+                                        <select class="form-select" id="wbZone">
+                                            <option value="rec" data-i18n="zone_1_label">Rec (Recovery)</option>
+                                            <option value="en1" data-i18n="zone_2_label">En-1 (Base Endurance)</option>
+                                            <option value="en2" data-i18n="zone_3_label">En-2 (Threshold)</option>
+                                            <option value="en3" data-i18n="zone_4_label">En-3 (VO2 Max)</option>
+                                            <option value="sp" data-i18n="zone_5_label">Sp (Sprint)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="bg-dark text-white p-4 rounded-3 text-center position-relative overflow-hidden">
+                                    <div class="position-relative z-1">
+                                        <p class="text-uppercase text-secondary small letter-spacing-2 mb-1"
+                                            data-i18n="wb_target">Target Time</p>
+                                        <h1 class="display-3 fw-bold text-info mb-4" id="wbTargetTime">--:--</h1>
+
+                                        <div class="text-start border-top border-secondary pt-3 mt-3">
+                                            <h6 class="text-light mb-2">
+                                                <ion-icon name="pulse" class="me-1 text-success"></ion-icon>
+                                                <span data-i18n="wb_rest">Rest Protocol:</span>
+                                            </h6>
+                                            <p class="text-secondary small mb-0" id="wbRestAdvice"
+                                                data-i18n="wb_rest_placeholder">Select parameters to see advice.</p>
+                                        </div>
+
+                                        <div id="wbAlert"
+                                            class="mt-3 alert alert-danger bg-danger-subtle border-danger text-danger border-0 text-start d-none small"
+                                            data-i18n="wb_alert">
+                                            ⚠️ Methodological Alert: If you reduce rest in Sprint sets, you stop
+                                            training pure speed and switch to anaerobic endurance. Respect the long
+                                            pause!
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Technique (SWOLF) Tab -->
+                <div class="tab-pane fade" id="swim-tech-pane" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="glass-card h-100">
+                                <h5 class="mb-4 d-flex align-items-center">
+                                    <ion-icon name="flash" class="me-2 text-warning"></ion-icon>
+                                    <span data-i18n="swolf_title">Technique Analysis</span>
+                                </h5>
+
+                                <p class="text-secondary small mb-4" id="swolfDesc" data-i18n="swolf_desc">
+                                    SWOLF = Time + Strokes. Lower score is better efficiency.
+                                </p>
+
+                                <div class="mb-3">
+                                    <label class="form-label" data-i18n="swolf_label_time">Time</label>
+                                    <div class="input-group">
+                                        <span
+                                            class="input-group-text bg-warning-subtle text-warning border-warning"><ion-icon
+                                                name="stopwatch"></ion-icon></span>
+                                        <input type="text" class="form-control" id="swolfTime"
+                                            placeholder="Seconds or MM:SS (e.g. 30)"
+                                            data-i18n-placeholder="swolf_placeholder_time">
+                                    </div>
+                                </div>
+                                <div class="mb-3" id="strokesInputGroup">
+                                    <label class="form-label" data-i18n="swolf_label_strokes">Strokes (Cycles)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-info-subtle text-info border-info"><ion-icon
+                                                name="hand-left"></ion-icon></span>
+                                        <input type="number" class="form-control" id="swolfStrokes"
+                                            placeholder="Count (e.g. 15)"
+                                            data-i18n-placeholder="swolf_placeholder_strokes">
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" data-i18n="swolf_label_pool">Pool Length</label>
+                                    <select class="form-select" id="swolfPool">
+                                        <option value="25" data-i18n="pool_25m">25m Pool</option>
+                                        <option value="50" data-i18n="pool_50m">50m Pool</option>
+                                    </select>
+                                </div>
+
+                                <button class="btn btn-warning w-100 text-white" id="btnCalcSwolf">
+                                    <span id="btnSwolfText" data-i18n="swolf_btn_analyze">Analyze Efficiency</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div
+                                class="glass-card h-100 d-flex flex-column justify-content-center align-items-center text-center">
+                                <div id="swolfResultPlaceholder" class="opacity-50">
+                                    <ion-icon name="water-outline" class="display-1 mb-3"></ion-icon>
+                                    <h5 class="text-secondary" data-i18n="swolf_res_placeholder">Enter metrics to
+                                        analyze</h5>
+                                </div>
+
+                                <div id="swolfResult" class="d-none w-100 animate-fade-in">
+                                    <!-- AI Level Badge (Initially Hidden) -->
+                                    <div id="aiLevelBadge" class="d-none mb-2">
+                                        <span class="badge bg-gradient fs-6 px-3 py-2 rounded-pill"
+                                            id="aiLevelText">Advanced</span>
+                                    </div>
+
+                                    <p class="text-secondary text-uppercase small mb-1" data-i18n="swolf_res_score">
+                                        SWOLF Score</p>
+                                    <h1 class="display-1 fw-bold text-primary mb-4" id="resSwolfScore">0</h1>
+                                    <small class="text-secondary d-none mb-3 d-block"
+                                        id="aiEstLabel">(Estimated)</small>
+
+                                    <div class="row g-3 mb-4 text-start">
+                                        <div class="col-6">
+                                            <div class="p-3 bg-light rounded border h-100">
+                                                <small class="text-secondary text-uppercase d-block mb-1"
+                                                    data-i18n="freq_label">Frequency</small>
+                                                <h3 class="fw-bold text-dark mb-0">
+                                                    <span id="resSwimFreq">0</span> <span
+                                                        class="fs-6 fw-normal text-secondary">spm</span>
+                                                    <span class="fs-6 text-muted border-start ps-2 ms-2"
+                                                        id="resSwimHz">0.00 Hz</span>
+                                                </h3>
+                                                <small class="text-body-tertiary" style="font-size: 0.7rem;"
+                                                    data-i18n="freq_unit">(Strokes/Min)</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-3 bg-light rounded border h-100">
+                                                <small class="text-secondary text-uppercase d-block mb-1"
+                                                    data-i18n="amp_label">Amplitude</small>
+                                                <h3 class="fw-bold text-dark mb-0"><span id="resSwimAmp">0.00</span>
+                                                    <span class="fs-6 fw-normal text-secondary">m</span>
+                                                </h3>
+                                                <small class="text-body-tertiary" style="font-size: 0.7rem;"
+                                                    data-i18n="amp_desc">(Meters/Stroke)</small>
+                                            </div>
+                                        </div>
+                                        <!-- New Speed Box for AI -->
+                                        <div class="col-12 d-none" id="aiSpeedBox">
+                                            <div class="p-3 bg-info bg-opacity-10 border border-info rounded h-100">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <small class="text-info text-uppercase fw-bold mb-1"
+                                                            data-i18n="ai_avg_speed">Avg Speed</small>
+                                                        <h3 class="fw-bold text-dark mb-0"><span
+                                                                id="resSwimSpeed">0.00</span> <span
+                                                                class="fs-6 fw-normal text-secondary">m/s</span></h3>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <h4 class="text-secondary mb-0"><span
+                                                                id="resSwimSpeedKmh">0.0</span> <small>km/h</small></h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="alert alert-info border-0 bg-info-subtle text-info-emphasis text-start small mb-3">
+                                        <div class="d-flex align-items-start">
+                                            <ion-icon name="information-circle"
+                                                class="me-2 fs-5 flex-shrink-0 mt-1"></ion-icon>
+                                            <div>
+                                                <strong data-i18n="tech_why_title">Why is this important?</strong><br>
+                                                • <b data-i18n="freq_label">Frequency</b>: <span
+                                                    data-i18n="freq_info">Rhythm of your stroke. Too low means dead
+                                                    spots; too high might mean slipping.</span><br>
+                                                • <b data-i18n="amp_label">Amplitude</b>: <span
+                                                    data-i18n="amp_info">Distance per stroke. Higher is generally better
+                                                    efficiency.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="swolfFeedback"
+                                        class="alert alert-light text-start small d-flex align-items-start">
+                                        <ion-icon name="bulb-outline" class="me-2 fs-5 flex-shrink-0 mt-1"></ion-icon>
+                                        <span id="resSwolfText">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Health (ACWR) Tab -->
+                <div class="tab-pane fade" id="swim-health-pane" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="glass-card h-100">
+                                <h5 class="mb-4 d-flex align-items-center">
+                                    <ion-icon name="medkit" class="me-2 text-danger"></ion-icon>
+                                    <span data-i18n="acwr_title">Load Management (ACWR)</span>
+                                </h5>
+                                <p class="text-secondary small mb-4" data-i18n="acwr_desc">
+                                    Compare Acute (7-day) vs Chronic (28-day) load to prevent injury.
+                                </p>
+
+                                <div class="mb-3">
+                                    <label class="form-label" data-i18n="acwr_label_acute">Acute Load (Last 7
+                                        Days)</label>
+                                    <input type="number" class="form-control" id="acwrAcute" placeholder="e.g. 20000 m"
+                                        data-i18n-placeholder="acwr_res_placeholder">
+                                    <div class="form-text" data-i18n="acwr_doc_acute">Total distance or load units this
+                                        week.</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" data-i18n="acwr_label_chronic">Chronic Load (Avg Last 4
+                                        weeks)</label>
+                                    <input type="number" class="form-control" id="acwrChronic"
+                                        placeholder="e.g. 15000 m" data-i18n-placeholder="acwr_res_placeholder">
+                                    <div class="form-text" data-i18n="acwr_doc_chronic">Weekly average over the last
+                                        month.</div>
+                                </div>
+
+                                <button class="btn btn-danger w-100 text-white" id="btnCalcAcwr">
+                                    <span data-i18n="acwr_btn_calc">Calculate Risk</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div
+                                class="glass-card h-100 d-flex flex-column justify-content-center align-items-center text-center">
+                                <div id="acwrResultPlaceholder" class="opacity-50">
+                                    <ion-icon name="heart-outline" class="display-1 mb-3"></ion-icon>
+                                    <h5 class="text-secondary" data-i18n="acwr_res_placeholder">Enter load data</h5>
+                                </div>
+
+                                <div id="acwrResult" class="d-none w-100 animate-fade-in">
+                                    <h2 class="display-4 fw-bold mb-2" id="resAcwrRatio">0.00</h2>
+                                    <p class="text-uppercase fw-bold mb-4" id="resAcwrStatus">--</p>
+
+                                    <div id="acwrAdvice" class="alert d-none text-start small"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Analyzer Tab -->
                 <div class="tab-pane fade" id="swim-ai-pane" role="tabpanel">
                     <!-- Existing AI content -->
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="glass-card">
-                                <h5 class="mb-3" data-i18n="video_upload_title">Video Upload</h5>
-                                <div class="upload-area mb-4" id="swimUploadArea">
-                                    <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
-                                    <h4 data-i18n="drop_video_text">Drop your video here</h4>
-                                    <p class="text-secondary" data-i18n="video_formats">Supports MP4, MOV, WEBM (Max
-                                        50MB)</p>
-                                    <input type="file" id="swimVideoInput" accept="video/*" class="d-none">
-                                    <button class="btn btn-primary mt-2" id="btnSwimSelectFile"
-                                        data-i18n="btn_select_file">Select File</button>
+                            <div class="glass-card position-relative overflow-hidden">
+                                <!-- Decorative Background Glow -->
+                                <div class="position-absolute top-0 start-50 translate-middle"
+                                    style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(67, 97, 238, 0.15), transparent 70%); z-index: 0; pointer-events: none;">
                                 </div>
 
-                                <!-- Video Player & MediaPipe Overlay -->
-                                <div class="position-relative mb-4">
-                                    <video id="swimVideoPlayer" class="w-100 rounded d-none" controls muted
+                                <h5 class="mb-4 position-relative" data-i18n="video_upload_title">Video Upload</h5>
+
+                                <!-- Modern Upload Area -->
+                                <div class="upload-area mb-4 position-relative" id="swimUploadArea"
+                                    style="border-style: solid; border-width: 1px; background: rgba(15, 23, 42, 0.3);">
+                                    <div class="position-relative z-2">
+                                        <div
+                                            class="bg-primary bg-opacity-10 p-4 rounded-circle d-inline-flex mb-3 text-primary">
+                                            <ion-icon name="cloud-upload" class="fs-1"></ion-icon>
+                                        </div>
+                                        <h4 data-i18n="drop_video_text" class="fw-bold">Drop fit video here</h4>
+                                        <p class="text-secondary small mb-3" data-i18n="video_formats">MP4, MOV, WEBM
+                                            (Max
+                                            50MB)</p>
+                                        <input type="file" id="swimVideoInput" accept="video/*" class="d-none">
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <button class="btn btn-outline-light btn-sm" id="btnSwimSelectFile"
+                                                data-i18n="btn_select_file">Browse Files</button>
+                                            <!-- <button class="btn btn-outline-primary btn-sm" id="btnSwimDemo">Try
+                                                Demo</button> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Video Player & Analysis Container -->
+                                <div class="position-relative mb-4 rounded overflow-hidden shadow-lg border border-secondary border-opacity-25 d-none"
+                                    id="swimVideoContainer" style="min-height: 300px; background: #000;">
+
+                                    <video id="swimVideoPlayer" class="w-100 h-100 object-fit-cover" controls muted
                                         playsinline></video>
-                                    <canvas id="swimCanvas" class="position-absolute top-0 start-0 w-100 h-100 d-none"
+                                    <canvas id="swimCanvas" class="position-absolute top-0 start-0 w-100 h-100"
                                         style="pointer-events: none;"></canvas>
+
+                                    <!-- AI Scanner Overlay -->
+                                    <div id="swimAiOverlay"
+                                        class="ai-status-overlay d-flex flex-column justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100 d-none"
+                                        style="background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); z-index: 20;">
+                                        <div class="text-center">
+                                            <div class="spinner-border text-info mb-3"
+                                                style="width: 3rem; height: 3rem; border-width: 3px;" role="status">
+                                            </div>
+                                            <h4 class="text-white fw-bold ai-pulse-text font-monospace">ANALYZING
+                                                BIOMECHANICS...</h4>
+                                            <p class="text-info small font-monospace" id="swimProcessStatus">DETECTING
+                                                STROKE PATTERNS</p>
+                                        </div>
+                                        <div class="ai-scanner-line"
+                                            style="background: linear-gradient(90deg, transparent, #0ea5e9, transparent);">
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <h5 class="mb-3 mt-4" data-i18n="ai_result_title">AI Analysis Result</h5>
-                                <!-- ... rest of existing AI content ... -->
-                                <div class="ai-result-box" id="swimResultBox">
-                                    <p class="text-secondary fst-italic" data-i18n="ai_waiting_text">Upload a video to
-                                        see the analysis...</p>
-                                    <!-- Mock Result -->
-                                    <div class="d-none" id="aiOutputMock">
+
+
+                                <!-- Result Dashboard -->
+                                <div class="ai-result-box bg-transparent border-0 p-0" id="swimResultBox">
+
+                                    <!-- Empty State -->
+                                    <div class="text-center py-5 border rounded-3 bg-dark bg-opacity-25 border-secondary border-opacity-25 border-dashed"
+                                        id="swimResultEmpty">
+                                        <ion-icon name="stats-chart-outline"
+                                            class="display-3 text-secondary opacity-25 mb-3"></ion-icon>
+                                        <p class="text-secondary mb-0" data-i18n="ai_waiting_text">Upload a video to
+                                            unlock insights</p>
+                                    </div>
+
+                                    <!-- Mock Result (Hidden) -->
+                                    <div class="d-none animate-fade-in" id="aiOutputMock">
+                                        <!-- JS will inject dashboard here -->
                                     </div>
                                 </div>
                             </div>
@@ -173,21 +559,6 @@
                                 <h5 class="mb-4" data-i18n="context_title">Context</h5>
                                 <form>
                                     <div class="mb-3">
-                                        <label class="form-label" data-i18n="gender_label">Gender</label>
-                                        <select class="form-select">
-                                            <option data-i18n="gender_male">Male</option>
-                                            <option data-i18n="gender_female">Female</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label" data-i18n="pool_length_label">Pool Length</label>
-                                        <select class="form-select">
-                                            <option data-i18n="pool_25m">25m (Short Course)</option>
-                                            <option data-i18n="pool_50m">50m (Long Course)</option>
-                                            <option data-i18n="pool_open">Open Water</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
                                         <label class="form-label" data-i18n="stroke_label">Stroke to Analyze</label>
                                         <select class="form-select">
                                             <option data-i18n="stroke_free">Front Crawl (Freestyle)</option>
@@ -196,23 +567,29 @@
                                             <option data-i18n="stroke_fly">Butterfly</option>
                                         </select>
                                     </div>
+
+                                    <hr class="my-4 text-secondary">
+                                    <h6 class="text-primary mb-3">
+                                        <ion-icon name="options-outline" class="me-2"></ion-icon>
+                                        <span data-i18n="meta_optional">Video Metadata (Optional)</span>
+                                    </h6>
+                                    <p class="small text-secondary mb-3" data-i18n="meta_desc">Manually enter data for
+                                        better AI accuracy.</p>
+
                                     <div class="mb-3">
-                                        <label class="form-label" data-i18n="level_label">Swimmer Level</label>
-                                        <select class="form-select">
-                                            <option data-i18n="level_beginner">Beginner</option>
-                                            <option data-i18n="level_inter">Intermediate</option>
-                                            <option data-i18n="level_pro">Advanced/Pro</option>
-                                        </select>
+                                        <label class="form-label" data-i18n="meta_label_dist">Total Distance (m)</label>
+                                        <input type="number" class="form-control" id="manualSwimDist"
+                                            placeholder="e.g. 50">
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label" data-i18n="angle_label">Camera Angle</label>
-                                        <select class="form-select">
-                                            <option data-i18n="angle_side">Side View (Above Water)</option>
-                                            <option data-i18n="angle_under">Side View (Underwater)</option>
-                                            <option data-i18n="angle_front">Front View</option>
-                                            <option data-i18n="angle_drone">Drone/Overhead</option>
-                                        </select>
+                                        <label class="form-label" data-i18n="meta_label_time">Total Time (s) or
+                                            Pace</label>
+                                        <input type="text" class="form-control" id="manualSwimTime"
+                                            placeholder="e.g. 30 (seconds)">
+                                        <div class="form-text small" data-i18n="meta_doc_time">Use seconds (e.g. 45.5)
+                                            for best results.</div>
                                     </div>
+
                                     <button type="button" class="btn btn-primary w-100 mt-2" id="btnAnalyzeSwim"
                                         disabled>
                                         <ion-icon name="sparkles" class="me-2"></ion-icon><span
@@ -231,11 +608,11 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Common JS (Sidevar, i18n) -->
-    <script src="../js/common.js"></script>
+    <script src="js/common.js"></script>
     <!-- Video Processing JS -->
-    <script src="../js/video_processor.js"></script>
+    <script src="js/video_processor.js"></script>
     <!-- Module JS -->
-    <script src="../js/swimming.js"></script>
+    <script src="js/swimming.js"></script>
 </body>
 
 </html>

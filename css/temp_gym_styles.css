@@ -1,0 +1,63 @@
+/* --- Gym AI Analyzer Specifics --- */
+
+/* Video Player Wrapper */
+#gymVideoPlayer {
+    background: #000;
+}
+
+/* Upload Area Overlay */
+#gymUploadArea {
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s ease;
+}
+
+#gymUploadArea.d-none {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Group Radio Button Hover Glow */
+.group-hover-glow:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+.btn-check:checked+.btn-outline-light {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: inset 0 0 0 1px var(--primary-color);
+}
+
+/* Text Shadow for HUD reading */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Gradient Backgrounds for HUD Visibility */
+.bg-gradient-to-b {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.bg-gradient-to-t {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.backdrop-blur {
+    backdrop-filter: blur(4px);
+}
+
+/* Result Box Animation */
+#gymResultBox {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

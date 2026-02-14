@@ -1,0 +1,165 @@
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Referencias DOM
+    const videoEl = document.getElementById('gymVideoPlayer');
+    const canvasEl = document.getElementById('gymCanvas');
+    const btnCamera = document.getElementById('btnGymCamera');
+    const btnSelectFile = document.getElementById('btnGymSelectFile');
+    const fileInput = document.getElementById('gymVideoInput');
+    const uploadArea = document.getElementById('gymUploadArea');
+    const overlay = document.getElementById('gymOverlay');
+    const feedbackArea = document.getElementById('hudFeedbackArea');
+
+    const hudReps = document.getElementById('hudRepCounter');
+    const hudAngle = document.getElementById('hudMetricAngle');
+    const hudVelocity = document.getElementById('hudMetricVelocity');
+    const errorLog = document.getElementById('gymErrorLog');
+
+    // Referencia al Overlay de Calibración
+    const calibrationOverlay = document.getElementById('gymCalibrationOverlay');
+
+    // --- 1. ACTIVAR CÁMARA ---
+    if (btnCamera) {
+        btnCamera.addEventListener('click', () => {
+            startGymSession(null);
+        });
+    }
+
+    // --- 2. CARGAR ARCHIVO ---
+    if (btnSelectFile && fileInput) {
+        btnSelectFile.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const url = URL.createObjectURL(e.target.files[0]);
+                startGymSession(url);
+            }
+        });
+    }
+
+    function startGymSession(videoUrl) {
+        // UI: Resetear vista
+        if (uploadArea) uploadArea.classList.add('d-none');
+        if (overlay) overlay.classList.remove('d-none');
+        if (calibrationOverlay) {
+            calibrationOverlay.classList.remove('d-none');
+            calibrationOverlay.classList.add('d-flex');
+        }
+
+        // Ajustar Canvas
+        canvasEl.width = videoEl.clientWidth || 640;
+        canvasEl.height = videoEl.clientHeight || 480;
+
+        if (videoUrl) {
+            videoEl.src = videoUrl;
+            videoEl.muted = true;
+            videoEl.loop = true;
+        }
+
+        // Arrancar el Motor
+        if (typeof videoProcessor !== 'undefined') {
+            videoProcessor.start(videoEl, canvasEl);
+        } else {
+            console.error("Error: video_processor.js no cargado");
+        }
+    }
+
+    // --- 3. ESCUCHAR EVENTOS DE LA IA ---
+    window.addEventListener('gym-data', (e) => {
+        const data = e.detail; // ¡IMPORTANTE: data se define aquí!
+
+        // A. ACTUALIZACIÓN DE FRAME
+        if (data.type === 'FRAME') {
+            if (hudReps) hudReps.innerText = data.reps;
+            if (hudAngle) hudAngle.innerText = data.angle + "°";
+            if (hudVelocity) hudVelocity.innerText = data.velocity + " m/s";
+        }
+
+        // B. FEEDBACK TOAST
+        if (data.type === 'FEEDBACK') {
+            showToast(data.msg, data.color);
+            // Log de error si es rojo
+            if (data.color === 'danger' && errorLog) {
+                const li = document.createElement('li');
+                li.innerText = `• ${data.msg}`;
+                errorLog.prepend(li); // Añadir al principio
+                if (errorLog.children.length > 5) errorLog.removeChild(errorLog.lastChild);
+            }
+        }
+
+        // C. GESTIÓN DE CALIBRACIÓN
+        if (calibrationOverlay) {
+            const title = calibrationOverlay.querySelector('h3');
+            const sub = calibrationOverlay.querySelector('p');
+
+            // C1. Feedback (Busca, Aléjate...)
+            if (data.type === 'CALIBRATION_FEEDBACK') {
+                if (calibrationOverlay.classList.contains('d-none')) {
+                    calibrationOverlay.classList.remove('d-none');
+                    calibrationOverlay.classList.add('d-flex');
+                }
+                if (title) {
+                    title.innerText = data.msg;
+                    title.className = "fw-bold tracking-wide text-uppercase text-center px-3 text-warn";
+                }
+                if (sub) sub.innerText = data.subtext;
+            }
+
+            // C2. Calibrando (Girando)
+            if (data.type === 'CALIBRATION_START') {
+                if (calibrationOverlay.classList.contains('d-none')) {
+                    calibrationOverlay.classList.remove('d-none');
+                    calibrationOverlay.classList.add('d-flex');
+                }
+                if (title) {
+                    title.innerText = "CALIBRANDO...";
+                    title.className = "fw-bold tracking-wide text-uppercase text-center px-3 text-neon";
+                }
+                if (sub) sub.innerText = "No te muevas...";
+            }
+
+            // C3. Terminado
+            if (data.type === 'CALIBRATION_COMPLETE') {
+                calibrationOverlay.classList.remove('d-flex');
+                calibrationOverlay.classList.add('d-none');
+                showToast("¡CALIBRADO!", "success");
+            }
+        }
+
+        // D. RESET
+        if (data.type === 'RESET') {
+            if (hudReps) hudReps.innerText = "0";
+            if (errorLog) errorLog.innerHTML = "";
+        }
+    });
+
+    // --- 4. CONFIGURACIÓN DE MODOS ---
+    const exerciseSelect = document.getElementById('gymExerciseSelect');
+    if (exerciseSelect) {
+        exerciseSelect.addEventListener('change', (e) => {
+            if (videoProcessor.gymAnalyzer) {
+                videoProcessor.gymAnalyzer.exerciseType = e.target.value;
+                videoProcessor.gymAnalyzer.reset();
+            }
+        });
+    }
+
+    const modeInputs = document.querySelectorAll('input[name="gymMode"]');
+    modeInputs.forEach(input => {
+        input.addEventListener('change', (e) => {
+            if (videoProcessor.gymAnalyzer) {
+                videoProcessor.gymAnalyzer.mode = e.target.value;
+                videoProcessor.gymAnalyzer.reset();
+            }
+        });
+    });
+
+    // Helper
+    function showToast(msg, color = 'primary') {
+        if (!feedbackArea) return;
+        const toast = document.createElement('div');
+        toast.className = `badge bg-${color} fs-6 shadow-sm mb-2 animate-slide-in`;
+        toast.innerText = msg;
+        feedbackArea.appendChild(toast);
+        setTimeout(() => { toast.remove(); }, 2500);
+    }
+});

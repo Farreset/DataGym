@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataGym Analyze | Routine Builder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/routines_premium.css">
+    <!-- Icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- SortableJS (Drag & Drop) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <!-- jsPDF (PDF Export) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <!-- QRious (QR Code Generator) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Background Animation -->
+    <div class="bg-gradient-animation"></div>
+
+    <!-- Sidebar injected by common.js -->
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <h1 class="page-title" data-i18n="routines_title">Constructor de Rutinas</h1>
+            <p class="text-secondary" data-i18n="routines_subtitle">Crea tu plan de entrenamiento personalizado</p>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row g-4 h-100">
+
+                <!-- Left Column: Exercise Browser -->
+                <div class="col-lg-7 d-flex flex-column" style="height: calc(100vh - 180px);">
+                    <div class="glass-card flex-grow-1 d-flex flex-column h-100 overflow-hidden">
+                        <div class="p-3 border-bottom border-secondary border-opacity-25">
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark border-secondary text-secondary"><ion-icon
+                                                name="search"></ion-icon></span>
+                                        <input type="text" class="form-control bg-dark text-white border-secondary"
+                                            id="searchExercise" placeholder="Buscar ejercicios...">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select bg-dark text-white border-secondary" id="filterMuscle">
+                                        <option value="" data-i18n="filter_muscle_all">Todos los Músculos</option>
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select bg-dark text-white border-secondary"
+                                        id="filterEquipment">
+                                        <option value="" data-i18n="filter_equip_all">Todo el Equipo</option>
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Exercise List (Scrollable) -->
+                        <div class="flex-grow-1 overflow-auto p-3" id="exerciseList">
+                            <div class="text-center text-secondary mt-5">
+                                <div class="spinner-border text-primary mb-2" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p data-i18n="loading_exercises">Cargando ejercicios...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: My Routine -->
+                <div class="col-lg-5 d-flex flex-column" style="height: calc(100vh - 180px);">
+                    <div class="glass-card flex-grow-1 d-flex flex-column h-100">
+                        <div
+                            class="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><ion-icon name="list" class="me-2 text-primary"></ion-icon><span
+                                    data-i18n="my_routine">Mi Rutina</span></h5>
+                            <button class="btn btn-sm btn-outline-info me-1" id="btnAddRest" title="Add Rest Period">
+                                <ion-icon name="cafe-outline"></ion-icon> <span class="d-none d-md-inline"
+                                    data-i18n="btn_add_rest">Descanso</span>
+                            </button>
+                            <div>
+
+                                <button class="btn btn-sm btn-outline-danger me-1" id="btnClearRoutine"><ion-icon
+                                        name="trash"></ion-icon></button>
+                                <button class="btn btn-sm btn-success" id="btnSaveRoutine"
+                                    title="Save / Export"><ion-icon name="save"></ion-icon> <span
+                                        data-i18n="btn_save">Guardar PDF</span></button>
+                            </div>
+                        </div>
+
+                        <!-- Client Name Input -->
+                        <div class="px-3 pt-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-dark border-secondary text-secondary"><ion-icon
+                                        name="person-outline"></ion-icon></span>
+                                <input type="text"
+                                    class="form-control bg-dark text-white border-secondary border-opacity-50"
+                                    id="clientName" placeholder="Nombre de Atleta / Cliente (Opcional)">
+                            </div>
+                        </div>
+
+                        <!-- Routine List (Scrollable) -->
+                        <div class="flex-grow-1 overflow-auto px-3 pb-3 pt-2" id="routineList">
+                            <div class="text-center text-secondary mt-5 empty-state">
+                                <ion-icon name="barbell-outline" class="display-1 opacity-25"></ion-icon>
+                                <p class="mt-2" data-i18n="empty_routine_title">Tu rutina está vacía.</p>
+                                <p class="small opacity-75" data-i18n="empty_routine_text">Haz clic en "+" para añadir
+                                    ejercicios.</p>
+                            </div>
+                        </div>
+
+                        <!-- Footer / Summary -->
+                        <div class="p-3 border-top border-secondary border-opacity-25 bg-dark bg-opacity-25">
+                            <div class="d-flex justify-content-between text-secondary small">
+                                <span id="routineCount">0 Ejercicios</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Common JS -->
+    <script src="js/common.js"></script>
+    <!-- Routine Logic -->
+    <script src="js/routines.js"></script>
+</body>
+
+</html>

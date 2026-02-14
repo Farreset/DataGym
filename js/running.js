@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         zoneId: 'runUploadArea',
         inputId: 'runVideoInput',
         btnId: 'btnRunSelectFile',
-        resultBoxId: 'runResultBox',
-        mockId: 'runAiOutputMock',
+        resultBoxId: 'runResultBox', // Used by common.js to hide/show generic box, but we control it more specifically
+        mockId: 'runAiOutputMock', // Not really used in new flow but kept for compatibility
         // New Workflow Fields
         videoId: 'runVideoPlayer',
         canvasId: 'runCanvas',
@@ -17,60 +17,168 @@ document.addEventListener('DOMContentLoaded', () => {
         onAnalysisComplete: () => {
             const results = videoProcessor.getAnalysisResults();
             if (results && results.detected) {
-                const resultBox = document.getElementById('runResultBox');
-                const waitingText = resultBox.querySelector('.text-secondary.fst-italic');
-                if (waitingText) waitingText.classList.add('d-none');
+                // 1. Switch UI to Results Mode
+                document.getElementById('runInputSection').classList.add('d-none');
+                document.getElementById('runAnalysisSection').classList.remove('d-none');
 
-                // Build Corrections List
-                let correctionsHtml = '';
-                if (results.corrections.length > 0) {
-                    correctionsHtml = '<ul class="list-unstyled mb-0 text-start">';
-                    results.corrections.forEach(c => {
-                        correctionsHtml += `<li class="text-danger small"><ion-icon name="alert-circle" class="me-1"></ion-icon>${c}</li>`;
-                    });
-                    correctionsHtml += '</ul>';
-                } else {
-                    correctionsHtml = '<p class="text-success small mb-0"><ion-icon name="checkmark-circle" class="me-1"></ion-icon>¡Buena Técnica!</p>';
+                // Hide Placeholder / Show Result Box
+                document.getElementById('runResultPlaceholder').classList.add('d-none');
+                const resultBox = document.getElementById('runResultBox');
+                resultBox.classList.remove('d-none');
+
+                // 2. Build Premium UI
+
+                // 3. Restore Video Controls for Scrubbing
+                const videoEl = document.getElementById('runVideoPlayer');
+                if (videoEl) {
+                    videoEl.controls = true;
+                    videoEl.onclick = null; // Remove toggle-play click handler
                 }
 
-                // Build Recommendations List
-                let recHtml = '';
-                results.recommendations.forEach(r => {
-                    recHtml += `<span class="badge bg-info text-dark me-1">${r}</span>`;
-                });
+                // --- Corrections & Recommendations ---
+                let feedbackHtml = '';
+                if (results.corrections.length > 0) {
+                    results.corrections.forEach(c => {
+                        feedbackHtml += `
+                            <div class="d-flex align-items-start mb-2 text-danger bg-danger bg-opacity-10 p-2 rounded">
+                                <ion-icon name="alert-circle" class="me-2 mt-1"></ion-icon>
+                                <span class="small fw-bold">${c}</span>
+                            </div>`;
+                    });
+                } else {
+                    feedbackHtml = `
+                        <div class="d-flex align-items-center mb-3 text-success bg-success bg-opacity-10 p-2 rounded">
+                            <ion-icon name="checkmark-done-circle" class="me-2 fs-5"></ion-icon>
+                            <span class="fw-bold">Excellent Mechanics!</span>
+                        </div>`;
+                }
+
+                // Helper for gradients
+                const getLeanColor = (val) => val > 10 ? '#f72585' : '#4cc9f0';
 
                 const html = `
-                     <div class="row text-center mb-3">
-                        <div class="col-6">
-                            <h1 class="display-4 fw-bold text-primary">${results.spm}</h1>
-                            <span class="text-muted small text-uppercase">Cadencia (SPM)</span>
+                    <!-- Header Summary -->
+                    <div class="row align-items-center mb-4">
+                        <div class="col-6 text-center border-end border-secondary border-opacity-25">
+                            <div class="d-inline-flex align-items-baseline position-relative">
+                                <h1 class="display-2 fw-bolder text-white mb-0 tracking-tight" style="text-shadow: 0 0 20px rgba(67, 97, 238, 0.5);">${results.spm}</h1>
+                                <span class="fs-6 text-secondary ms-2 fw-bold">PPM</span>
+                                <ion-icon name="information-circle" class="text-secondary opacity-50 position-absolute top-0 start-100 ms-1" style="font-size: 1rem; cursor: help;" data-bs-toggle="tooltip" data-bs-placement="top" title="Cadencia (Pasos por Minuto): Ideal 170-180+ para reducir el impacto."></ion-icon>
+                            </div>
+                            <div class="small text-uppercase text-secondary ls-2 mt-1" data-i18n="cadence">Cadencia</div>
                         </div>
-                        <div class="col-6">
-                            <h1 class="display-4 fw-bold text-success">${results.lean}°</h1>
-                            <span class="text-muted small text-uppercase">Inclinación</span>
+                        <div class="col-6 text-center">
+                            <div class="d-inline-flex align-items-baseline position-relative">
+                                <h1 id="run_val_lean" class="display-2 fw-bolder text-white mb-0 tracking-tight" style="color: ${getLeanColor(results.lean)}; text-shadow: 0 0 20px ${getLeanColor(results.lean)}aa;">${results.lean}°</h1>
+                                <span class="fs-6 text-secondary ms-2 fw-bold" data-i18n="tilt">INCL.</span>
+                                <ion-icon name="information-circle" class="text-secondary opacity-50 position-absolute top-0 start-100 ms-1" style="font-size: 1rem; cursor: help;" data-bs-toggle="tooltip" data-bs-placement="top" title="Inclinación: 5-10° ayuda a la propulsión. >15° indica falta de control."></ion-icon>
+                            </div>
+                            <div class="small text-uppercase text-secondary ls-2 mt-1" data-i18n="forward_lean">Inclinación</div>
                         </div>
                     </div>
-                    <div class="row g-2">
+
+                    <!-- Leg Symmetry Grid -->
+                    <h6 class="text-secondary text-uppercase small ls-2 mb-3"><ion-icon name="git-compare-outline" class="me-1" data-i18n="gct_angles"></ion-icon> Simetría y Ángulos</h6>
+                    <div class="row g-3 mb-4">
+                        <!-- LEFT -->
                         <div class="col-6">
-                            <div class="p-2 border rounded bg-white bg-opacity-10 h-100">
-                                <h6 class="small text-uppercase text-secondary mb-2">Correcciones</h6>
-                                ${correctionsHtml}
+                            <div class="p-3 rounded-3 position-relative overflow-hidden" style="background: linear-gradient(145deg, rgba(67, 97, 238, 0.1), rgba(15, 23, 42, 0.6)); border: 1px solid rgba(67, 97, 238, 0.2);">
+                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-10" style="pointer-events: none;">
+                                    <span class="display-1 fw-bold text-primary" data-i18n="left">I</span>
+                                </div>
+                                <div class="position-relative z-1">
+                                    <div class="d-flex justify-content-between mb-2 border-bottom border-light border-opacity-10 pb-1 align-items-center">
+                                        <span class="text-secondary small d-flex align-items-center" data-i18n="contact">Contacto <ion-icon name="help-circle-outline" class="ms-1 text-muted" style="cursor: help;" data-bs-toggle="tooltip" title="Tiempo de Contacto: Menos de 250ms indica mayor reactividad."></ion-icon></span>
+                                        <span class="fw-bold text-white font-monospace">${results.details?.left.gct || '--'} <small class="text-muted">ms</small></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2 border-bottom border-light border-opacity-10 pb-1 align-items-center">
+                                        <span class="text-secondary small d-flex align-items-center" data-i18n="knee_flex">Rodilla <ion-icon name="help-circle-outline" class="ms-1 text-muted" style="cursor: help;" data-bs-toggle="tooltip" title="Flexión Máxima de Rodilla. Absorbe el impacto."></ion-icon></span>
+                                        <span id="run_val_knee_l" class="fw-bold text-white font-monospace">${results.details?.left.kneeAngle || '--'}°</span>
+                                    </div>
+                                     <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-secondary small d-flex align-items-center" data-i18n="shin">Tibia <ion-icon name="help-circle-outline" class="ms-1 text-muted" style="cursor: help;" data-bs-toggle="tooltip" title="Ángulo de Tibia al impacto. >10° sugiere 'Overstriding' (freno)."></ion-icon></span>
+                                        <span id="run_val_shin_l" class="${(results.details?.left.shinAngle > 15) ? 'text-danger' : 'text-success'} fw-bold font-monospace">
+                                            ${results.details?.left.shinAngle || '--'}°
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                         <div class="col-6">
-                            <div class="p-2 border rounded bg-white bg-opacity-10 h-100">
-                                <h6 class="small text-uppercase text-secondary mb-2">Recomendado</h6>
-                                <div>${recHtml}</div>
+
+                        <!-- RIGHT -->
+                        <div class="col-6">
+                            <div class="p-3 rounded-3 position-relative overflow-hidden" style="background: linear-gradient(145deg, rgba(247, 37, 133, 0.1), rgba(15, 23, 42, 0.6)); border: 1px solid rgba(247, 37, 133, 0.2);">
+                                 <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-10" style="pointer-events: none;">
+                                    <span class="display-1 fw-bold text-danger" data-i18n="right">D</span>
+                                </div>
+                                <div class="position-relative z-1">
+                                    <div class="d-flex justify-content-between mb-2 border-bottom border-light border-opacity-10 pb-1 align-items-center">
+                                        <span class="text-secondary small d-flex align-items-center" data-i18n="contact">Contacto <ion-icon name="help-circle-outline" class="ms-1 text-muted" style="cursor: help;" data-bs-toggle="tooltip" title="Tiempo de Contacto: Menos de 250ms indica mayor reactividad."></ion-icon></span>
+                                        <span class="fw-bold text-white font-monospace">${results.details?.right.gct || '--'} <small class="text-muted">ms</small></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2 border-bottom border-light border-opacity-10 pb-1 align-items-center">
+                                        <span class="text-secondary small d-flex align-items-center" data-i18n="knee_flex">Rodilla <ion-icon name="help-circle-outline" class="ms-1 text-muted" style="cursor: help;" data-bs-toggle="tooltip" title="Flexión Máxima de Rodilla. Absorbe el impacto."></ion-icon></span>
+                                        <span id="run_val_knee_r" class="fw-bold text-white font-monospace">${results.details?.right.kneeAngle || '--'}°</span>
+                                    </div>
+                                     <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-secondary small d-flex align-items-center" data-i18n="shin">Tibia <ion-icon name="help-circle-outline" class="ms-1 text-muted" style="cursor: help;" data-bs-toggle="tooltip" title="Ángulo de Tibia al impacto. >10° sugiere 'Overstriding' (freno)."></ion-icon></span>
+                                        <span id="run_val_shin_r" class="${(results.details?.right.shinAngle > 15) ? 'text-danger' : 'text-success'} fw-bold font-monospace">
+                                            ${results.details?.right.shinAngle || '--'}°
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- AI Feedback -->
+                    <div class="p-4 rounded-3" style="background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.1);">
+                        <h6 class="text-secondary text-uppercase small ls-2 mb-3"><ion-icon name="pulse-outline" class="me-1"></ion-icon> Análisis IA</h6>
+                        ${feedbackHtml}
+                    </div>
+                    
+                    <!-- Restart Button -->
+                    <button class="btn btn-outline-light w-100 mt-4" onclick="resetRunningAnalysis()">
+                        <ion-icon name="refresh-outline" class="me-2"></ion-icon> Nuevo Análisis
+                    </button>
                 `;
 
-                const mockOutput = document.getElementById('runAiOutputMock');
-                if (mockOutput) {
-                    mockOutput.innerHTML = html;
-                    mockOutput.classList.remove('d-none');
+                resultBox.innerHTML = html;
+
+                // Stop recording to avoid corrupting averages during scrub
+                if (videoProcessor.activeAnalyzer && videoProcessor.activeAnalyzer.finalize) {
+                    videoProcessor.activeAnalyzer.finalize();
                 }
+
+                // Listen for Real-Time seeking updates
+                window.addEventListener('run-data', (e) => {
+                    const d = e.detail;
+
+                    const setVal = (id, val) => {
+                        const el = document.getElementById(id);
+                        if (el) el.innerText = val + '°';
+                    };
+
+                    setVal('run_val_lean', d.lean);
+                    setVal('run_val_knee_l', d.lKnee);
+                    setVal('run_val_knee_r', d.rKnee);
+
+                    const updateShin = (id, val) => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.innerText = val + '°';
+                            el.className = (val > 15 ? 'text-danger' : 'text-success') + ' fw-bold font-monospace';
+                        }
+                    };
+                    updateShin('run_val_shin_l', d.lShin);
+                    updateShin('run_val_shin_r', d.rShin);
+                });
+
+                // Initialize Tooltips
+                const tooltipTriggerList = [].slice.call(resultBox.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
             }
         }
     });
@@ -187,7 +295,7 @@ function initRunZoneCalculator() {
                 const minPct = parseFloat(zones[z].min);
                 const maxPct = parseFloat(zones[z].max);
 
-                // Apply the formula: ABS((VAM_decimal_minutes) * ((zone_pct/100) * 0.99 - 1.9905))
+                // Apply the formula
                 const paceMinDecimal = Math.abs(vamDecimalMinutes * ((maxPct / 100) * 0.99 - 1.9905));
                 const paceMaxDecimal = Math.abs(vamDecimalMinutes * ((minPct / 100) * 0.99 - 1.9905));
 
@@ -248,3 +356,188 @@ function initRunningCalculators() {
         });
     }
 }
+
+// Global Reset Function for "New Analysis" button
+window.resetRunningAnalysis = function () {
+    // 1. Reset Video Processor
+    if (window.videoProcessor) {
+        window.videoProcessor.reset();
+    }
+
+    // 2. Switch UI back to Input
+    document.getElementById('runAnalysisSection').classList.add('d-none');
+    document.getElementById('runInputSection').classList.remove('d-none');
+
+    // 3. Clear Results
+    const resultBox = document.getElementById('runResultBox');
+    resultBox.classList.add('d-none');
+    resultBox.innerHTML = '';
+    document.getElementById('runResultPlaceholder').classList.remove('d-none');
+
+    // 4. Reset Inputs
+    const fileInput = document.getElementById('runVideoInput');
+    if (fileInput) fileInput.value = '';
+
+    const analyzeBtn = document.getElementById('btnAnalyzeRun');
+    if (analyzeBtn) {
+        analyzeBtn.disabled = true;
+        // Reset to initial state
+        analyzeBtn.innerHTML = '<ion-icon name="sparkles" class="me-2"></ion-icon><span data-i18n="btn_analyze">Analyze with AI</span>';
+        analyzeBtn.classList.remove('btn-outline-light');
+        analyzeBtn.classList.add('btn-primary');
+    }
+
+    // 5. Reset Drop Zone Visuals
+    const dropZone = document.getElementById('runUploadArea');
+    if (dropZone) {
+        const h4 = dropZone.querySelector('h4');
+        const p = dropZone.querySelector('p');
+
+        // Restore Spanish defaults (since we are in Spanish mode)
+        if (h4) h4.textContent = "Suelte su video aquí";
+        dropZone.style.borderColor = '';
+    }
+};
+
+// --- TRAIL RUNNING CALCULATORS ---
+
+// 1. GAP Calculator (Minetti)
+window.calculateGAP = function () {
+    const dist = parseFloat(document.getElementById('gapDist').value);
+    const elev = parseFloat(document.getElementById('gapElev').value);
+    const timeStr = document.getElementById('gapTimeInput').value;
+
+    // Use common parser
+    const totalSeconds = parseTime(timeStr);
+
+    if (!dist || !totalSeconds) {
+        alert("Por favor introduce distancia y tiempo.");
+        return;
+    }
+
+    // 1. Calculate basic metrics
+    const totalMinutes = totalSeconds / 60;
+    const paceDec = totalMinutes / dist; // min/km in decimal
+
+    // 2. Calculate Gradient (Slope)
+    // Gradient i = height / distance. (e.g. 1000m / 10000m = 0.1 or 10%)
+    let gradient = 0;
+    if (elev > 0) {
+        gradient = (elev / (dist * 1000));
+    }
+
+    // 3. Minetti Cost Factor Approximation
+    // Polynomial for Energy Cost (J/kg/m): C = 155.4*i^5 - 30.4*i^4 - 43.3*i^3 + 46.3*i^2 + 19.5*i + 3.6
+    const i = gradient;
+    const costOfRunning = (155.4 * Math.pow(i, 5)) - (30.4 * Math.pow(i, 4)) - (43.3 * Math.pow(i, 3)) + (46.3 * Math.pow(i, 2)) + (19.5 * i) + 3.6;
+
+    // Cost on flat (i=0) is 3.6
+    const flatCost = 3.6;
+
+    // The ratio of effort
+    const effortRatio = costOfRunning / flatCost;
+
+    // GAP = Actual Pace / Ratio (Faster pace = lower number)
+    const gapPaceDec = paceDec / effortRatio;
+
+    // 4. Update UI
+    document.getElementById('resPace').innerText = formatPace(paceDec);
+    document.getElementById('resGAP').innerText = formatPace(gapPaceDec);
+
+    const gradePercent = (gradient * 100).toFixed(1);
+    document.getElementById('resGrade').innerText = gradePercent + "%";
+    document.getElementById('gradeBar').style.width = Math.min(gradePercent * 2, 100) + "%"; // Visual scale
+
+    // Explanation
+    const diffSeconds = Math.round((paceDec - gapPaceDec) * 60);
+    let explanation = "";
+    if (diffSeconds > 10) {
+        explanation = `Debido a la pendiente media del ${gradePercent}%, tu esfuerzo metabólico fue <strong>${diffSeconds} segundos/km más rápido</strong> de lo que dice el reloj. ¡Buen trabajo de fuerza!`;
+    } else if (diffSeconds < -5) {
+        explanation = `Al ser mayormente bajada, la gravedad te ayudó. Tu esfuerzo real fue más lento que tu velocidad.`;
+    } else {
+        explanation = `El terreno fue bastante llano, por lo que tu ritmo real y esfuerzo fueron similares.`;
+    }
+    document.getElementById('gapExplanation').innerHTML = explanation;
+
+    document.getElementById('gapResults').classList.remove('d-none');
+};
+
+function formatPace(decimalPace) {
+    const minutes = Math.floor(decimalPace);
+    const seconds = Math.round((decimalPace - minutes) * 60);
+    const secondsStr = seconds < 10 ? "0" + seconds : seconds;
+    return `${minutes}:${secondsStr}`;
+}
+
+// 2. TRIMP Calculator (Banister)
+window.calculateTRIMP = function () {
+    const duration = parseFloat(document.getElementById('trimpTime').value);
+    const hrRest = parseFloat(document.getElementById('hrRest').value);
+    const hrMax = parseFloat(document.getElementById('hrMax').value);
+    const hrAvg = parseFloat(document.getElementById('hrAvg').value);
+    const gender = document.getElementById('trimpGender').value;
+
+    if (!duration || !hrRest || !hrMax || !hrAvg) {
+        alert("Por favor completa todos los campos de frecuencia cardíaca.");
+        return;
+    }
+
+    // Calculate HR Reserve Ratio (Delta HR)
+    const hrReserve = (hrAvg - hrRest) / (hrMax - hrRest);
+
+    // Gender Factor (b)
+    const b = (gender === 'male') ? 1.92 : 1.67;
+
+    // Banister Formula
+    const trimp = duration * hrReserve * 0.64 * Math.exp(b * hrReserve);
+    const trimpScore = Math.round(trimp);
+
+    document.getElementById('trimpValue').innerText = trimpScore;
+
+    // Diagnosis
+    let diag = "";
+    if (trimpScore < 50) {
+        diag = "<span class='text-success fw-bold'>Recuperación activa.</span><br>Un estímulo suave. Ideal para soltar piernas.";
+    } else if (trimpScore < 100) {
+        diag = "<span class='text-info fw-bold'>Mantenimiento aeróbico.</span><br>Buen trabajo de base sin sobrecargar.";
+    } else if (trimpScore < 200) {
+        diag = "<span class='text-warning fw-bold'>Carga Significativa.</span><br>Has acumulado fatiga real. Asegura buena nutrición.";
+    } else {
+        diag = "<span class='text-danger fw-bold'>Sobrecarga / Alta Intensidad.</span><br>¡Cuidado! Requiere 24-48h de recuperación.";
+    }
+    document.getElementById('trimpDiagnosis').innerHTML = diag;
+
+    document.getElementById('trimpResults').classList.remove('d-none');
+};
+
+// 3. Calories Calculator (Gravity Adjusted)
+window.calculateCalories = function () {
+    const weight = parseFloat(document.getElementById('calWeight').value);
+    const dist = parseFloat(document.getElementById('calDist').value);
+    const elev = parseFloat(document.getElementById('calElev').value);
+
+    if (!weight || !dist) {
+        alert("Introduce peso y distancia.");
+        return;
+    }
+
+    // 1. Horizontal Cost (Approx 0.9 to 1.0 kcal/kg/km on flat)
+    const horizontalCost = 0.9 * weight * dist;
+
+    // 2. Vertical Cost (Work = Mass * g * Height / Efficiency)
+    // Efficiency ~20%
+    let verticalCostKcal = 0;
+    if (elev > 0) {
+        const gravity = 9.81;
+        const efficiency = 0.20;
+        const workJoules = weight * gravity * elev;
+        const energyJoules = workJoules / efficiency;
+        verticalCostKcal = energyJoules / 4184; // J to kcal
+    }
+
+    const totalKcal = Math.round(horizontalCost + verticalCostKcal);
+
+    document.getElementById('calValue').innerText = totalKcal;
+    document.getElementById('calResultBox').classList.remove('d-none');
+};

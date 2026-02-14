@@ -10,7 +10,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -34,10 +34,6 @@
                 <h1 class="page-title" data-i18n="run_title">Running Analysis</h1>
                 <p class="text-secondary" data-i18n="run_subtitle">Track mechanics and pace</p>
                 <div class="mt-3">
-                    <button class="btn btn-outline-light btn-sm" id="btnOpenZoneConfig">
-                        <ion-icon name="options-outline" class="me-2"></ion-icon>
-                        <span data-i18n="nav_zone_config">Zone Config.</span>
-                    </button>
                 </div>
             </header>
 
@@ -51,9 +47,21 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="run-pro-tab" data-bs-toggle="tab" data-bs-target="#run-pro-pane"
+                        type="button" role="tab">
+                        <ion-icon name="pulse-outline" class="me-2"></ion-icon>RunnerPro Suite
+                    </button>
+                </li>
+                <!--<li class="nav-item" role="presentation">
                     <button class="nav-link" id="run-pace-tab" data-bs-toggle="tab" data-bs-target="#run-pace-pane"
                         type="button" role="tab">
                         <ion-icon name="stopwatch-outline" class="me-2"></ion-icon>Pace & PPM
+                    </button>
+                </li>-->
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="run-trail-tab" data-bs-toggle="tab" data-bs-target="#run-trail-pane"
+                        type="button" role="tab">
+                        <ion-icon name="earth-outline" class="me-2"></ion-icon>Trail / Mountain
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -63,9 +71,267 @@
                             Analyzer</span>
                     </button>
                 </li>
+
             </ul>
 
             <div class="tab-content" id="runTabsContent">
+                <!-- RunnerPro Suite Tab -->
+                <div class="tab-pane fade" id="run-pro-pane" role="tabpanel">
+
+                    <!-- Inner Navigation for Suite -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <ul class="nav nav-pills gap-3 p-2 bg-dark bg-opacity-40 rounded-4 border border-dark border-opacity-5 glass-card"
+                            id="proSuiteTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link active btn-sm rounded-3 d-flex align-items-center gap-2 px-3 py-2 transition-all hover-glow"
+                                    id="pro-vam-tab" data-bs-toggle="pill" data-bs-target="#pro-vam-pane" type="button"
+                                    role="tab">
+                                    <ion-icon name="speedometer-outline"></ion-icon>
+                                    <span>Calculadora VAM</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link btn-sm rounded-3 d-flex align-items-center gap-2 px-3 py-2 transition-all hover-glow"
+                                    id="pro-pred-tab" data-bs-toggle="pill" data-bs-target="#pro-pred-pane"
+                                    type="button" role="tab">
+                                    <ion-icon name="trending-up-outline"></ion-icon>
+                                    <span>Predicción Carrera</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link btn-sm rounded-3 d-flex align-items-center gap-2 px-3 py-2 transition-all hover-glow"
+                                    id="pro-bio-tab" data-bs-toggle="pill" data-bs-target="#pro-bio-pane" type="button"
+                                    role="tab">
+                                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                                    <span>Biomecánica</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="proSuiteContent">
+
+                        <!-- 1. VAM & ZONES -->
+                        <div class="tab-pane fade show active" id="pro-vam-pane" role="tabpanel">
+                            <div class="row g-4">
+                                <div class="col-lg-4">
+                                    <!-- Test Settings -->
+                                    <div class="glass-card mb-4 border-start border-4 border-primary">
+                                        <h5 class="text-white mb-3 text-primary"><ion-icon name="timer-outline"
+                                                class="me-2"></ion-icon>Configuración del Test</h5>
+                                        <div class="mb-3">
+                                            <label class="form-label text-white-50 small">Tipo de Test</label>
+                                            <div class="d-flex bg-dark bg-opacity-50 rounded p-1 mb-3">
+                                                <input type="radio" class="btn-check" name="testType" id="test6m"
+                                                    value="6" checked autocomplete="off">
+                                                <label class="btn btn-outline-primary btn-sm flex-grow-1" for="test6m">6
+                                                    min</label>
+                                                <input type="radio" class="btn-check" name="testType" id="test12m"
+                                                    value="12" autocomplete="off">
+                                                <label class="btn btn-outline-primary btn-sm flex-grow-1"
+                                                    for="test12m">12 min (Cooper)</label>
+                                            </div>
+
+                                            <label class="form-label text-white-50 small">Distancia Reales
+                                                (metros)</label>
+                                            <input type="number" id="proVamDist"
+                                                class="form-control bg-dark text-white border-secondary" value="1300">
+                                            <div class="form-text text-secondary small">Distancia total recorrida en el
+                                                test.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Heart Rate Section -->
+                                    <div class="glass-card mb-4 border-start border-4 border-danger">
+                                        <h5 class="text-white mb-3 text-danger"><ion-icon name="heart-outline"
+                                                class="me-2"></ion-icon>Datos Cardíacos</h5>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <label class="form-label text-white-50 small">FC Máxima</label>
+                                                <input type="number" id="fcMax"
+                                                    class="form-control bg-dark text-white border-secondary"
+                                                    value="185">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label text-white-50 small">FC Reposo</label>
+                                                <input type="number" id="fcRest"
+                                                    class="form-control bg-dark text-white border-secondary" value="60">
+                                            </div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="useKarvonen" checked>
+                                            <label class="form-check-label text-white-50 small"
+                                                for="useKarvonen">Fórmula Karvonen (Preferencia)</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <div
+                                                class="p-3 rounded-4 bg-primary bg-opacity-50 border border-primary border-opacity-25 text-center shadow-lg transition-transform hover-scale">
+                                                <div class="text-white fw-bold text-uppercase mb-1"
+                                                    style="font-size: 0.65rem; letter-spacing: 0.05rem;">VAM Personal
+                                                </div>
+                                                <div class="h2 fw-bold text-white mb-0 font-monospace" id="resProVam">--
+                                                </div>
+                                                <div class="text-white-50 opacity-75 small" style="font-size: 0.65rem;">
+                                                    km/h</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div
+                                                class="p-3 rounded-4 bg-indigo bg-opacity-20 border border-indigo border-opacity-25 text-center shadow-lg transition-transform hover-scale">
+                                                <div class="text-indigo-emphasis fw-bold text-uppercase mb-1"
+                                                    style="font-size: 0.65rem; letter-spacing: 0.05rem;">VO2max Est.
+                                                </div>
+                                                <div class="h2 fw-bold text-white mb-0 font-monospace" id="resProVo2">--
+                                                </div>
+                                                <div class="text-white-50 opacity-75 small" style="font-size: 0.65rem;">
+                                                    ml/kg/min</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-8">
+                                    <div class="glass-card h-100 border-0 shadow-2xl overflow-hidden"
+                                        style="background: rgba(15, 23, 42, 0.4);">
+                                        <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+                                            <h5 class="text-white mb-0 fw-bold"><ion-icon name="list-outline"
+                                                    class="me-2 text-primary"></ion-icon>Zonas de Entrenamiento</h5>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div
+                                                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1">
+                                                    Optimización VAM</div>
+                                                <button
+                                                    class="btn btn-outline-light btn-sm p-1 d-flex align-items-center"
+                                                    id="btnOpenProZoneConfig" title="Configurar Rangos %VAM">
+                                                    <ion-icon name="settings-outline"></ion-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-dark table-hover mb-0 align-middle">
+                                                <thead class="text-white-50">
+                                                    <tr class="small text-uppercase"
+                                                        style="letter-spacing: 0.05rem; font-size: 0.75rem;">
+                                                        <th class="ps-4 border-0">Zona</th>
+                                                        <th class="border-0">% VAM</th>
+                                                        <th class="border-0">Ritmo (min/km)</th>
+                                                        <th class="border-0">FC (bpm)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="proZonesTableBody" class="border-0">
+                                                    <!-- Injected by JS -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. RACE PREDICTOR -->
+                        <div class="tab-pane fade" id="pro-pred-pane" role="tabpanel">
+                            <div class="row g-4">
+                                <div class="col-lg-5">
+                                    <div class="glass-card border-start border-4 border-warning h-100">
+                                        <h5 class="text-white mb-3 text-warning"><ion-icon name="trending-up-outline"
+                                                class="me-2"></ion-icon>Marca Reciente</h5>
+                                        <div class="mb-3">
+                                            <label class="form-label text-white-50 small">Distancia Conocida</label>
+                                            <select id="predDist"
+                                                class="form-select bg-dark text-white border-secondary">
+                                                <option value="5">5 km</option>
+                                                <option value="10" selected>10 km</option>
+                                                <option value="21.097">Media Maratón</option>
+                                                <option value="42.195">Maratón</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-white-50 small">Tiempo (hh:mm:ss)</label>
+                                            <input type="text" id="predTime"
+                                                class="form-control bg-dark text-white border-secondary font-monospace"
+                                                value="00:55:00">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="glass-card h-100 border-indigo-500 border-opacity-10">
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <h5 class="text-white mb-0 fw-bold"><ion-icon name="analytics-outline"
+                                                    class="me-2 text-warning"></ion-icon>Potencial de Marca</h5>
+                                            <small
+                                                class="text-white-50 font-monospace px-2 py-1 bg-dark bg-opacity-50 rounded"
+                                                style="font-size: 0.65rem;">Algorithm: Riegel v1.1</small>
+                                        </div>
+                                        <div class="row g-3" id="predResultsContainer">
+                                            <!-- Injected by JS -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. BIOMECHANICS -->
+                        <div class="tab-pane fade" id="pro-bio-pane" role="tabpanel">
+                            <div class="row g-4">
+                                <div class="col-lg-8">
+                                    <h6 class="text-white-50 small text-uppercase mb-3">Cribado Funcional (Tests
+                                        Laterales)</h6>
+                                    <div id="bioChecklistContainer" class="row g-3">
+                                        <!-- Injected by JS -->
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="glass-card text-center sticky-top shadow-2xl border-indigo-500 border-opacity-10"
+                                        style="top: 20px;">
+                                        <div class="mb-4">
+                                            <ion-icon name="shield-checkmark-outline"
+                                                class="text-indigo fs-1 opacity-75 mb-2"></ion-icon>
+                                            <h5 class="mb-1 text-white fw-bold">Diagnosis de Riesgo</h5>
+                                            <p class="text-white-50 small">Prevención de lesiones</p>
+                                        </div>
+
+                                        <div id="bioRiskBadge"
+                                            class="d-inline-block px-4 py-2 rounded-pill fw-bold mb-4 border border-secondary text-secondary bg-dark bg-opacity-25 transition-all">
+                                            Sin Datos
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <div class="d-flex justify-content-between small text-white-50 mb-1 px-1">
+                                                <span>Progreso de Test</span>
+                                                <span id="bioProgressPct">0%</span>
+                                            </div>
+                                            <div class="progress bg-dark bg-opacity-50"
+                                                style="height: 8px; border-radius: 4px;">
+                                                <div id="bioProgressBar"
+                                                    class="progress-bar bg-primary transition-all shadow-glow"
+                                                    role="progressbar" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="p-3 rounded-3 bg-white bg-opacity-5 text-start border border-white border-opacity-10">
+                                            <p class="small text-secondary mb-0 line-height-sm">
+                                                Completa los 6 tests biomecánicos para identificar desequilibrios
+                                                musculares. El diagnóstico ayuda a prevenir lesiones comunes como la
+                                                <strong>fascitis plantar</strong> o el <strong>síndrome de la
+                                                    cintilla iliotibial</strong>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
                 <!-- Zone Calculator Tab -->
                 <div class="tab-pane fade show active" id="run-calc-pane" role="tabpanel">
                     <div class="row">
@@ -81,6 +347,10 @@
                                 </div>
                                 <button class="btn btn-primary w-100" id="btnCalcZones"
                                     data-i18n="btn_calc_zones">Calculate Zones</button>
+                                <button class="btn btn-outline-light btn-sm w-100 mt-3" id="btnOpenZoneConfig">
+                                    <ion-icon name="options-outline" class="me-2"></ion-icon>
+                                    <span data-i18n="nav_zone_config">Zone Config.</span>
+                                </button>
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -142,85 +412,322 @@
                     </div>
                 </div>
 
+                <!-- Trail Running / Mountain Analytics Tab -->
+                <div class="tab-pane fade" id="run-trail-pane" role="tabpanel">
+                    <div class="row">
+                        <!-- INTRODUCCIÓN -->
+                        <div class="col-12 mb-4">
+                            <div class="glass-card border-start border-4 border-success">
+                                <h4 class="text-white mb-2"><ion-icon name="trail-sign-outline"
+                                        class="me-2"></ion-icon>Trail Running Analytics</h4>
+                                <p class="text-secondary mb-0">
+                                    En la montaña, el ritmo por kilómetro (min/km) no cuenta toda la verdad. Esta
+                                    herramienta utiliza algoritmos científicos (Minetti, Banister) para calcular tu
+                                    <strong class="text-success">Esfuerzo Real (GAP)</strong>, <strong
+                                        class="text-danger">Carga Interna (TRIMP)</strong> y <strong
+                                        class="text-warning">Gasto Energético</strong> considerando la gravedad y el
+                                    desnivel.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 1. GAP CALCULATOR -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="glass-card h-100">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-success bg-opacity-10 p-2 rounded me-3 text-success">
+                                        <ion-icon name="speedometer" class="fs-4"></ion-icon>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">Calculadora GAP (Minetti)</h5>
+                                        <small class="text-secondary">Ritmo Ajustado a Pendiente</small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label small">Distancia (km)</label>
+                                        <input type="number" id="gapDist" class="form-control" placeholder="21.5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small">Desnivel Positivo (m+)</label>
+                                        <input type="number" id="gapElev" class="form-control" placeholder="1200">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small">Tiempo Total (HH:MM:SS)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark-subtle border-secondary"><ion-icon
+                                                name="time-outline"></ion-icon></span>
+                                        <input type="text" id="gapTimeInput" class="form-control"
+                                            placeholder="ej. 01:45:30 o 45:00">
+                                    </div>
+                                </div>
+                                <button class="btn btn-success w-100 mb-4" onclick="calculateGAP()">Calcular
+                                    Rendimiento</button>
+
+                                <!-- Result GAP -->
+                                <div id="gapResults" class="d-none animate-slide-in">
+                                    <div class="row text-center mb-3">
+                                        <div class="col-6">
+                                            <small class="text-secondary d-block">Ritmo Real</small>
+                                            <span class="fs-4 fw-bold text-white" id="resPace">--:--</span> <small
+                                                class="text-secondary">/km</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-success d-block fw-bold">Ritmo GAP</small>
+                                            <span class="fs-3 fw-bold text-success" id="resGAP">--:--</span> <small
+                                                class="text-secondary">/km</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <div class="progress flex-grow-1 bg-secondary bg-opacity-25"
+                                            style="height: 6px;">
+                                            <div id="gradeBar" class="progress-bar bg-info" role="progressbar"
+                                                style="width: 0%"></div>
+                                        </div>
+                                        <span id="resGrade" class="text-white fw-bold small">0%</span>
+                                    </div>
+                                    <small class="text-secondary d-block text-end mb-3">Pendiente Media</small>
+
+                                    <div class="alert alert-dark border-secondary mb-0 small text-start">
+                                        <i class="fa-solid fa-lightbulb text-warning me-1"></i> <span
+                                            id="gapExplanation">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. TRIMP CALCULATOR -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="glass-card h-100">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-danger bg-opacity-10 p-2 rounded me-3 text-danger">
+                                        <ion-icon name="heart" class="fs-4"></ion-icon>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">TRIMP (Carga Interna)</h5>
+                                        <small class="text-secondary">Impulso de Entrenamiento (Banister)</small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-2 mb-3">
+                                    <div class="col-8">
+                                        <label class="form-label small">Duración (min)</label>
+                                        <input type="number" id="trimpTime" class="form-control" placeholder="Minutos">
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="form-label small">Género</label>
+                                        <select id="trimpGender"
+                                            class="form-select text-white bg-dark border-secondary">
+                                            <option value="male">Hombre</option>
+                                            <option value="female">Mujer</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-4">
+                                        <label class="form-label small">FC Reposo</label>
+                                        <input type="number" id="hrRest" class="form-control" placeholder="50">
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="form-label small">FC Máx</label>
+                                        <input type="number" id="hrMax" class="form-control" placeholder="190">
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="form-label small">FC Media</label>
+                                        <input type="number" id="hrAvg"
+                                            class="form-control border-danger text-danger fw-bold" placeholder="155">
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-danger w-100 mb-4" onclick="calculateTRIMP()">Calcular
+                                    Estrés</button>
+
+                                <!-- Result TRIMP -->
+                                <div id="trimpResults" class="d-none text-center animate-slide-in">
+                                    <small class="text-secondary d-block text-uppercase"
+                                        style="font-size: 0.7rem;">Puntuación TRIMP</small>
+                                    <h2 class="display-3 fw-bold text-danger mb-0" id="trimpValue">--</h2>
+                                    <small class="text-secondary">puntos de estrés</small>
+
+                                    <div
+                                        class="mt-3 text-start bg-dark bg-opacity-50 p-3 rounded border border-secondary border-opacity-25">
+                                        <strong class="d-block text-white mb-1">Diagnóstico:</strong>
+                                        <p id="trimpDiagnosis" class="small text-secondary mb-0"
+                                            style="line-height: 1.4;">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. CALORIES CALCULATOR -->
+                        <div class="col-12">
+                            <div class="glass-card">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-warning bg-opacity-10 p-2 rounded me-3 text-warning"
+                                        style="color:#fd7e14 !important">
+                                        <ion-icon name="flame" class="fs-4"></ion-icon>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">Gasto Energético Real</h5>
+                                        <small class="text-secondary">Incluye ineficiencia vertical
+                                            (gravedad)</small>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-3">
+                                        <label class="form-label small">Peso Total (kg)</label>
+                                        <input type="number" id="calWeight" class="form-control" placeholder="70">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small">Distancia (km)</label>
+                                        <input type="number" id="calDist" class="form-control" placeholder="15">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small">Desnivel + (m)</label>
+                                        <input type="number" id="calElev" class="form-control" placeholder="800">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-warning w-100 text-white" onclick="calculateCalories()"
+                                            style="background-color:#fd7e14; border:none;">Calcular</button>
+                                    </div>
+                                </div>
+
+                                <!-- Result Calories -->
+                                <div id="calResultBox"
+                                    class="d-none mt-4 p-3 rounded d-flex justify-content-between align-items-center"
+                                    style="background: rgba(253, 126, 20, 0.1); border: 1px solid rgba(253, 126, 20, 0.3);">
+                                    <div>
+                                        <strong class="d-block" style="color:#fd7e14">Calorías Totales
+                                            Estimadas</strong>
+                                        <small class="text-secondary opacity-75">Metabolismo Basal + Coste Mecánico
+                                            Vertical</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span id="calValue" class="display-6 fw-bold" style="color:#fd7e14">0</span>
+                                        <small class="fw-bold" style="color:#fd7e14">kcal</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <!-- AI Analyzer Tab -->
                 <div class="tab-pane fade" id="run-ai-pane" role="tabpanel">
-                    <div class="row">
+
+                    <!-- 1. Input Section (Centered) -->
+                    <div id="runInputSection" class="row justify-content-center">
                         <div class="col-lg-8">
-                            <div class="glass-card">
-                                <h5 class="mb-3" data-i18n="video_upload_title">Video Upload</h5>
-                                <div class="upload-area mb-4" id="runUploadArea">
+                            <div class="glass-card text-center p-5">
+                                <h2 class="mb-3 text-white fw-bold" data-i18n="video_upload_title">Video Upload</h2>
+
+                                <div class="d-inline-flex align-items-center justify-content-center text-start bg-info bg-opacity-10 border border-info border-opacity-25 rounded-3 p-3 mb-4 mx-auto"
+                                    style="max-width: 600px;">
+                                    <ion-icon name="information-circle-outline"
+                                        class="text-info fs-2 me-3 flex-shrink-0"></ion-icon>
+                                    <p class="text-info mb-0 small" data-i18n="video_upload_text">Upload your
+                                        running video
+                                        to receive an advanced AI-powered biomechanical analysis.
+                                        Our system will automatically evaluate your cadence, stride length, vertical
+                                        oscillation, ground contact time, and other key performance metrics to help
+                                        you
+                                        understand and improve your running technique.</p>
+                                </div>
+
+                                <!-- Upload Area -->
+                                <div class="upload-area mb-4 mx-auto" id="runUploadArea" style="max-width: 500px;">
                                     <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
                                     <h4 data-i18n="drop_video_text">Drop your video here</h4>
-                                    <p class="text-secondary" data-i18n="video_formats">Supports MP4, MOV, WEBM (Max
-                                        50MB)</p>
+                                    <p class="text-secondary small" data-i18n="video_formats">Supports MP4, MOV,
+                                        WEBM
+                                        (Max 50MB)</p>
                                     <input type="file" id="runVideoInput" accept="video/*" class="d-none">
-                                    <button class="btn btn-primary mt-2" id="btnRunSelectFile"
+                                    <button class="btn btn-outline-primary mt-2" id="btnRunSelectFile"
                                         data-i18n="btn_select_file">Select File</button>
                                 </div>
 
-                                <!-- Video Player & MediaPipe Overlay -->
-                                <div class="position-relative mb-4">
-                                    <video id="runVideoPlayer" class="w-100 rounded d-none" controls muted
-                                        playsinline></video>
-                                    <canvas id="runCanvas" class="position-absolute top-0 start-0 w-100 h-100 d-none"
-                                        style="pointer-events: none;"></canvas>
-                                </div>
 
-                                <h5 class="mb-3 mt-4" data-i18n="ai_result_title">AI Analysis Result</h5>
-                                <h5 class="mb-3 mt-4 d-none" data-i18n="ai_result_title" id="runResultTitle">AI Analysis
-                                    Result</h5>
-                                <div class="ai-result-box" id="runResultBox">
-                                    <p class="text-secondary fst-italic" data-i18n="ai_waiting_text">Upload a video to
-                                        see the analysis...</p>
-                                    <!-- Mock Result for Running -->
-                                    <div class="d-none" id="runAiOutputMock">
-                                        <h6 class="text-success"><ion-icon name="checkmark-circle"
-                                                class="me-1"></ion-icon><span data-i18n="strengths">Strengths</span>
-                                        </h6>
-                                        <p class="small text-secondary mb-3" data-i18n="run_mock_str">Midfoot strike
-                                            pattern is solid.</p>
-                                        <h6 class="text-warning"><ion-icon name="alert-circle"
-                                                class="me-1"></ion-icon><span data-i18n="improvements">Areas for
-                                                Improvement</span></h6>
-                                        <p class="small text-secondary" data-i18n="run_mock_imp">Slight overstriding
-                                            identified.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="glass-card">
-                                <h5 class="mb-4" data-i18n="context_title">Context</h5>
-                                <form>
-                                    <div class="mb-3">
-                                        <label class="form-label" data-i18n="surface_label">Surface</label>
-                                        <select class="form-select">
-                                            <option data-i18n="surface_track">Track</option>
-                                            <option data-i18n="surface_road">Road</option>
-                                            <option data-i18n="surface_trail">Trail</option>
-                                            <option data-i18n="surface_treadmill">Treadmill</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label" data-i18n="footwear_label">Footwear</label>
-                                        <select class="form-select">
-                                            <option data-i18n="shoe_daily">Daily Trainer</option>
-                                            <option data-i18n="shoe_racing">Racing/Carbon</option>
-                                            <option data-i18n="shoe_minimal">Minimalist</option>
-                                            <option data-i18n="shoe_spikes">Track Spikes</option>
-                                        </select>
-                                    </div>
-                                    <button type="button" class="btn btn-primary w-100 mt-2" id="btnAnalyzeRun"
-                                        disabled>
-                                        <ion-icon name="sparkles" class="me-2"></ion-icon><span
-                                            data-i18n="btn_analyze">Analyze with AI</span>
-                                    </button>
-                                </form>
+
+                                <!-- Analyze Button -->
+                                <button type="button" class="btn btn-primary btn-lg px-5 rounded-pill shadow-lg"
+                                    id="btnAnalyzeRun" disabled>
+                                    <ion-icon name="sparkles" class="me-2"></ion-icon>
+                                    <span data-i18n="btn_analyze">Analyze with AI</span>
+                                </button>
                             </div>
                         </div>
                     </div>
+
+                    <!-- 2. Analysis & Results Section (Hidden Initially) -->
+                    <div id="runAnalysisSection" class="row d-none">
+                        <!-- Left: Video Player -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="glass-card p-0 overflow-hidden position-relative h-100"
+                                style="min-height: 400px; background: black;">
+                                <video id="runVideoPlayer" class="w-100 h-100 object-fit-cover" controls muted
+                                    playsinline></video>
+                                <canvas id="runCanvas" class="position-absolute top-0 start-0 w-100 h-100"
+                                    style="pointer-events: none;"></canvas>
+                                <!-- AI Overlay will be injected here via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Right: Results Panel -->
+                        <div class="col-lg-6">
+                            <div class="glass-card h-100" id="runResultContainer">
+                                <div class="text-center h-100 d-flex flex-column justify-content-center align-items-center text-secondary"
+                                    id="runResultPlaceholder">
+                                    <ion-icon name="analytics-outline"
+                                        style="font-size: 4rem; opacity: 0.5;"></ion-icon>
+                                    <p class="mt-3">Analysis results will appear here.</p>
+                                </div>
+                                <div id="runResultBox" class="d-none animate-slide-in">
+                                    <!-- Results injected by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. TRAINING PLAN -->
+                    <div class="tab-pane fade" id="pro-plan-pane" role="tabpanel">
+                        <div class="row g-4">
+                            <div class="col-lg-4">
+                                <div class="glass-card border-start border-4 border-primary">
+                                    <h5 class="text-white mb-3 text-primary"><ion-icon name="construct-outline"
+                                            class="me-2"></ion-icon>Estructura Base</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label text-white-50 small">Días de Entrenamiento</label>
+                                        <select id="proPlanDays"
+                                            class="form-select bg-dark text-white border-secondary">
+                                            <option value="3">3 días / semana</option>
+                                            <option value="4" selected>4 días / semana</option>
+                                            <option value="5">5 días / semana</option>
+                                            <option value="6">6 días / semana</option>
+                                        </select>
+                                    </div>
+                                    <div
+                                        class="p-3 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20">
+                                        <p class="small text-white-50 mb-0">Esta estructura se adapta automáticamente a
+                                            tu <strong>VAM (${currentVam} km/h)</strong> para definir ritmos de rodaje,
+                                            series y tiradas largas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div id="manualPlanContainer" class="row g-3">
+                                    <!-- Injected by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </div>
         </div>
     </main>
 
@@ -282,9 +789,97 @@
                 </div>
                 <div class="modal-footer border-secondary">
                     <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal"
-                        data-i18n="btn_cancel">Cancel</button>
-                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveZones" data-i18n="btn_save">Save
-                        Changes</button>
+                        data-i18n="btn_cancel">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnSaveZones">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pro Zone Config Modal -->
+    <div class="modal fade" id="proZoneConfigModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-0 p-0">
+                <div class="modal-header border-secondary border-opacity-25">
+                    <h5 class="modal-title fw-bold text-white">Configurar Rangos % VAM</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-white-50 small mb-4">Ajusta los porcentajes de VAM para cada zona de entrenamiento.
+                    </p>
+                    <form id="proZoneConfigForm">
+                        <div class="mb-3 row align-items-center">
+                            <label class="col-sm-4 col-form-label text-info fw-bold small">Z1 - Recuperación</label>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z1_min" value="50"></div>
+                            <div class="col-sm-1 text-center text-white-50">-</div>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z1_max" value="60"></div>
+                            <div class="col-sm-1 text-white-50 small">%</div>
+                        </div>
+                        <div class="mb-3 row align-items-center">
+                            <label class="col-sm-4 col-form-label text-success fw-bold small">Z2 - Rodaje Base</label>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z2_min" value="60"></div>
+                            <div class="col-sm-1 text-center text-white-50">-</div>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z2_max" value="70"></div>
+                            <div class="col-sm-1 text-white-50 small">%</div>
+                        </div>
+                        <div class="mb-3 row align-items-center">
+                            <label class="col-sm-4 col-form-label text-primary fw-bold small">Z3 - Aeróbico</label>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z3_min" value="70"></div>
+                            <div class="col-sm-1 text-center text-white-50">-</div>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z3_max" value="80"></div>
+                            <div class="col-sm-1 text-white-50 small">%</div>
+                        </div>
+                        <div class="mb-3 row align-items-center">
+                            <label class="col-sm-4 col-form-label text-warning fw-bold small">Z4 - Umbral</label>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z4_min" value="80"></div>
+                            <div class="col-sm-1 text-center text-white-50">-</div>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z4_max" value="90"></div>
+                            <div class="col-sm-1 text-white-50 small">%</div>
+                        </div>
+                        <div class="mb-3 row align-items-center">
+                            <label class="col-sm-4 col-form-label text-danger fw-bold small">Z5 - VO2max</label>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z5_min" value="90"></div>
+                            <div class="col-sm-1 text-center text-white-50">-</div>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z5_max" value="98"></div>
+                            <div class="col-sm-1 text-white-50 small">%</div>
+                        </div>
+                        <div class="mb-3 row align-items-center">
+                            <label class="col-sm-4 col-form-label text-secondary fw-bold small">Z6 - Anaeróbico</label>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z6_min" value="98"></div>
+                            <div class="col-sm-1 text-center text-white-50">-</div>
+                            <div class="col-sm-3"><input type="number"
+                                    class="form-control form-control-sm bg-dark text-white border-secondary"
+                                    id="pro_z6_max" value="120"></div>
+                            <div class="col-sm-1 text-white-50 small">%</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-secondary border-opacity-25">
+                    <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="btnSaveProZones">Guardar Cambios</button>
                 </div>
             </div>
         </div>
@@ -293,11 +888,13 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Common JS (Sidevar, i18n) -->
-    <script src="../js/common.js"></script>
+    <script src="js/common.js"></script>
     <!-- Video Processing JS -->
-    <script src="../js/video_processor.js"></script>
+    <script src="js/video_processor.js"></script>
     <!-- Module JS -->
-    <script src="../js/running.js"></script>
+    <script src="js/running.js"></script>
+    <script src="js/runner_pro.js"></script>
+    </div>
 </body>
 
 </html>
