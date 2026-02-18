@@ -10,7 +10,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/DataGym/css/style.css">
+    <link rel="stylesheet" href="https://farreset.github.io/DataGym/css/style.css">
     <!-- Icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -32,8 +32,9 @@
     <main class="main-content">
         <div id="module-gym" class="module-content">
             <header class="page-header">
-                <h1 class="page-title" data-i18n="gym_title">Gym Exercises</h1>
-                <p class="text-secondary" data-i18n="gym_subtitle">Calculator and tools for gym exercises</p>
+                <h1 class="page-title" data-i18n="gym_title">Ejercicios de Gimnasio</h1>
+                <p class="text-secondary" data-i18n="gym_subtitle">Calculadora y herramientas para ejercicios de
+                    gimnasio</p>
             </header>
 
             <!-- Tabs -->
@@ -41,31 +42,26 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="gym-rm-tab" data-bs-toggle="tab" data-bs-target="#gym-rm-pane"
                         type="button" role="tab">
-                        <ion-icon name="calculator-outline" class="me-2"></ion-icon>RM Calc
+                        <ion-icon name="calculator-outline" class="me-2"></ion-icon>Calc RM
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="gym-power-tab" data-bs-toggle="tab" data-bs-target="#gym-power-pane"
                         type="button" role="tab">
-                        <ion-icon name="speedometer-outline" class="me-2"></ion-icon>W5 Calc
+                        <ion-icon name="speedometer-outline" class="me-2"></ion-icon>Calc W5
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <!-- <li class="nav-item" role="presentation">
                     <button class="nav-link" id="gym-bmi-tab" data-bs-toggle="tab" data-bs-target="#gym-bmi-pane"
                         type="button" role="tab">
                         <ion-icon name="body-outline" class="me-2"></ion-icon>BMI & Metrics
                     </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="gym-w5-tab" data-bs-toggle="tab" data-bs-target="#gym-w5-pane"
-                        type="button" role="tab">
-                        <ion-icon name="options-outline" class="me-2"></ion-icon>Carga total
-                    </button>
-                </li>
+                </li>-->
+
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="gym-ai-tab" data-bs-toggle="tab" data-bs-target="#gym-ai-pane"
                         type="button" role="tab">
-                        <ion-icon name="videocam-outline" class="me-2"></ion-icon>AI Analyzer
+                        <ion-icon name="videocam-outline" class="me-2"></ion-icon>Analizador IA
                     </button>
                 </li>
             </ul>
@@ -74,38 +70,198 @@
 
                 <!-- RM Calc Tab -->
                 <div class="tab-pane fade show active" id="gym-rm-pane" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="tab_rm">1RM Estimator</h5>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="label_weight">Lifted Weight (kg)</label>
-                                    <input type="number" class="form-control" id="inputRmWeight" placeholder="100">
+                    <!-- RM & Load Tab -->
+                    <div class="h-100">
+                        <div class="row g-4">
+                            <!-- Left Column: Calculators -->
+                            <div class="col-lg-5">
+                                <div class="d-flex flex-column ">
+                                    <!-- 1RM Calculator Input -->
+                                    <div class="glass-card">
+                                        <h5 class="mb-4 d-flex align-items-center gap-2">
+                                            <ion-icon name="calculator-outline" class="text-primary"></ion-icon>
+                                            <span data-i18n="tab_rm" class="text-uppercase ls-1 fs-6">Calculadora
+                                                1RM</span>
+                                        </h5>
+                                        <div class="row g-3">
+                                            <div class="col-6">
+                                                <label class="form-label small text-secondary text-uppercase"
+                                                    data-i18n="label_weight">Peso (kg)</label>
+                                                <div class="input-group input-group-md">
+                                                    <input type="number" class="form-control form-control-md"
+                                                        id="inputRmWeight" placeholder="100">
+                                                    <span
+                                                        class="input-group-text bg-transparent border-secondary text-secondary">kg</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label small text-secondary text-uppercase"
+                                                    data-i18n="label_reps">Repeticiones</label>
+                                                <input type="number" class="form-control form-control-s"
+                                                    id="inputRmReps" placeholder="5">
+                                            </div>
+                                            <div class="col-12">
+                                                <button
+                                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                                                    id="btnCalcRm">
+                                                    <ion-icon name="flash-outline"></ion-icon>
+                                                    <span data-i18n="btn_calc_rm">Calcular Máximo</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="glass-card d-flex flex-column">
+                                        <h5 class="mb-4 d-flex align-items-center gap-2 opacity-75">
+                                            <ion-icon name="analytics-outline"></ion-icon>
+                                            <span class="text-uppercase ls-1 fs-6">Perfil de Rendimiento</span>
+                                        </h5>
+
+                                        <!-- Main 1RM Display -->
+                                        <div
+                                            class="text-center py-4 bg-dark bg-opacity-25 rounded-3 mb-4 border border-white border-opacity-10">
+                                            <small class="text-secondary text-uppercase ls-2">1RM Estimado</small>
+                                            <div class="display-2 fw-bold text-white text-shadow mt-2 mb-0 lh-1"
+                                                id="res1rm">--</div>
+                                            <div class="text-white-50 small mt-1">kg</div>
+                                        </div>
+                                        <!-- Derived RMs Grid -->
+                                        <div class="row g-2 mb-4">
+                                            <div class="col-4">
+                                                <div
+                                                    class="p-2 bg-dark bg-opacity-50 rounded-2 text-center border border-white border-opacity-5">
+                                                    <div class="text-white fw-bold" id="res3rm">--</div>
+                                                    <small class="text-white-50 text-uppercase"
+                                                        style="font-size: 0.65rem;">3 RM</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div
+                                                    class="p-2 bg-dark bg-opacity-50 rounded-2 text-center border border-white border-opacity-5">
+                                                    <div class="text-white fw-bold" id="res5rm">--</div>
+                                                    <small class="text-white-50 text-uppercase"
+                                                        style="font-size: 0.65rem;">5 RM</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div
+                                                    class="p-2 bg-dark bg-opacity-50 rounded-2 text-center border border-white border-opacity-5">
+                                                    <div class="text-white fw-bold" id="res10rm">--</div>
+                                                    <small class="text-white-50 text-uppercase"
+                                                        style="font-size: 0.65rem;">10 RM</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Training Zones Table -->
+                                        <div
+                                            class="table-responsive mb-4 rounded-3 overflow-hidden border border-white border-opacity-10">
+                                            <table class="table table-dark table-borderless mb-0 bg-transparent">
+                                                <thead class="bg-white bg-opacity-10">
+                                                    <tr>
+                                                        <th class="ps-3 py-2 text-secondary small text-uppercase">Zona
+                                                        </th>
+                                                        <th
+                                                            class="py-2 text-center text-secondary small text-uppercase">
+                                                            Rango</th>
+                                                        <th
+                                                            class="pe-3 py-2 text-end text-secondary small text-uppercase">
+                                                            Carga</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="small align-middle">
+                                                    <tr>
+                                                        <td class="ps-3 border-bottom border-white border-opacity-5">
+                                                            <span class="text-danger fw-bold"><ion-icon name="flash"
+                                                                    class="me-1"></ion-icon> Potencia</span>
+                                                        </td>
+                                                        <td
+                                                            class="text-center text-white-50 border-bottom border-white border-opacity-5">
+                                                            90-100%</td>
+                                                        <td class="text-end pe-3 fw-bold text-white border-bottom border-white border-opacity-5"
+                                                            id="zoneStrength">--</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="ps-3 border-bottom border-white border-opacity-5">
+                                                            <span class="text-warning fw-bold"><ion-icon name="body"
+                                                                    class="me-1"></ion-icon> Hipertrofia</span>
+                                                        </td>
+                                                        <td
+                                                            class="text-center text-white-50 border-bottom border-white border-opacity-5">
+                                                            70-85%</td>
+                                                        <td class="text-end pe-3 fw-bold text-white border-bottom border-white border-opacity-5"
+                                                            id="zoneHyper">--</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="ps-3">
+                                                            <span class="text-success fw-bold"><ion-icon name="infinite"
+                                                                    class="me-1"></ion-icon> Resistencia</span>
+                                                        </td>
+                                                        <td class="text-center text-white-50">50-65%</td>
+                                                        <td class="text-end pe-3 fw-bold text-white" id="zoneEndurance">
+                                                            --
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                        <!-- Weekly Load Calculator Input -->
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="label_reps">Reps Performed</label>
-                                    <input type="number" class="form-control" id="inputRmReps" placeholder="5">
-                                </div>
-                                <button class="btn btn-primary w-100 mb-3" id="btnCalcRm"
-                                    data-i18n="btn_calc_rm">Calculate 1RM</button>
                             </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="glass-card h-100">
-                                <h5 class="mb-3" data-i18n="res_1rm">Estimated 1RM</h5>
-                                <div class="d-flex justify-content-around text-center mt-4">
-                                    <div>
-                                        <h3 class="fw-bold text-success h3" id="res1rm">--</h3>
-                                        <small class="text-secondary">1RM</small>
+
+                            <!-- Right Column: Results & Visualization -->
+                            <div class="col-lg-7">
+
+                                <div class="glass-card">
+                                    <h5 class="mb-4 d-flex align-items-center gap-2">
+                                        <ion-icon name="barbell-outline" class="text-info"></ion-icon>
+                                        <span data-i18n="tab_w5" class="text-uppercase ls-1 fs-6">Carga Total</span>
+                                    </h5>
+                                    <div class="row g-3">
+                                        <div class="col-4">
+                                            <label class="form-label small text-secondary text-uppercase">Reps</label>
+                                            <input type="number" class="form-control form-control-sm" id="inputCTReps"
+                                                placeholder="10">
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label small text-secondary text-uppercase">Series</label>
+                                            <input type="number" class="form-control form-control-sm" id="inputCTSer"
+                                                placeholder="4">
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label small text-secondary text-uppercase">Carga</label>
+                                            <input type="number" class="form-control form-control-sm" id="inputCTWeight"
+                                                placeholder="50">
+                                        </div>
+                                        <div class="col-12">
+                                            <button
+                                                class="btn btn-secondary w-100 d-flex align-items-center justify-content-center gap-2"
+                                                id="btnCalcCT">
+                                                <ion-icon name="layers-outline"></ion-icon>
+                                                <span data-i18n="btn_calc_w5">Calcular Volumen</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 class="fw-bold text-info h3" id="res3rm">--</h3>
-                                        <small class="text-secondary">3RM</small>
+                                </div>
+                                <div class="glass-card d-flex flex-column">
+                                    <!-- W5 Load Result (Moved Here) -->
+                                    <div class="mt-auto pt-3 border-top border-white border-opacity-10">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <small class="text-secondary text-uppercase ls-1">Volumen de
+                                                    Sesión</small>
+                                                <div class="d-flex align-items-baseline gap-2">
+                                                    <h3 class="mb-0 fw-bold text-white" id="resCTLoad">0</h3>
+                                                    <span class="text-white-50 small font-monospace"
+                                                        id="resCTUnit">kg</span>
+                                                </div>
+                                            </div>
+                                            <ion-icon name="layers-outline" class="fs-2 text-white-50"></ion-icon>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 class="fw-bold text-warning h3" id="res5rm">--</h3>
-                                        <small class="text-secondary" data-i18n="label_5rm">5RM</small>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -127,7 +283,8 @@
                                     <input type="number" class="form-control" id="inputBmiHeight" placeholder="180">
                                 </div>
                                 <button class="btn btn-info w-100 mb-3" id="btnCalcBmi"
-                                    data-i18n="btn_calc_bmi">Calculate BMI</button>
+                                    data-i18n="btn_calc_bmi">Calculate
+                                    BMI</button>
 
                                 <div class="text-center p-3">
                                     <h6 class="text-secondary" data-i18n="res_bmi">Your BMI</h6>
@@ -139,31 +296,7 @@
                     </div>
                 </div>
 
-                <!-- W5 Load Tab -->
-                <div class="tab-pane fade" id="gym-w5-pane" role="tabpanel">
-                    <div class="glass-card">
-                        <h5 class="mb-4" data-i18n="tab_w5">Weekly Load</h5>
-                        <!-- Placeholder simple calc -->
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="form-label" data-i18n="label_reps">Reps</label>
-                                <input type="number" class="form-control mb-3" id="inputCTReps" placeholder="3">
-                                <label class="form-label" data-i18n="label_series">Series</label>
-                                <input type="number" class="form-control mb-3" id="inputCTSer" placeholder="6">
-                                <label class="form-label" data-i18n="label_weight">Avg Weight (kg)</label>
-                                <input type="number" class="form-control mb-3" id="inputCTWeight" placeholder="60">
-                                <button class="btn btn-secondary w-100" id="btnCalcCT" data-i18n="btn_calc_w5">Calculate
-                                    Load</button>
-                            </div>
-                            <div class="col-md-6 text-center d-flex align-items-center justify-content-center">
-                                <div>
-                                    <h6 class="text-secondary" data-i18n="res_w5">Total Load (Kg)</h6>
-                                    <h2 class="text-white" id="resCTLoad">--</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Power Calc Tab -->
                 <div class="tab-pane fade" id="gym-power-pane" role="tabpanel">
@@ -172,39 +305,41 @@
                         <div class="row">
                             <!-- Section 1: Power Calculation -->
                             <div class="col-md-6 border-end border-secondary">
-                                <h6 class="text-warning mb-3" data-i18n="tab_power">1. Power Calculation</h6>
-                                <p class="text-secondary small" data-i18n="info_tab">Test performed in 5 seconds</p>
+                                <h6 class="text-warning mb-3" data-i18n="tab_power">1. Cálculo de Potencia</h6>
+                                <p class="text-secondary small" data-i18n="info_tab">Test realizado en 5 segundos</p>
 
-                                <label class="form-label small" data-i18n="label_weight">Weight (kg)</label>
+                                <label class="form-label small" data-i18n="label_weight">Peso (kg)</label>
                                 <input type="number" class="form-control form-control-sm mb-2" id="inputWWeight"
                                     placeholder="80">
 
-                                <label class="form-label small" data-i18n="label_reps">Repetitions</label>
+                                <label class="form-label small" data-i18n="label_reps">Repeticiones</label>
                                 <input type="number" class="form-control form-control-sm mb-2" id="inputWReps"
                                     placeholder="5">
 
-                                <label class="form-label small" data-i18n="label_distance">Distance (cm)</label>
+                                <label class="form-label small" data-i18n="label_distance">Distancia (cm)</label>
                                 <input type="number" class="form-control form-control-sm mb-2" id="inputCM"
                                     placeholder="50">
 
-                                <label class="form-label small" data-i18n="label_percentage">Percentage (%)</label>
+                                <label class="form-label small" data-i18n="label_percentage">Porcentaje (%)</label>
                                 <input type="number" class="form-control form-control-sm mb-3" id="inputPercentage"
                                     placeholder="60">
 
                                 <button class="btn btn-warning w-100 mb-3" id="btnCalcPower"
-                                    data-i18n="btn_calc_power">Calculate Power</button>
+                                    data-i18n="btn_calc_power">Calcular Potencia</button>
 
                                 <div class="bg-dark bg-opacity-25 p-3 rounded text-center">
                                     <div class="row">
                                         <div class="col-6">
-                                            <small class="text-white-50 d-block" data-i18n="label_power">Power</small>
+                                            <small class="text-white-50 d-block"
+                                                data-i18n="label_power">Potencia</small>
                                             <span class="text-warning h4 fw-bold" id="potencia">--</span>
                                             <small>W</small>
                                         </div>
                                         <div class="col-6">
                                             <small class="text-white-50 d-block"
-                                                data-i18n="label_adjusted">Adjusted</small>
-                                            <span class="text-info h4 fw-bold" id="potenciap">--</span> <small>W</small>
+                                                data-i18n="label_adjusted">Ajustado</small>
+                                            <span class="text-info h4 fw-bold" id="potenciap">--</span>
+                                            <small>W</small>
                                         </div>
                                     </div>
                                 </div>
@@ -212,25 +347,24 @@
 
                             <!-- Section 2: Time Estimation -->
                             <div class="col-md-6 ps-md-4">
-                                <h6 class="text-success mb-3" data-i18n="tab_time">2. Time Estimation</h6>
-                                <p class="text-secondary small" data-i18n="info2_tab">Calculate estimated time for
-                                    target
-                                </p>
+                                <h6 class="text-success mb-3" data-i18n="tab_time">2. Estimación de Tiempo</h6>
+                                <p class="text-secondary small" data-i18n="info2_tab">Calcular tiempo estimado para
+                                    objetivo</p>
 
-                                <label class="form-label small" data-i18n="label_weight2">Target Weight (kg)</label>
+                                <label class="form-label small" data-i18n="label_weight2">Peso Objetivo (kg)</label>
                                 <input type="number" class="form-control form-control-sm mb-2" id="inputWPWeight"
                                     placeholder="90">
 
-                                <label class="form-label small" data-i18n="label_reps2">Target Reps</label>
+                                <label class="form-label small" data-i18n="label_reps2">Reps Objetivo</label>
                                 <input type="number" class="form-control form-control-sm mb-2" id="inputWPReps"
                                     placeholder="3">
 
                                 <button class="btn btn-success w-100 w-100 mt-4 mb-3" id="btnCalcTime"
-                                    data-i18n="btn_calc_time">Calculate Time</button>
+                                    data-i18n="btn_calc_time">Calcular Tiempo</button>
 
                                 <div class="bg-dark bg-opacity-25 p-3 rounded text-center">
-                                    <small class="text-white-50 d-block" data-i18n="label_time">Estimated Time</small>
-                                    <span class="text-white h2 fw-bold" id="tiempo">--</span> <small>sec</small>
+                                    <small class="text-white-50 d-block" data-i18n="label_time">Tiempo Estimado</small>
+                                    <span class="text-white h2 fw-bold" id="tiempo">--</span> <small>seg</small>
                                 </div>
                             </div>
                         </div>
@@ -258,17 +392,18 @@
                                         class="text-center p-5 rounded-4 glass-panel border border-secondary border-opacity-25 shadow-lg">
                                         <ion-icon name="cloud-upload-outline"
                                             class="display-1 text-primary mb-3"></ion-icon>
-                                        <h3 class="text-white mb-2" data-i18n="drop_video_text">Drop your video here
+                                        <h3 class="text-white mb-2" data-i18n="drop_video_text">Arrastra tu video aquí
                                         </h3>
                                         <p class="text-secondary mb-4" data-i18n="video_formats">MP4, MOV, WEBM (Max
                                             50MB)</p>
                                         <input type="file" id="gymVideoInput" accept="video/*" class="d-none">
                                         <div class="d-flex gap-3 justify-content-center">
                                             <button class="btn btn-primary px-4 py-2" id="btnGymSelectFile">
-                                                <ion-icon name="folder-open-outline" class="me-2"></ion-icon>Select File
+                                                <ion-icon name="folder-open-outline" class="me-2"></ion-icon>Seleccionar
+                                                Archivo
                                             </button>
                                             <button class="btn btn-outline-info px-4 py-2" id="btnGymCamera">
-                                                <ion-icon name="videocam-outline" class="me-2"></ion-icon>Live Camera
+                                                <ion-icon name="videocam-outline" class="me-2"></ion-icon>Cámara en Vivo
                                             </button>
                                         </div>
                                     </div>
@@ -293,9 +428,11 @@
                                         <div class="text-end">
                                             <div
                                                 class="glass-panel px-4 py-2 rounded-3 border border-white border-opacity-10 text-center">
-                                                <div class="text-white-50 small text-uppercase fw-bold ls-1">Reps</div>
+                                                <div class="text-white-50 small text-uppercase fw-bold ls-1">Reps
+                                                </div>
                                                 <div class="display-4 fw-bold text-white lh-1 text-shadow"
-                                                    id="hudRepCounter">0</div>
+                                                    id="hudRepCounter">0
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -316,21 +453,10 @@
                                                     <!-- Main Angle -->
                                                     <div class="text-white" id="hudMetricAngle">
                                                         <small
-                                                            class="d-block text-white-50 text-uppercase ls-1 mb-1">Depth/Angle</small>
+                                                            class="d-block text-white-50 text-uppercase ls-1 mb-1">Ángulo/Prof.</small>
                                                         <div class="d-flex align-items-baseline gap-1">
                                                             <span class="display-6 fw-bold" id="hudAngleMain">--</span>
                                                             <span class="fs-4 text-white-50">°</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Velocity -->
-                                                    <div class="text-white border-start border-white border-opacity-25 ps-4"
-                                                        id="hudMetricVelocity">
-                                                        <small
-                                                            class="d-block text-white-50 text-uppercase ls-1 mb-1">Velocity</small>
-                                                        <div class="d-flex align-items-baseline gap-1">
-                                                            <span class="display-6 fw-bold font-monospace"
-                                                                id="hudVelocity">0.00</span>
-                                                            <span class="fs-6 text-white-50">m/s</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -340,13 +466,104 @@
                                                     <canvas id="gymPowerChart"></canvas>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 text-end">
-                                                <button class="btn btn-danger btn-lg px-4 rounded-pill shadow-lg d-none"
-                                                    id="btnGymStopCamera" style="pointer-events: auto;">
-                                                    <ion-icon name="stop-circle" class="me-2"></ion-icon>Finish Set
+                                            <div
+                                                class="col-md-4 text-end d-flex justify-content-end align-items-center gap-3">
+
+                                                <!-- Duration Selector Removed -->
+
+                                                <!-- Recording Indicator -->
+                                                <div id="gymRecIndicator" class="d-none align-items-center gap-2">
+                                                    <div class="spinner-grow text-danger spinner-grow-sm" role="status">
+                                                    </div>
+                                                    <span class="text-danger fw-bold ls-1 font-monospace"
+                                                        id="gymRecTimer">00:00</span>
+                                                </div>
+
+                                                <!-- REC Button -->
+                                                <button
+                                                    class="btn btn-outline-light rounded-circle p-0 d-flex align-items-center justify-content-center shadow-lg hover-scale"
+                                                    id="btnGymRec"
+                                                    style="width: 64px; height: 64px; border: 4px solid white; pointer-events: auto;">
+                                                    <div class="bg-danger rounded-circle"
+                                                        style="width: 24px; height: 24px;"></div>
+                                                </button>
+
+                                                <!-- STOP Button (Hidden initially) -->
+                                                <button
+                                                    class="btn btn-danger rounded-circle p-0 d-none align-items-center justify-content-center shadow-lg hover-scale"
+                                                    id="btnGymStop"
+                                                    style="width: 64px; height: 64px; pointer-events: auto;">
+                                                    <ion-icon name="stop" class="text-white fs-2"></ion-icon>
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Countdown Overlay -->
+                                <div id="gymCountdown"
+                                    class="position-absolute top-0 start-0 w-100 h-100 bg-black bg-opacity-75 d-none flex-column justify-content-center align-items-center"
+                                    style="z-index: 60; backdrop-filter: blur(5px);">
+                                    <div class="display-1 fw-bold text-white" id="gymCountdownText"
+                                        style="font-size: 8rem;">3</div>
+                                </div>
+
+                                <!-- Session Summary Modal Overlay -->
+                                <div id="gymSummaryModal"
+                                    class="position-absolute top-0 start-0 w-100 h-100 bg-black bg-opacity-95 d-none flex-column p-4"
+                                    style="z-index: 50; backdrop-filter: blur(10px);">
+                                    <h3 class="text-white fw-bold mb-4"><ion-icon name="flag-outline"
+                                            class="text-success me-2"></ion-icon>Resumen de Serie</h3>
+
+                                    <div class="row flex-grow-1 g-4">
+                                        <!-- Visualization -->
+                                        <div class="col-lg-8">
+                                            <div
+                                                class="position-relative h-100 rounded-4 overflow-hidden border border-secondary border-opacity-50">
+                                                <canvas id="gymSummaryCanvas"
+                                                    class="w-100 h-100 object-fit-contain bg-black"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <!-- Stats -->
+                                        <div class="col-lg-4 d-flex flex-column">
+                                            <div class="glass-panel p-4 mb-3 text-center">
+                                                <h6 class="text-secondary text-uppercase ls-1">Repeticiones Totales</h6>
+                                                <div class="display-1 fw-bold text-white lh-1 my-2" id="sumReps">0</div>
+                                                <small class="text-success" id="sumExerciseName">SQUAT</small>
+                                            </div>
+
+                                            <div class="glass-panel p-4 mb-3 flex-grow-1">
+                                                <h6 class="text-secondary text-uppercase ls-1 mb-3">Feedback IA</h6>
+                                                <ul class="list-unstyled text-white-50" id="sumFeedbackList">
+                                                    <li class="d-flex gap-2 mb-2"><ion-icon name="checkmark-circle"
+                                                            class="text-secondary"></ion-icon> Análisis completado.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="mt-auto d-flex gap-2">
+                                                <button class="btn btn-outline-secondary flex-grow-1 py-3"
+                                                    id="btnSumDiscard">
+                                                    <ion-icon name="trash-outline" class="me-2"></ion-icon>Descartar
+                                                </button>
+                                                <button class="btn btn-success flex-grow-1 py-3" id="btnSumSave">
+                                                    <ion-icon name="save-outline" class="me-2"></ion-icon>Guardar
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Calibration Overlay -->
+                                <div id="gymCalibrationOverlay"
+                                    class="position-absolute top-0 start-0 w-100 h-100 bg-black bg-opacity-80 d-none flex-column justify-content-center align-items-center"
+                                    style="z-index: 25; backdrop-filter: blur(5px);">
+                                    <div class="text-center">
+                                        <ion-icon name="scan-circle-outline"
+                                            class="display-1 text-info mb-3 spin-slow"></ion-icon>
+                                        <h3 class="text-white fw-bold">CALIBRANDO...</h3>
+                                        <p class="text-white-50">Mantente visible y quieto</p>
                                     </div>
                                 </div>
 
@@ -356,7 +573,8 @@
                                     style="z-index: 30; backdrop-filter: blur(5px);">
                                     <ion-icon name="sync-circle"
                                         class="display-1 text-warning mb-3 spin-slow"></ion-icon>
-                                    <h2 id="gymBigAlertText" class="text-white fw-bold text-center px-4">GÍRATE 45°</h2>
+                                    <h2 id="gymBigAlertText" class="text-white fw-bold text-center px-4">GÍRATE 45°
+                                    </h2>
                                 </div>
 
                                 <!-- Results / Report Card (Post-Set State) -->
@@ -370,102 +588,76 @@
 
                         <!-- Sidebar / Controls (Right Column) -->
                         <div class="col-lg-3">
-                            <div class="glass-card h-100 d-flex flex-column">
+                            <div class="glass-card  d-flex flex-column">
                                 <h5 class="mb-4 d-flex align-items-center gap-2">
                                     <ion-icon name="options-outline" class="text-primary"></ion-icon>
-                                    <span data-i18n="config_title">Configuration</span>
+                                    <span data-i18n="config_title">Configuración</span>
                                 </h5>
 
                                 <form class="flex-grow-1">
                                     <div class="mb-4">
                                         <label class="form-label text-secondary small text-uppercase ls-1"
-                                            data-i18n="exercise_label">Exercise</label>
+                                            data-i18n="exercise_label">Ejercicio</label>
                                         <select
                                             class="form-select bg-dark text-white border-secondary border-opacity-50 py-2"
                                             id="gymExerciseSelect">
-                                            <option value="squat">Squat</option>
-                                            <option value="deadlift">Deadlift</option>
-                                            <option value="bench">Bench Press</option>
-                                            <option value="ohp">Overhead Press</option>
-                                            <option value="bicep_curl">Bicep Curl</option>
-                                            <option value="tricep_ext">Tricep Extension</option>
+                                            <option value="squat">Sentadilla</option>
+                                            <option value="deadlift">Peso Muerto</option>
+                                            <option value="bench">Press Banca</option>
+                                            <option value="ohp">Press Militar</option>
+                                            <option value="bicep_curl">Curl Bíceps</option>
+                                            <option value="tricep_ext">Ext. Tríceps</option>
+                                            <option value="lateral_raise">Elev. Laterales</option>
                                         </select>
                                     </div>
 
                                     <div class="mb-4">
                                         <label class="form-label text-secondary small text-uppercase ls-1"
-                                            data-i18n="analysis_mode_label">Mode</label>
-                                        <div class="d-grid gap-2">
-                                            <input type="radio" class="btn-check" name="gymMode" id="modeTechnique"
-                                                value="technique" checked>
-                                            <label
-                                                class="btn btn-outline-light text-start p-3 border-opacity-25 position-relative overflow-hidden group-hover-glow"
-                                                for="modeTechnique">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <ion-icon name="eye-outline"
-                                                        class="fs-5 me-2 text-primary"></ion-icon>
-                                                    <span class="fw-bold">Technique</span>
-                                                </div>
-                                                <small class="text-secondary d-block lh-sm">Strict form checks & rep
-                                                    counting.</small>
-                                            </label>
+                                            data-i18n="goal_label">Objetivo de Serie</label>
 
-                                            <input type="radio" class="btn-check" name="gymMode" id="modePerformance"
-                                                value="performance">
-                                            <label
-                                                class="btn btn-outline-light text-start p-3 border-opacity-25 position-relative overflow-hidden group-hover-glow"
-                                                for="modePerformance">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <ion-icon name="flash-outline"
-                                                        class="fs-5 me-2 text-warning"></ion-icon>
-                                                    <span class="fw-bold">Performance</span>
-                                                </div>
-                                                <small class="text-secondary d-block lh-sm">Velocity-based training &
-                                                    power.</small>
-                                            </label>
-                                        </div>
-                                    </div>
+                                        <div class="d-flex gap-2 align-items-end">
+                                            <div style="flex: 1;">
+                                                <small class="text-white-50 d-block mb-1"
+                                                    style="font-size: 0.7rem;">TIPO</small>
+                                                <select
+                                                    class="form-select bg-dark text-white border-secondary border-opacity-50 py-2"
+                                                    id="gymGoalType">
+                                                    <!--<option value="manual">Manual (∞)</option>-->
+                                                    <option value="time">Tiempo (s)</option>
+                                                    <option value="reps">Repeticiones</option>
+                                                </select>
+                                            </div>
 
-                                    <!-- Collapsible Advanced Settings -->
-                                    <div class="accordion accordion-flush bg-transparent" id="gymAdvancedSettings">
-                                        <div class="accordion-item bg-transparent border-0">
-                                            <h2 class="accordion-header">
-                                                <button
-                                                    class="accordion-button collapsed bg-transparent text-secondary shadow-none p-0 py-2 small"
-                                                    type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#flush-collapseOne">
-                                                    <ion-icon name="settings-outline" class="me-2"></ion-icon> Advanced
-                                                    Settings
-                                                </button>
-                                            </h2>
-                                            <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                                data-bs-parent="#gymAdvancedSettings">
-                                                <div class="accordion-body px-0 pt-3">
-                                                    <div class="mb-3">
-                                                        <label class="form-label small text-secondary">Load (kg)</label>
-                                                        <input type="number"
-                                                            class="form-control bg-dark text-white border-secondary border-opacity-50"
-                                                            id="gymLoadInput" placeholder="60">
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label class="form-label small text-secondary">Height
-                                                            (cm)</label>
-                                                        <input type="number"
-                                                            class="form-control bg-dark text-white border-secondary border-opacity-50"
-                                                            id="gymHeightInput" placeholder="175">
-                                                    </div>
-                                                </div>
+                                            <div style="width: 100px;">
+                                                <small class="text-white-50 d-block mb-1" style="font-size: 0.7rem;"
+                                                    id="gymGoalUnitLabel">META</small>
+                                                <input type="number"
+                                                    class="form-control bg-dark text-white border-secondary border-opacity-50 py-2 text-center"
+                                                    id="gymGoalValue" value="0" min="1" disabled placeholder="-">
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label text-secondary small text-uppercase ls-1">Cuenta
+                                            Regresiva</label>
+                                        <select
+                                            class="form-select bg-dark text-white border-secondary border-opacity-50 py-2"
+                                            id="gymCountdownSelect">
+                                            <option value="3" selected>3s</option>
+                                            <option value="5">5s</option>
+                                            <option value="10">10s</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Mode Selection Removed as per request (Only Reps, Velocity, Power) -->
+                                    <input type="hidden" id="gymMode" value="performance">
+
+                                    <!-- Collapsible Advanced Settings -->
+                                    <div class="accordion accordion-flush bg-transparent" id="gymAdvancedSettings">
+
                                 </form>
 
-                                <button type="button"
-                                    class="btn btn-primary w-100 py-3 rounded-3 mt-3 shadow-lg fw-bold d-flex align-items-center justify-content-center gap-2"
-                                    id="btnAnalyzeGym" disabled>
-                                    <ion-icon name="sparkles"></ion-icon>
-                                    <span data-i18n="btn_analyze">Start Analysis</span>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -478,12 +670,12 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Common JS (Sidevar, i18n) -->
-    <script src="/DataGym/js/common.js"></script>
+    <script src="https://farreset.github.io/DataGym/js/common.js"></script>
 
     <!-- Video Processing JS -->
-    <script src="/DataGym/js/video_processor.js"></script>
+    <script src="https://farreset.github.io/DataGym/js/video_processor.js"></script>
     <!-- Module JS -->
-    <script src="/DataGym/js/gym.js"></script>
+    <script src="https://farreset.github.io/DataGym/js/gym.js"></script>
 </body>
 
 </html>

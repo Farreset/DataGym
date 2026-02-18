@@ -20,7 +20,32 @@ document.addEventListener('DOMContentLoaded', () => {
         module: 'Plyometrics',         // Indicamos que estamos en el modo Pliometría
         onAnalysisComplete: handlePlyoAnalysisResults // Qué hacer cuando termine el vídeo
     });
+
+    // Inicializamos los tooltips de Bootstrap
+    initTooltips();
 });
+
+/**
+ * Inicializa los tooltips de Bootstrap para mostrar información de ayuda.
+ */
+function initTooltips() {
+    // Primero destruimos tooltips existentes para evitar duplicados si se llama varias veces
+    const existingTooltips = document.querySelectorAll('.tooltip');
+    existingTooltips.forEach(t => t.remove());
+
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        // Obtenemos el texto traducido del atributo data-bs-title usando getTranslation
+        const titleKey = tooltipTriggerEl.getAttribute('data-bs-title');
+        const translatedTitle = getTranslation(titleKey);
+
+        // Inicializamos el tooltip de Bootstrap
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            title: translatedTitle,
+            trigger: 'hover'
+        });
+    });
+}
 
 /**
  * Función que se ejecuta cuando la IA termina de analizar el vídeo.
@@ -123,6 +148,7 @@ function initPlyoCalculators() {
                 return;
             }
             // Fórmula física: Altura = (Gravedad * Tiempo^2) / 8
+
             const gravity = 9.81;
             const heightMeters = (gravity * Math.pow(flightTime, 2)) / 8;
             const heightCm = (heightMeters * 100).toFixed(1);

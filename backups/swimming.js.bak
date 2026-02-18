@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initWorkoutBuilder();
     initSwolf();
     initAcwr();
-    initTooltips();
 
     // Set default mode UI
     switchCssMode('test');
@@ -73,12 +72,14 @@ function initCssProfile() {
     if (btnTest) {
         btnTest.addEventListener('click', () => {
             // Get 400m time
-            const t400Str = document.getElementById('cssT400').value;
-            const t400_total = parseTime(t400Str);
+            const t400_m = parseInt(document.getElementById('cssT400m').value) || 0;
+            const t400_s = parseInt(document.getElementById('cssT400s').value) || 0;
+            const t400_total = (t400_m * 60) + t400_s;
 
             // Get 200m time
-            const t200Str = document.getElementById('cssT200').value;
-            const t200_total = parseTime(t200Str);
+            const t200_m = parseInt(document.getElementById('cssT200m').value) || 0;
+            const t200_s = parseInt(document.getElementById('cssT200s').value) || 0;
+            const t200_total = (t200_m * 60) + t200_s;
 
             if (t400_total <= 0 || t200_total <= 0 || t400_total <= t200_total) {
                 alert("Por favor revisa los tiempos. El 400m debe ser mayor que el 200m.");
@@ -98,8 +99,9 @@ function initCssProfile() {
     if (btnEst) {
         btnEst.addEventListener('click', () => {
             // Get 100m Time
-            const t100Str = document.getElementById('cssT100').value;
-            const t100_total = parseTime(t100Str);
+            const t100_m = parseInt(document.getElementById('cssT100m').value) || 0;
+            const t100_s = parseInt(document.getElementById('cssT100s').value) || 0;
+            const t100_total = (t100_m * 60) + t100_s;
 
             if (t100_total <= 0) {
                 alert("Por favor introduce un tiempo válido para 100m.");
@@ -217,7 +219,7 @@ function updateZonesTable() {
         const desc = (typeof getTranslation === 'function' ? getTranslation(zone.descKey) : "Training Zone");
 
         html += `
-            <div class="glass-card mb-2 p-2 border-start border-2 ${borderColor} ${bgColor}" ${bgStyle}>
+            <div class="glass-card mb-3 p-3 border-start border-5 ${borderColor} ${bgColor}" ${bgStyle}>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="fw-bold mb-1 ${textColor}" ${textStyle}>
@@ -318,9 +320,9 @@ function initSwolf() {
 
     btn.addEventListener('click', () => {
         const timeStr = document.getElementById('swolfTime').value;
-        const time = parseTime(timeStr);
+        const time = parseFloat(timeStr) || parseTime(timeStr); // Handle both updated seconds input and old format just in case
         const strokes = parseFloat(document.getElementById('swolfStrokes').value) || 0;
-        const pool = parseInt(document.getElementById('swolfLength').value) || 25;
+        const pool = parseInt(document.getElementById('swolfPool').value) || 25;
 
         if (time <= 0 || strokes <= 0) {
             alert("Introduce tiempo y brazadas válidos.");
@@ -354,6 +356,7 @@ function initSwolf() {
         document.getElementById('resSwolfFeedback').textContent = feedback;
         // document.getElementById('resSwolfText').textContent = "Tip técnico: " + feedback;
 
+        document.getElementById('swolfResultPlaceholder').classList.add('d-none');
         document.getElementById('swolfResult').classList.remove('d-none');
     });
 }
@@ -378,6 +381,7 @@ function initAcwr() {
         const statusEl = document.getElementById('resAcwrStatus');
         const zoneBadge = document.getElementById('resAcwrZone');
         const resultDiv = document.getElementById('acwrResult');
+        const resultPlaceholder = document.getElementById('acwrResultPlaceholder');
 
         // Reset Colors
         statusEl.className = "text-uppercase fw-bold mb-4";
@@ -412,6 +416,7 @@ function initAcwr() {
         statusEl.classList.add(colorClass);
         zoneBadge.textContent = zoneText;
 
+        resultPlaceholder.classList.add('d-none');
         resultDiv.classList.remove('d-none');
     });
 }
@@ -503,9 +508,4 @@ function formatMinSec(totalSeconds) {
 
 function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-function initTooltips() {
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }

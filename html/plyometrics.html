@@ -10,7 +10,7 @@
     <!-- Fuente Inter: Una letra bonita y profesional -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Nuestros estilos personalizados (colores, efectos de cristal, etc.) -->
-    <link rel="stylesheet" href="/DataGym/css/style.css">
+    <link rel="stylesheet" href="https://farreset.github.io/DataGym/css/style.css">
     <!-- Iconos de Ionicons: Dibujitos para los botones y menús -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -48,13 +48,13 @@
                         <span data-i18n="tab_plyo_indices">Índices (EUI/UCCI)</span>
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <!-- <li class="nav-item" role="presentation">
                     <button class="nav-link" id="plyo-ai-tab" data-bs-toggle="tab" data-bs-target="#plyo-ai-pane"
                         type="button" role="tab">
                         <ion-icon name="videocam-outline" class="me-2"></ion-icon>
                         <span data-i18n="tab_ai">Analizador con IA</span>
                     </button>
-                </li>
+                </li> -->
             </ul>
 
             <!-- Contenido de las Pestañas -->
@@ -66,11 +66,15 @@
                         <!-- Calculadora de Altura de Salto -->
                         <div class="col-md-6 mb-3">
                             <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="res_jump_height">Altura del Salto</h5>
+                                <h5 class="mb-4 d-flex align-items-center justify-content-between">
+                                    <span data-i18n="res_jump_height">Altura del Salto</span>
+                                    <ion-icon name="information-circle-outline" class="text-secondary cursor-pointer"
+                                        data-bs-toggle="tooltip" data-bs-title="info_jump_height"></ion-icon>
+                                </h5>
                                 <div class="mb-3">
-                                    <label class="form-label" data-i18n="label_flight_time">Tiempo de Vuelo (ms)</label>
+                                    <label class="form-label">Tiempo de Vuelo (s)</label>
                                     <input type="number" class="form-control" id="inputFlightTime"
-                                        placeholder="Ej: 500">
+                                        placeholder="Ej: 0.5">
                                 </div>
                                 <button class="btn btn-primary w-100 mb-3" id="btnCalcJump"
                                     data-i18n="btn_calc_jump">Calcular Altura</button>
@@ -83,7 +87,11 @@
                         <!-- Calculadora de RSI (Índice de Fuerza Reactiva) -->
                         <div class="col-md-6 mb-3">
                             <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="res_rsi">RSI (Reactividad)</h5>
+                                <h5 class="mb-4 d-flex align-items-center justify-content-between">
+                                    <span data-i18n="res_rsi">RSI (Reactividad)</span>
+                                    <ion-icon name="information-circle-outline" class="text-secondary cursor-pointer"
+                                        data-bs-toggle="tooltip" data-bs-title="info_rsi"></ion-icon>
+                                </h5>
                                 <div class="mb-3">
                                     <label class="form-label" data-i18n="label_drop_height">Altura de Caída (cm)</label>
                                     <input type="number" class="form-control" id="inputDropHeight" placeholder="Ej: 45">
@@ -107,7 +115,11 @@
                         <!-- EUI: Evalúa cuánta energía elástica usas -->
                         <div class="col-md-6 mb-3">
                             <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="res_eui">Índice Elástico (EUI)</h5>
+                                <h5 class="mb-4 d-flex align-items-center justify-content-between">
+                                    <span data-i18n="res_eui">Índice Elástico (EUI)</span>
+                                    <ion-icon name="information-circle-outline" class="text-secondary cursor-pointer"
+                                        data-bs-toggle="tooltip" data-bs-title="info_eui"></ion-icon>
+                                </h5>
                                 <div class="row g-2">
                                     <div class="col-6">
                                         <label class="form-label small" data-i18n="label_cmj">CMJ (cm)</label>
@@ -130,7 +142,11 @@
                         <!-- UCCI: Evalúa si usas bien los brazos al saltar -->
                         <div class="col-md-6 mb-3">
                             <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="res_ucci">Índice Coordinación (Brazos)</h5>
+                                <h5 class="mb-4 d-flex align-items-center justify-content-between">
+                                    <span data-i18n="res_ucci">Índice Coordinación (Brazos)</span>
+                                    <ion-icon name="information-circle-outline" class="text-secondary cursor-pointer"
+                                        data-bs-toggle="tooltip" data-bs-title="info_ucci"></ion-icon>
+                                </h5>
                                 <div class="row g-2">
                                     <div class="col-6">
                                         <label class="form-label small" data-i18n="label_abk">Abalakov (cm)</label>
@@ -219,7 +235,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Lógica Compartida (Idioma, Menú, etc.) -->
-    <script src="/DataGym/js/common.js"></script>
+    <script src="https://farreset.github.io/DataGym/js/common.js"></script>
 
     <!-- Librerías de MediaPipe: La "magia" para detectar el cuerpo en el vídeo -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -230,9 +246,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 
     <!-- Nuestro procesador de vídeo personalizado -->
-    <script src="/DataGym/js/video_processor.js"></script>
+    <script src="https://farreset.github.io/DataGym/js/video_processor.js"></script>
     <!-- Lógica específica de este módulo (Pliometría) -->
-    <script src="/DataGym/js/plyometrics.js"></script>
+    <script src="https://farreset.github.io/DataGym/js/plyometrics.js"></script>
 
 </body>
 

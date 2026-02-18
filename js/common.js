@@ -22,35 +22,35 @@ function injectSidebar() {
         </div>
 
         <div class="nav flex-column">
-             <a href="/DataGym/index.html" class="nav-link ${(path === '/DataGym/' || path === '/DataGym/index.html' || path.endsWith('/DataGym')) ? 'active' : ''}">
+             <a href="https://farreset.github.io/DataGym/index.html" class="nav-link ${(path === '/' || path.includes('index.html')) ? 'active' : ''}">
                 <ion-icon name="home-outline"></ion-icon>
                 <span data-i18n="nav_dashboard">Dashboard</span>
             </a>
             
-            <a href="/DataGym/html/running.html" class="nav-link ${path.includes('running') ? 'active' : ''}">
+            <a href="https://farreset.github.io/DataGym/html/running.html" class="nav-link ${path.includes('running') ? 'active' : ''}">
                 <ion-icon name="walk-outline"></ion-icon>
                 <span data-i18n="nav_running">Running</span>
             </a>
-            <a href="/DataGym/html/swimming.html" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
+            <a href="https://farreset.github.io/DataGym/html/swimming.html" class="nav-link ${path.includes('swimming') ? 'active' : ''}">
                 <ion-icon name="water-outline"></ion-icon>
                 <span data-i18n="nav_swimming">Swimming</span>
             </a>
-            <a href="/DataGym/html/plyometrics.html" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
+            <a href="https://farreset.github.io/DataGym/html/plyometrics.html" class="nav-link ${path.includes('plyometrics') ? 'active' : ''}">
                 <ion-icon name="fitness-outline"></ion-icon>
                 <span data-i18n="nav_plyometrics">Plyometrics</span>
             </a>
-             <a href="/DataGym/html/gym.html" class="nav-link ${path.includes('gym') ? 'active' : ''}">
+             <a href="https://farreset.github.io/DataGym/html/gym.html" class="nav-link ${path.includes('gym') ? 'active' : ''}">
                 <ion-icon name="barbell-outline"></ion-icon>
                 <span data-i18n="nav_gym">Gym</span>
             </a>
-            <a href="/DataGym/html/routines.html" class="nav-link ${path.includes('routines') ? 'active' : ''}">
+            <a href="https://farreset.github.io/DataGym/html/routines.html" class="nav-link ${path.includes('routines') ? 'active' : ''}">
                 <ion-icon name="list-outline"></ion-icon>
                 <span data-i18n="nav_routines">Routines</span>
             </a>
-             <a href="/DataGym/html/nutrition.html" class="nav-link ${path.includes('nutrition') ? 'active' : ''}">
+            <!--<a href="https://farreset.github.io/DataGym/html/nutrition.html" class="nav-link ${path.includes('nutrition') ? 'active' : ''}">
                 <ion-icon name="nutrition-outline"></ion-icon>
                 <span data-i18n="nav_nutrition">Nutrition</span>
-            </a>
+            </a>-->
             <div class="mt-4 px-3" id="toolsSection">
                 <h6 class="text-secondary small text-uppercase" data-i18n="nav_tools">Tools</h6>
                 <!-- Dynamic tools injected here based on page -->
@@ -222,21 +222,29 @@ const translations = {
         feedback_optimal: "¡Rango Óptimo!",
         feedback_improve_elastic: "Mejorar Capacidad Elástica (Pliometría)",
         feedback_improve_coord: "Mejorar Coordinación (Brazos)",
+        info_jump_height: "Calculado a partir del tiempo de vuelo usando la fórmula de gravedad.",
+        info_rsi: "Mide la capacidad de absorber y reaprovechar energía elástica rápidamente. Escala: <1.5 Bajo, 1.5-2.5 Bueno, >2.5 Excelente.",
+        info_eui: "Compara el salto con contramovimiento (CMJ) frente al salto desde parado (SJ). Escala óptima: 15% - 30%.",
+        info_ucci: "Evalúa cuánto contribuye el balanceo de brazos a la altura total del salto. Escala óptima: 10% - 20%.",
+        desc_jump_height: "Calcula la altura máxima alcanzada. Es el indicador básico de potencia explosiva en el tren inferior.",
+        desc_rsi: "Mide la eficacia del ciclo estiramiento-acortamiento. Vital para deportes que requieren cambios de dirección y rebote.",
+        desc_eui: "Indica cuánta altura extra ganas usando el impulso elástico. Ayuda a programar el volumen de saltos reactivos.",
+        desc_ucci: "Determina si el uso de brazos es eficiente. Una mala coordinación limita tu potencial de salto real.",
 
         // Gym
-        tab_rm: "Calc. RM",
+        tab_rm: "Calculadora 1RM",
         tab_bmi: "IMC y Métricas",
-        tab_w5: "Carga Semanal",
+        tab_w5: "Carga Total",
         label_weight: "Peso (kg)",
         label_reps: "Repeticiones",
         label_height: "Altura (cm)",
         label_5rm: "Estimación 5RM",
-        btn_calc_rm: "Calcular 1RM",
+        btn_calc_rm: "Calcular Máximo",
         btn_calc_bmi: "Calcular IMC",
-        btn_calc_w5: "Calcular Carga",
+        btn_calc_w5: "Calcular Volumen",
         res_1rm: "1RM Estimado",
         res_bmi: "Tu IMC",
-        res_w5: "Carga Total",
+        res_w5: "Volumen de Sesión",
         label_power: "Potencia",
         label_adjusted: "Ajustada",
         btn_calc_power: "Calcular Potencia",
@@ -708,6 +716,14 @@ const translations = {
         cycles_label: "Número de ciclos (paladas)",
         cycles_per_second: "Cicles / Segon",
         strokes_per_minute: "Brazadas / Minut",
+        info_jump_height: "Calculat a partir del temps de vol utilitzant la fórmula de gravetat.",
+        info_rsi: "Mesura la capacitat d'absorbir i reaprofitar energia elàstica ràpidament. Escala: <1.5 Baix, 1.5-2.5 Bo, >2.5 Excel·lent.",
+        info_eui: "Compara el salt amb contramoviment (CMJ) davant del salt des d'aturat (SJ). Escala òptima: 15% - 30%.",
+        info_ucci: "Avalua quant contribueix el balanceig de braços a l'alçada total del salt. Escala òptima: 10% - 20%.",
+        desc_jump_height: "Calcula l'alçada màxima assolida. És l'indicador bàsic de potència explosiva al tren inferior.",
+        desc_rsi: "Mesura l'eficàcia del cicle estirament-escurçament. Vital per a esports que requereixen canvis de direcció i rebot.",
+        desc_eui: "Indica quanta alçada extra guanyes fent servir l'impuls elàstic. Ajuda a programar el volum de salts reactius.",
+        desc_ucci: "Determina si l'ús de braços és eficient. Una mala coordinació limita el teu potencial de salt real.",
 
 
         // JS Dynamic Strings
@@ -798,6 +814,14 @@ const translations = {
         video_formats: "Supports MP4, MOV, WEBM (Max 50MB)",
         btn_select_file: "Select File",
         ai_result_title: "AI Analysis Result",
+        info_jump_height: "Calculated from flight time using the gravity formula.",
+        info_rsi: "Measures the ability to absorb and reuse elastic energy quickly. Scale: <1.5 Low, 1.5-2.5 Good, >2.5 Excellent.",
+        info_eui: "Compares Countermovement Jump (CMJ) vs. Squat Jump (SJ). Optimal scale: 15% - 30%.",
+        info_ucci: "Evaluates the contribution of arm swing to total jump height. Optimal scale: 10% - 20%.",
+        desc_jump_height: "Calculates the maximum height reached. It is the core indicator of lower-body explosive power.",
+        desc_rsi: "Measures the efficiency of the stretch-shortening cycle. Critical for sports requiring quick bouncing and agility.",
+        desc_eui: "Shows how much extra height you gain from elastic recoil. Helps in programming reactive jump volume.",
+        desc_ucci: "Determines if arm movement is efficient. Poor coordination limits your true jumping potential.",
         ai_waiting_text: "Upload a video to see the analysis...",
         context_title: "Context",
         stroke_label: "Stroke to Analyze",

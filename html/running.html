@@ -10,7 +10,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/DataGym/css/style.css">
+    <link rel="stylesheet" href="https://farreset.github.io/DataGym/css/style.css">
     <!-- Icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -18,6 +18,64 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
         crossorigin="anonymous"></script>
+
+    <!-- React & Tailwind for Trail Calculator -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Scoped styles for React component */
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        /* Custom Inputs for Nutrition V4 */
+        .input-dark {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .input-dark:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Grid Layout helpers */
+        .panel {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Prevent Tailwind preflight from wrecking Bootstrap */
+        /* We rely on specific classes or Bootstrap overrides */
+    </style>
 </head>
 
 <body>
@@ -65,6 +123,13 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="run-nutri-tab" data-bs-toggle="tab" data-bs-target="#run-nutri-pane"
+                        type="button" role="tab">
+                        <ion-icon name="nutrition-outline"></ion-icon>
+                        <span>Calculadora Nutrail</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
                     <button class="nav-link" id="run-ai-tab" data-bs-toggle="tab" data-bs-target="#run-ai-pane"
                         type="button" role="tab">
                         <ion-icon name="videocam-outline" class="me-2"></ion-icon><span data-i18n="tab_ai">AI
@@ -109,6 +174,7 @@
                                     <span>Biomecánica</span>
                                 </button>
                             </li>
+
                         </ul>
                     </div>
 
@@ -329,6 +395,8 @@
                             </div>
                         </div>
 
+
+
                     </div>
 
                 </div>
@@ -365,53 +433,10 @@
                     </div>
                 </div>
 
-                <!-- Pace & PPM Tab -->
-                <div class="tab-pane fade" id="run-pace-pane" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="tab_pace">Pace Converter</h5>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="label_pace">Pace (min/km)</label>
-                                    <input type="text" class="form-control" id="inputPaceKm" placeholder="05:00">
-                                </div>
-                                <button class="btn btn-info w-100 mb-3" id="btnConvertPace"
-                                    data-i18n="btn_convert">Convert</button>
-                                <div class="d-flex justify-content-around text-center">
-                                    <div>
-                                        <h3 id="resSpeedKmh">--</h3>
-                                        <small class="text-secondary" data-i18n="res_speed">km/h</small>
-                                    </div>
-                                    <div>
-                                        <h3 id="resPaceMile">--</h3>
-                                        <small class="text-secondary" data-i18n="res_pace_mile">min/mile</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="glass-card h-100">
-                                <h5 class="mb-4" data-i18n="label_cadence">Cadence (PPM)</h5>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="label_cadence">Steps per Minute</label>
-                                    <input type="number" class="form-control" id="inputCadence" placeholder="170">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label" data-i18n="label_stride">Stride Length (m)</label>
-                                    <input type="number" class="form-control" id="inputStrideLen" placeholder="1.2"
-                                        step="0.01">
-                                </div>
-                                <button class="btn btn-success w-100 mb-3" id="btnCalcSpeedFromCadence"
-                                    data-i18n="btn_calc_speed">Calculate
-                                    Speed</button>
-                                <div class="text-center">
-                                    <h2 class="text-success" id="resCadenceSpeed">-- km/h</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Nutrition PRO Tab (Main Level) -->
+                <div class="tab-pane fade" id="run-nutri-pane" role="tabpanel">
+                    <div id="trail-nutrition-root"></div>
                 </div>
-
                 <!-- Trail Running / Mountain Analytics Tab -->
                 <div class="tab-pane fade" id="run-trail-pane" role="tabpanel">
                     <div class="row">
@@ -559,60 +584,8 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-
-                        <!-- 3. CALORIES CALCULATOR -->
-                        <div class="col-12">
-                            <div class="glass-card">
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="bg-warning bg-opacity-10 p-2 rounded me-3 text-warning"
-                                        style="color:#fd7e14 !important">
-                                        <ion-icon name="flame" class="fs-4"></ion-icon>
-                                    </div>
-                                    <div>
-                                        <h5 class="mb-0">Gasto Energético Real</h5>
-                                        <small class="text-secondary">Incluye ineficiencia vertical
-                                            (gravedad)</small>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 align-items-end">
-                                    <div class="col-md-3">
-                                        <label class="form-label small">Peso Total (kg)</label>
-                                        <input type="number" id="calWeight" class="form-control" placeholder="70">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small">Distancia (km)</label>
-                                        <input type="number" id="calDist" class="form-control" placeholder="15">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small">Desnivel + (m)</label>
-                                        <input type="number" id="calElev" class="form-control" placeholder="800">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button class="btn btn-warning w-100 text-white" onclick="calculateCalories()"
-                                            style="background-color:#fd7e14; border:none;">Calcular</button>
-                                    </div>
-                                </div>
-
-                                <!-- Result Calories -->
-                                <div id="calResultBox"
-                                    class="d-none mt-4 p-3 rounded d-flex justify-content-between align-items-center"
-                                    style="background: rgba(253, 126, 20, 0.1); border: 1px solid rgba(253, 126, 20, 0.3);">
-                                    <div>
-                                        <strong class="d-block" style="color:#fd7e14">Calorías Totales
-                                            Estimadas</strong>
-                                        <small class="text-secondary opacity-75">Metabolismo Basal + Coste Mecánico
-                                            Vertical</small>
-                                    </div>
-                                    <div class="text-end">
-                                        <span id="calValue" class="display-6 fw-bold" style="color:#fd7e14">0</span>
-                                        <small class="fw-bold" style="color:#fd7e14">kcal</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 
@@ -622,8 +595,9 @@
                     <!-- 1. Input Section (Centered) -->
                     <div id="runInputSection" class="row justify-content-center">
                         <div class="col-lg-8">
-                            <div class="glass-card text-center p-5">
-                                <h2 class="mb-3 text-white fw-bold" data-i18n="video_upload_title">Video Upload</h2>
+                            <div class="glass-card text-center p-4">
+                                <h2 class="mb-3 text-white fw-bold" data-i18n="video_upload_title">Video Upload
+                                </h2>
 
                                 <div class="d-inline-flex align-items-center justify-content-center text-start bg-info bg-opacity-10 border border-info border-opacity-25 rounded-3 p-3 mb-4 mx-auto"
                                     style="max-width: 600px;">
@@ -632,8 +606,10 @@
                                     <p class="text-info mb-0 small" data-i18n="video_upload_text">Upload your
                                         running video
                                         to receive an advanced AI-powered biomechanical analysis.
-                                        Our system will automatically evaluate your cadence, stride length, vertical
-                                        oscillation, ground contact time, and other key performance metrics to help
+                                        Our system will automatically evaluate your cadence, stride length,
+                                        vertical
+                                        oscillation, ground contact time, and other key performance metrics to
+                                        help
                                         you
                                         understand and improve your running technique.</p>
                                 </div>
@@ -653,7 +629,7 @@
 
 
                                 <!-- Analyze Button -->
-                                <button type="button" class="btn btn-primary btn-lg px-5 rounded-pill shadow-lg"
+                                <button type="button" class="btn btn-primary btn-md px-5 rounded-pill shadow-lg"
                                     id="btnAnalyzeRun" disabled>
                                     <ion-icon name="sparkles" class="me-2"></ion-icon>
                                     <span data-i18n="btn_analyze">Analyze with AI</span>
@@ -692,41 +668,46 @@
                         </div>
                     </div>
 
-                    <!-- 4. TRAINING PLAN -->
-                    <div class="tab-pane fade" id="pro-plan-pane" role="tabpanel">
-                        <div class="row g-4">
-                            <div class="col-lg-4">
-                                <div class="glass-card border-start border-4 border-primary">
-                                    <h5 class="text-white mb-3 text-primary"><ion-icon name="construct-outline"
-                                            class="me-2"></ion-icon>Estructura Base</h5>
-                                    <div class="mb-3">
-                                        <label class="form-label text-white-50 small">Días de Entrenamiento</label>
-                                        <select id="proPlanDays"
-                                            class="form-select bg-dark text-white border-secondary">
-                                            <option value="3">3 días / semana</option>
-                                            <option value="4" selected>4 días / semana</option>
-                                            <option value="5">5 días / semana</option>
-                                            <option value="6">6 días / semana</option>
-                                        </select>
-                                    </div>
-                                    <div
-                                        class="p-3 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20">
-                                        <p class="small text-white-50 mb-0">Esta estructura se adapta automáticamente a
-                                            tu <strong>VAM (${currentVam} km/h)</strong> para definir ritmos de rodaje,
-                                            series y tiradas largas.</p>
-                                    </div>
+
+                </div>
+
+                <!-- 4. TRAINING PLAN (Legacy/Unused?) -->
+                <div class="tab-pane fade" id="pro-plan-pane" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+                            <div class="glass-card border-start border-4 border-primary">
+                                <h5 class="text-white mb-3 text-primary"><ion-icon name="construct-outline"
+                                        class="me-2"></ion-icon>Estructura Base</h5>
+                                <div class="mb-3">
+                                    <label class="form-label text-white-50 small">Días de
+                                        Entrenamiento</label>
+                                    <select id="proPlanDays" class="form-select bg-dark text-white border-secondary">
+                                        <option value="3">3 días / semana</option>
+                                        <option value="4" selected>4 días / semana</option>
+                                        <option value="5">5 días / semana</option>
+                                        <option value="6">6 días / semana</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="col-lg-8">
-                                <div id="manualPlanContainer" class="row g-3">
-                                    <!-- Injected by JS -->
+                                <div
+                                    class="p-3 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20">
+                                    <p class="small text-white-50 mb-0">Esta estructura se adapta
+                                        automáticamente a
+                                        tu <strong>VAM (${currentVam} km/h)</strong> para definir ritmos de
+                                        rodaje,
+                                        series y tiradas largas.</p>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-8">
+                            <div id="manualPlanContainer" class="row g-3">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
                     </div>
-
                 </div>
+
             </div>
+        </div>
         </div>
         </div>
     </main>
@@ -888,12 +869,631 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Common JS (Sidevar, i18n) -->
-    <script src="/DataGym/js/common.js"></script>
+    <script src="js/common.js"></script>
     <!-- Video Processing JS -->
-    <script src="/DataGym/js/video_processor.js"></script>
+    <script src="js/video_processor.js"></script>
     <!-- Module JS -->
-    <script src="/DataGym/js/running.js"></script>
-    <script src="/DataGym/js/runner_pro.js"></script>
+    <script src="js/running.js"></script>
+    <script src="js/runner_pro.js"></script>
+
+    <!-- React Component: Trail Nutrition Calculator -->
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        // --- BASES DE DATOS DE PRODUCTOS ---
+        const GELS = [
+            { id: 'maurten100', name: 'Maurten Gel 100', cho: 25, na: 20 },
+            { id: 'maurten160', name: 'Maurten Gel 160', cho: 40, na: 0 },
+            { id: 'neversecond_c30', name: 'Neversecond C30', cho: 30, na: 200 },
+            { id: '226ers_high', name: '226ERS High Energy', cho: 50, na: 0 },
+            { id: 'santamadre', name: 'Santa Madre Unusual', cho: 60, na: 200 },
+            { id: 'gu_roctane', name: 'GU Roctane', cho: 21, na: 180 },
+            { id: 'gu_liquid', name: 'GU Liquid Energy', cho: 23, na: 40 },
+            { id: 'sis_beta', name: 'SiS Beta Fuel', cho: 40, na: 30 },
+            { id: 'precision30', name: 'Precision Fuel 30', cho: 30, na: 0 },
+            { id: 'powerbar', name: 'PowerBar PowerGel', cho: 26, na: 200 },
+            { id: 'clif_shot', name: 'Clif Shot Energy', cho: 24, na: 60 },
+            { id: 'spring_cana', name: 'Spring Energy (Canaberry)', cho: 17, na: 60 },
+            { id: 'huma_chia', name: 'Huma Chia Gel', cho: 23, na: 105 },
+            { id: 'high5', name: 'High5 Energy Gel', cho: 23, na: 0 },
+            { id: 'food_banana', name: 'Plátano (Medio)', cho: 23, na: 1 },
+            { id: 'food_dates', name: 'Dátiles (3 uds)', cho: 18, na: 2 }
+        ];
+
+        const DRINKS = [
+            { id: 'water', name: 'Agua Sola', cho: 0, na: 0 },
+            { id: 'iso_generic', name: 'Isotónico Estándar', cho: 30, na: 250 }, // por 500ml
+            { id: 'maurten320', name: 'Maurten Mix 320', cho: 80, na: 0 },
+            { id: 'maurten160', name: 'Maurten Mix 160', cho: 40, na: 0 },
+            { id: 'tailwind', name: 'Tailwind Nutrition', cho: 50, na: 600 },
+            { id: 'tailwind_high_na', name: 'Tailwind High Sodium (Est)', cho: 50, na: 800 },
+            { id: 'skratch', name: 'Skratch Labs Sport', cho: 20, na: 380 },
+            { id: 'gatorade_endurance', name: 'Gatorade Endurance', cho: 22, na: 300 },
+            { id: 'santamadre_carb', name: 'Santa Madre Carbofuel', cho: 45, na: 400 },
+            { id: 'nuun', name: 'Nuun Sport (Electrolitos)', cho: 1, na: 300 },
+            { id: 'ph_1000', name: 'Precision Hydration 1000', cho: 1, na: 500 },
+            { id: 'ph_1500', name: 'Precision Hydration 1500', cho: 1, na: 750 },
+            { id: 'salt_stick', name: 'Salt Stick Caps (1 cap/h)', cho: 0, na: 215 },
+        ];
+
+        const TrailMasterV4 = () => {
+            // --- 1. VARIABLES DE ENTRADA (ESTADO) ---
+
+            // Perfil Atleta
+            const [weight, setWeight] = useState(70); // kg
+            const [gutTraining, setGutTraining] = useState('medium'); // low, medium, high
+            const [sweatLevel, setSweatLevel] = useState('medium'); // low, medium, high, extreme
+
+            // Perfil Carrera
+            const [dist, setDist] = useState(21); // km
+            const [elev, setElev] = useState(1000); // m+
+            const [timeH, setTimeH] = useState(3); // horas
+            const [terrain, setTerrain] = useState('mixed'); // runnable, mixed, technical
+
+            // Condiciones
+            const [temp, setTemp] = useState(20); // Celsius
+            const [altitude, setAltitude] = useState(1000); // metros promedio
+
+            // Estrategia Nutricional
+            const [selectedGel, setSelectedGel] = useState('maurten100');
+            const [selectedDrink, setSelectedDrink] = useState('iso_generic');
+            const [liquidIntake, setLiquidIntake] = useState(500); // ml/hora objetivo
+
+            // --- 2. MOTOR DE CÁLCULO CIENTÍFICO ---
+
+            const results = useMemo(() => {
+                const warnings = [];
+
+                // A. CÁLCULO DE ESFUERZO (ITRA & COSTO ENERGÉTICO)
+                // Km Esfuerzo = Dist + (Desnivel/100)
+                const kmEffort = dist + (elev / 100);
+
+                // Coeficiente de Terreno (Energy Cost)
+                // Technical: Más frenadas/arrancadas = Mayor gasto (1.2 - 1.3 kcal/kg/km)
+                // Runnable: Ritmo constante = Eficiencia estándar (1.0 kcal/kg/km)
+                let terrainCoeff = 1.05; // Mixed base
+                if (terrain === 'technical') terrainCoeff = 1.25;
+                if (terrain === 'runnable') terrainCoeff = 0.98;
+
+                // Gasto Calórico Total
+                // Fórmula: Peso * KmEsfuerzo * CoeficienteTerreno
+                const totalKcal = Math.round(weight * kmEffort * terrainCoeff);
+                const kcalPerHour = Math.round(totalKcal / timeH);
+
+                // B. DEMANDA DE CARBOHIDRATOS (CHO)
+                // Base fisiológica según duración
+                let targetCHO = 0;
+                if (timeH <= 1.5) targetCHO = 30;
+                else if (timeH <= 2.5) targetCHO = 60;
+                else targetCHO = 90; // Estándar Ultra moderno
+
+                // Ajuste por Intensidad Relativa
+                // Si Kcal/h es muy alto para el peso, es alta intensidad -> Necesita más CHO
+                const relativeIntensity = kcalPerHour / weight; // kcal/kg/h
+                if (relativeIntensity > 10) targetCHO += 10; // Intensidad alta
+
+                // Límite por Entreno Estomacal (Gut Training)
+                let gutLimit = 60;
+                if (gutTraining === 'medium') gutLimit = 90;
+                if (gutTraining === 'high') gutLimit = 120;
+
+                // Ajuste por Rebote Estomacal (Terrain Bouncing)
+                // En terreno muy "corrible", el rebote mecánico dificulta la digestión de altos volúmenes
+                if (terrain === 'runnable' && targetCHO > 75) {
+                    gutLimit -= 10;
+                    warnings.push("Terreno muy corrible: Se reduce el límite de ingesta por alto impacto mecánico (rebote).");
+                }
+
+                // Aplicar Límite Estomacal
+                targetCHO = Math.min(targetCHO, gutLimit);
+
+                // C. PENALIZACIONES AMBIENTALES
+                // Calor: La sangre va a la piel para termoregulación, isquemia intestinal.
+                let envFactor = 1.0;
+                if (temp > 25) envFactor -= 0.15; // -15% absorción
+                if (temp > 32) envFactor -= 0.25; // -25% absorción
+
+                // Altitud: Hipoxia reduce flujo sanguíneo digestivo
+                if (altitude > 2000) envFactor -= 0.10;
+                if (altitude > 3000) envFactor -= 0.20;
+
+                const adjustedCHO = Math.round(targetCHO * envFactor);
+                if (adjustedCHO < targetCHO) {
+                    warnings.push(`Ambiente hostil (Calor/Altitud): Objetivo reducido a ${adjustedCHO}g/h para evitar bloqueo gástrico.`);
+                }
+
+                // D. HIDRATACIÓN Y SODIO
+                // Mapeo Tasa Sudoración (L/h)
+                const sweatMap = {
+                    low: 0.5,     // < 15C o ritmo suave
+                    medium: 1.0,  // Estándar
+                    high: 1.5,    // Calor o alta intensidad
+                    extreme: 2.0  // Competición en calor
+                };
+                let sweatRate = sweatMap[sweatLevel];
+                // Ajuste fino por temperatura si no se seleccionó manualmente
+                if (temp > 28 && sweatLevel === 'medium') sweatRate = 1.3;
+
+                const fluidLoss = sweatRate * 1000; // ml/h
+                const fluidBalance = liquidIntake - fluidLoss; // Si es negativo, deshidratación
+
+                // Mapeo Sodio (mg/L de sudor promedio ~900mg)
+                const naLoss = sweatRate * 900;
+
+                // E. CÁLCULO DE PRODUCTO (LA MEZCLA)
+                const drinkInfo = DRINKS.find(d => d.id === selectedDrink);
+                const gelInfo = GELS.find(g => g.id === selectedGel);
+
+                // Aporte del Líquido
+                const liquidCHO_h = (drinkInfo.cho / 500) * liquidIntake;
+                const liquidNa_h = (drinkInfo.na / 500) * liquidIntake;
+
+                // Aporte Restante necesario de Geles
+                let remainingCHO = adjustedCHO - liquidCHO_h;
+                if (remainingCHO < 0) remainingCHO = 0;
+
+                const gelsNeeded = gelInfo.cho > 0 ? (remainingCHO / gelInfo.cho) : 0;
+                const totalGels = Math.ceil(gelsNeeded * timeH);
+                const gelInterval = gelsNeeded > 0 ? Math.round(60 / gelsNeeded) : 0;
+
+                // Total Sodio Ingesta
+                const totalNa_Input = liquidNa_h + (gelsNeeded * gelInfo.na);
+
+                // F. OSMOLARIDAD (CRÍTICO)
+                // Concentración (%) = (Total CHO g / Total Líquido ml) * 100
+                // Rango ideal: 6-8% (Isotónico). Máximo tolerable: 10-12% (Hipertónico - riesgo diarrea)
+                const totalCHO_Input = liquidCHO_h + (gelsNeeded * gelInfo.cho);
+                const concentration = liquidIntake > 0 ? (totalCHO_Input / liquidIntake) * 100 : 100;
+
+                return {
+                    kmEffort,
+                    totalKcal,
+                    kcalPerHour,
+                    targetCHO: adjustedCHO,
+                    liquidCHO_h,
+                    gelsNeeded: gelsNeeded.toFixed(1),
+                    totalGels,
+                    gelInterval,
+                    fluidLoss,
+                    fluidBalance,
+                    naLoss,
+                    totalNa_Input,
+                    concentration: concentration.toFixed(1),
+                    warnings
+                };
+            }, [weight, gutTraining, sweatLevel, dist, elev, timeH, terrain, temp, altitude, selectedGel, selectedDrink, liquidIntake]);
+
+            // Función auxiliar para colores
+            const getOsmolarityColor = (val) => {
+                if (val < 4) return 'text-blue-400'; // Hipo
+                if (val <= 8) return 'text-emerald-400'; // Iso (Perfecto)
+                if (val <= 12) return 'text-amber-400'; // Límite (Relaxed from 11)
+                return 'text-red-500'; // Peligro (>12%)
+            };
+
+            return (
+                <div className="max-w-7xl mx-auto p-4 lg:p-8 min-h-screen animate-slide-in">
+
+
+
+                    <div className="flex justify-center mb-6">
+                        <button className="bg-slate-800/50 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2 rounded-full border border-white/10 flex items-center gap-2 transition-all" data-bs-toggle="modal" data-bs-target="#nutritionMethodologyModal">
+                            <ion-icon name="book-outline"></ion-icon>
+                            <span>Cómo funciona & Base Científica</span>
+                        </button>
+                    </div>
+
+
+
+
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                        {/* --- COLUMNA DE DATOS (INPUTS) --- */}
+                        <div className="lg:col-span-4 space-y-6">
+
+                            {/* SECCIÓN 1: FÍSICA DEL RECORRIDO */}
+                            <section className="panel p-5">
+                                <h2 className="label text-blue-400 mb-4 border-b border-white/5 pb-2">1. Física del Terreno</h2>
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <span className="text-xs text-slate-400 mb-1 block">Distancia (km)</span>
+                                            <input type="number" value={dist} onChange={e => setDist(Number(e.target.value))} className="input-dark" />
+                                        </div>
+                                        <div>
+                                            <span className="text-xs text-slate-400 mb-1 block">Desnivel + (m)</span>
+                                            <input type="number" value={elev} onChange={e => setElev(Number(e.target.value))} className="input-dark" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-slate-400 mb-1 block">Duración Estimada (h)</span>
+                                        <input type="number" step="0.5" value={timeH} onChange={e => setTimeH(Number(e.target.value))} className="input-dark" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-slate-400 mb-1 block">Tipo de Terreno</span>
+                                        <select value={terrain} onChange={e => setTerrain(e.target.value)} className="input-dark cursor-pointer">
+                                            <option value="runnable">Corrible / Pista (Alto Impacto/Rebote)</option>
+                                            <option value="mixed">Mixto / Sendero (Estándar)</option>
+                                            <option value="technical">Técnico / Skyrunning (Alto Gasto Energético)</option>
+                                        </select>
+                                        <p className="text-[10px] text-slate-500 mt-1">
+                                            {terrain === 'technical' ? 'Aumenta el cálculo calórico un 20%.' : terrain === 'runnable' ? 'Reduce tolerancia gástrica por rebote.' : 'Balance estándar.'}
+                                        </p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* SECCIÓN 2: FISIOLOGÍA Y AMBIENTE */}
+                            <section className="panel p-5">
+                                <h2 className="label text-emerald-400 mb-4 border-b border-white/5 pb-2">2. Fisiología & Clima</h2>
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <span className="text-xs text-slate-400 mb-1 block">Peso (kg)</span>
+                                            <input type="number" value={weight} onChange={e => setWeight(Number(e.target.value))} className="input-dark" />
+                                        </div>
+                                        <div>
+                                            <span className="text-xs text-slate-400 mb-1 block">Temperatura (°C)</span>
+                                            <input type="number" value={temp} onChange={e => setTemp(Number(e.target.value))} className="input-dark" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <span className="text-xs text-slate-400 mb-1 block">Entreno Estómago</span>
+                                            <select value={gutTraining} onChange={e => setGutTraining(e.target.value)} className="input-dark text-xs">
+                                                <option value="low">Bajo (Max 60g)</option>
+                                                <option value="medium">Medio (Max 90g)</option>
+                                                <option value="high">Élite (Max 120g)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <span className="text-xs text-slate-400 mb-1 block">Altitud Media (m)</span>
+                                            <input type="number" value={altitude} onChange={e => setAltitude(Number(e.target.value))} className="input-dark" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-slate-400 mb-1 block">Tasa Sudoración (Subjetiva)</span>
+                                        <div className="grid grid-cols-4 gap-1">
+                                            {['low', 'medium', 'high', 'extreme'].map(level => (
+                                                <button
+                                                    key={level}
+                                                    onClick={() => setSweatLevel(level)}
+                                                    className={`text-[10px] py-2 rounded border ${sweatLevel === level ? 'bg-blue-600 border-blue-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'}`}
+                                                >
+                                                    {level === 'low' ? 'Baja' : level === 'medium' ? 'Media' : level === 'high' ? 'Alta' : 'Extrema'}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <p className="text-[10px] text-right text-slate-500 mt-1">
+                                            Est: {level => level === 'low' ? 0.5 : level === 'medium' ? 1.0 : level === 'high' ? 1.5 : 2.0} L/h
+                                        </p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* SECCIÓN 3: ESTRATEGIA */}
+                            <section className="panel p-5">
+                                <h2 className="label text-amber-400 mb-4 border-b border-white/5 pb-2">3. Estrategia de Fuel</h2>
+                                <div className="space-y-4">
+                                    <div>
+                                        <span className="text-xs text-slate-400 mb-1 block">Bebida (Fuente Líquida)</span>
+                                        <select value={selectedDrink} onChange={e => setSelectedDrink(e.target.value)} className="input-dark text-xs">
+                                            {DRINKS.map(d => <option key={d.id} value={d.id}>{d.name} ({d.cho}g CHO/500ml)</option>)}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <div className="flex justify-between">
+                                            <span className="text-xs text-slate-400 mb-1 block">Plan de Hidratación (ml/h)</span>
+                                            <span className="text-xs font-bold text-blue-400">{liquidIntake} ml</span>
+                                        </div>
+                                        <input type="range" min="0" max="1500" step="50" value={liquidIntake} onChange={e => setLiquidIntake(Number(e.target.value))} className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-slate-400 mb-1 block">Gel / Sólido Preferido</span>
+                                        <select value={selectedGel} onChange={e => setSelectedGel(e.target.value)} className="input-dark text-xs">
+                                            {GELS.map(g => <option key={g.id} value={g.id}>{g.name} ({g.cho}g CHO)</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        {/* --- COLUMNA DE RESULTADOS (OUTPUT) --- */}
+                        <div className="lg:col-span-8 space-y-6">
+
+                            {/* KPI CARDS SUPERIOR */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="panel p-4 flex flex-col justify-between">
+                                    <div>
+                                        <span className="label text-slate-500">Km Esfuerzo (ITRA)</span>
+                                        <span className="text-3xl font-bold text-white">{results.kmEffort.toFixed(1)} <span className="text-sm font-normal text-slate-500">km</span></span>
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 mt-2">Dureza Real Física</div>
+                                </div>
+                                <div className="panel p-4 flex flex-col justify-between">
+                                    <div>
+                                        <span className="label text-slate-500">Gasto Calórico</span>
+                                        <span className="text-3xl font-bold text-white">{results.kcalPerHour} <span className="text-sm font-normal text-slate-500">kcal/h</span></span>
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 mt-2">Total: {results.totalKcal} kcal</div>
+                                </div>
+                                <div className="panel p-4 flex flex-col justify-between border-l-2 border-blue-500">
+                                    <div>
+                                        <span className="label text-blue-400">Objetivo CHO/h</span>
+                                        <span className="text-3xl font-bold text-white">{results.targetCHO} <span className="text-sm font-normal text-slate-500">g/h</span></span>
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 mt-2">Ajustado por clima y terreno</div>
+                                </div>
+                            </div>
+
+                            {/* PLAN PRINCIPAL */}
+                            <div className="panel bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700 shadow-xl overflow-hidden relative">
+                                <div className="p-6 md:p-8 relative z-10">
+                                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                                        <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                                        Estrategia de Ejecución
+                                    </h3>
+
+                                    <div className="flex flex-col md:flex-row gap-8 items-center">
+                                        <div className="flex-1 text-center md:text-left">
+                                            <div className="text-sm text-slate-400 uppercase tracking-wide mb-1">Ritmo de Ingesta</div>
+                                            {parseFloat(results.gelsNeeded) > 0 ? (
+                                                <>
+                                                    <div className="text-5xl font-black text-white leading-none mb-2">{results.gelsNeeded} <span className="text-lg font-medium text-slate-400">geles/h</span></div>
+                                                    <div className="inline-block bg-slate-700/50 rounded-lg px-3 py-1 text-sm text-emerald-300 font-mono border border-slate-600">
+                                                        1 gel cada {results.gelInterval} minutos
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div className="text-2xl font-bold text-emerald-400">Solo Líquido es suficiente</div>
+                                            )}
+                                        </div>
+
+                                        <div className="w-px h-24 bg-slate-700 hidden md:block"></div>
+
+                                        <div className="flex-1 space-y-3">
+                                            <div className="flex justify-between items-center text-sm">
+                                                <span className="text-slate-400">Total Geles Carrera:</span>
+                                                <span className="font-bold text-white text-lg">{results.totalGels} uds</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-sm">
+                                                <span className="text-slate-400">Total Litros:</span>
+                                                <span className="font-bold text-white text-lg">{(liquidIntake * timeH / 1000).toFixed(1)} L</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-sm pt-2 border-t border-white/5">
+                                                <span className="text-slate-400">Carbohidratos Líquidos:</span>
+                                                <span className="font-mono text-blue-300">{Math.round(results.liquidCHO_h)} g/h</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* PANELES DE SEGURIDAD CIENTÍFICA */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                {/* 1. OSMOLARIDAD (Digestión) */}
+                                <div className="panel p-5">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <h3 className="label text-slate-300">Tolerancia Gástrica (Osmolaridad)</h3>
+                                        <div className={`text-xl font-bold font-mono ${getOsmolarityColor(parseFloat(results.concentration))}`}>
+                                            {results.concentration}%
+                                        </div>
+                                    </div>
+
+                                    {/* Gauge Bar */}
+                                    <div className="relative h-3 bg-slate-800 rounded-full overflow-hidden mb-2">
+                                        <div className="absolute top-0 bottom-0 left-[60%] w-0.5 bg-white/20 z-10" title="Ideal min"></div>
+                                        <div className="absolute top-0 bottom-0 left-[80%] w-0.5 bg-white/20 z-10" title="Ideal max"></div>
+                                        <div
+                                            className={`h-full transition-all duration-500 ${getOsmolarityColor(parseFloat(results.concentration)).replace('text', 'bg').replace('400', '500')}`}
+                                            style={{ width: `${Math.min(parseFloat(results.concentration) * 10, 100)}%` }}
+                                        ></div>
+                                    </div>
+                                    <div className="flex justify-between text-[10px] text-slate-500 mb-3">
+                                        <span>0%</span>
+                                        <span className="text-emerald-500 font-bold">6-8% (Óptimo)</span>
+                                        <span>12%+</span>
+                                    </div>
+
+                                    {parseFloat(results.concentration) > 12 ? (
+                                        <div className="p-3 bg-red-900/20 border border-red-900/50 rounded text-xs text-red-200 leading-snug">
+                                            ⚠️ <strong>Concentración Alta:</strong> Mezcla muy concentrada. Puede causar molestias estomacales. Bebe agua extra.
+                                        </div>
+                                    ) : parseFloat(results.concentration) < 4 && results.targetCHO > 40 ? (
+                                        <div className="p-3 bg-blue-900/20 border border-blue-900/50 rounded text-xs text-blue-200 leading-snug">
+                                            ℹ️ <strong>Hipotónico:</strong> Mezcla muy diluida. Hidratación rápida, pero poca energía. Considera añadir CHO.
+                                        </div>
+                                    ) : (
+                                        <div className="p-3 bg-emerald-900/20 border border-emerald-900/50 rounded text-xs text-emerald-200 leading-snug">
+                                            ✅ <strong>Isotónico:</strong> Mezcla perfecta para vaciado gástrico rápido y absorción de energía.
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 2. BALANCE HÍDRICO & SODIO */}
+                                <div className="panel p-5">
+                                    <h3 className="label text-slate-300 mb-4">Balance Hidroelectrolítico</h3>
+
+                                    <div className="space-y-4">
+                                        {/* Agua */}
+                                        <div>
+                                            <div className="flex justify-between text-xs text-slate-400 mb-1">
+                                                <span>Agua (Pérdida vs Ingesta)</span>
+                                                <span className={results.fluidBalance < -600 ? 'text-red-400' : 'text-emerald-400'}>
+                                                    {Math.round(results.fluidBalance)} ml/h
+                                                </span>
+                                            </div>
+                                            <div className="h-2 bg-slate-800 rounded-full overflow-hidden flex relative">
+                                                <div className="bg-red-500/50 h-full w-full absolute"></div>
+                                                <div className="bg-blue-500 h-full absolute transition-all duration-500" style={{ width: `${Math.min((liquidIntake / results.fluidLoss) * 100, 100)}%` }}></div>
+                                            </div>
+                                            <div className="text-[10px] text-right text-slate-500 mt-1">
+                                                Pierdes {results.fluidLoss.toFixed(0)}ml/h
+                                            </div>
+                                        </div>
+
+                                        {/* Sodio */}
+                                        <div className="pt-2 border-t border-white/5">
+                                            <div className="flex justify-between items-baseline mb-1">
+                                                <span className="text-xs text-slate-400">Sodio Ingesta</span>
+                                                <span className="font-mono text-white font-bold">{Math.round(results.totalNa_Input)} mg</span>
+                                            </div>
+                                            <div className="flex justify-between items-baseline">
+                                                <span className="text-xs text-slate-400">Sodio Estimado Pérdida</span>
+                                                <span className="font-mono text-slate-500">{Math.round(results.naLoss)} mg</span>
+                                            </div>
+                                            {(results.totalNa_Input - results.naLoss) < -700 && (
+                                                <div className="mt-2 text-[10px] text-amber-400 flex items-center gap-1">
+                                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                                    Aporte bajo de Sodio. Considera añadir sales.
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* ALERTAS GLOBALES */}
+                            {results.warnings.length > 0 && (
+                                <div className="space-y-2">
+                                    {results.warnings.map((w, i) => (
+                                        <div key={i} className="bg-amber-900/20 border border-amber-900/50 p-3 rounded flex items-start gap-3">
+                                            <svg className="w-5 h-5 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                            <span className="text-xs text-amber-200">{w}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('trail-nutrition-root'));
+        root.render(<TrailMasterV4 />);
+    </script>
+
+
+    <!-- Nutrition Methodology Modal -->
+    <div class="modal fade" id="nutritionMethodologyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content glass-card border-0 p-0 text-white">
+                <div class="modal-header border-secondary border-opacity-25">
+                    <h5 class="modal-title fw-bold"><ion-icon name="flask-outline"
+                            class="me-2 text-info"></ion-icon>Metodología Científica</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h6 class="text-primary fw-bold mb-2">1. Demanda de Carbohidratos (CHO)</h6>
+                            <p class="small text-white-50">Basado en las guías de la <em>International Society of Sports
+                                    Nutrition (ISSN)</em>:</p>
+                            <ul class="small text-white-50 ps-3">
+                                <li><strong>&lt; 90 min:</strong> 30g/h (Reservas de glucógeno suficientes).</li>
+                                <li><strong>90 - 150 min:</strong> 60g/h (Glucosa).</li>
+                                <li><strong>&gt; 150 min (Ultra):</strong> 90-120g/h (Glucosa + Fructosa 2:1).</li>
+                                <li>Ajustes por Intensidad (RPE), Calor y Tolerancia Gástrica.</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-info fw-bold mb-2">2. Hidratación & Osmolaridad</h6>
+                            <p class="small text-white-50">Cálculo de <strong>Isotonicidad</strong> para optimizar el
+                                vaciado gástrico:</p>
+                            <ul class="small text-white-50 ps-3">
+                                <li>Concentración ideal: <strong>6-8%</strong> (Isotónico).</li>
+                                <li><strong>&gt;10% (Hipertónico):</strong> Riesgo de problemas GI. Se requiere más agua
+                                    para diluir los geles.</li>
+                                <li>La tasa de sudoración se estima según peso, temperatura y nivel de sudoración
+                                    subjetivo.</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-success fw-bold mb-2">3. Sodio (Electrolitos)</h6>
+                            <p class="small text-white-50">Reposición crítica para evitar la hiponatremia:</p>
+                            <ul class="small text-white-50 ps-3">
+                                <li>Baja sudoración: ~400mg/h.</li>
+                                <li>Alta sudoración/Calor: ~800-1200mg/h.</li>
+                                <li>Se descuenta el sodio aportado por la bebida y geles seleccionados.</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-warning fw-bold mb-2">4. Estrategia de Fueling</h6>
+                            <p class="small text-white-50">El algoritmo prioriza:</p>
+                            <ol class="small text-white-50 ps-3">
+                                <li>Cubrir la demanda de líquido con Isotónico (Base).</li>
+                                <li>Completar la demanda de CHO restante con Geles.</li>
+                                <li>Verificar que la mezcla estomacal no sea hipertónica.</li>
+                            </ol>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-white fw-bold mb-3 border-bottom border-white-10 pb-2">5. Glosario de
+                                Variables (Input)</h6>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-sm table-borderless small text-white-50 mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-white">Variable</th>
+                                            <th class="text-white">Impacto en el Cálculo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-info">Peso</td>
+                                            <td>Afecta la tasa de sudoración estimada y el gasto calórico basal.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-info">Duración</td>
+                                            <td>Determina el rango de CHO: &lt;1.5h (30g), 1.5-2.5h (60g), &gt;2.5h
+                                                (75-90g).</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-info">Intensidad (RPE)</td>
+                                            <td>RPE &gt; 8 aumenta la demanda de CHO (+10g/h) por mayor uso de
+                                                glucógeno.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-info">Terreno</td>
+                                            <td>Técnico (lento) favorece digestión. Corrible (rebote) limita la
+                                                tolerancia a sólidos.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-info">Temperatura</td>
+                                            <td>&gt; 25°C incrementa necesidades de fluido (+200-300ml/h) y reduce
+                                                tolerancia a CHO (-15%).</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-info">Nivel Estómago</td>
+                                            <td>Define el límite máximo de absorción (60g, 75g, o 90g+).</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-info">Sudoración</td>
+                                            <td>Baja/Media/Alta define la pérdida de sodio (400/800/1200 mg/h) y agua.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-info">Volumen Líquido</td>
+                                            <td>Clave para la Osmolaridad. Menos agua = Mayor concentración = Riesgo GI.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary border-opacity-25">
+                    <p class="small text-secondary me-auto mb-0">Algoritmo v2.1 | DataGym Science</p>
+                    <button type="button" class="btn btn-outline-light btn-sm"
+                        data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </body>
 
